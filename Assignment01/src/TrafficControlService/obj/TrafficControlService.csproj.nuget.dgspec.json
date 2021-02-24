@@ -1,0 +1,72 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\TrafficControlService.csproj": {}
+  },
+  "projects": {
+    "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\TrafficControlService.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\TrafficControlService.csproj",
+        "projectName": "TrafficControlService",
+        "projectPath": "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\TrafficControlService.csproj",
+        "packagesPath": "C:\\Users\\edwin\\.nuget\\packages\\",
+        "outputPath": "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\edwin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Dapr.Client": {
+              "target": "Package",
+              "version": "[0.10.0-preview01, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

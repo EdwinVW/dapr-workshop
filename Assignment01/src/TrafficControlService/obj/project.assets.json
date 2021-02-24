@@ -1,0 +1,316 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Dapr.Client/0.10.0-preview01": {
+        "type": "package",
+        "dependencies": {
+          "Google.Protobuf": "3.11.4",
+          "Grpc.Net.Client": "2.27.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/Dapr.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Dapr.Client.dll": {}
+        }
+      },
+      "Google.Protobuf/3.11.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Protobuf.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Protobuf.dll": {}
+        }
+      },
+      "Grpc.Core.Api/2.27.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/Grpc.Core.Api.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Grpc.Core.Api.dll": {}
+        }
+      },
+      "Grpc.Net.Client/2.27.0": {
+        "type": "package",
+        "dependencies": {
+          "Grpc.Core.Api": "2.27.0",
+          "Grpc.Net.Common": "2.27.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
+          "System.Diagnostics.DiagnosticSource": "4.5.1"
+        },
+        "compile": {
+          "lib/netstandard2.1/Grpc.Net.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/Grpc.Net.Client.dll": {}
+        }
+      },
+      "Grpc.Net.Common/2.27.0": {
+        "type": "package",
+        "dependencies": {
+          "Grpc.Core.Api": "2.27.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/Grpc.Net.Common.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/Grpc.Net.Common.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/2.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {}
+        }
+      },
+      "System.Diagnostics.DiagnosticSource/4.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Dapr.Client/0.10.0-preview01": {
+      "sha512": "VqNKQ0UbOhx0M/iD8qwiLV1z+0c2fln1Q69b3obKkGoVUWDQlYZWkFk5KjQg1lbAkGB9aTBB63YTNbtrvu60bg==",
+      "type": "package",
+      "path": "dapr.client/0.10.0-preview01",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "dapr.client.0.10.0-preview01.nupkg.sha512",
+        "dapr.client.nuspec",
+        "images/logo-transparent.png",
+        "lib/netcoreapp3.1/Dapr.Client.dll",
+        "lib/netcoreapp3.1/Dapr.Client.xml"
+      ]
+    },
+    "Google.Protobuf/3.11.4": {
+      "sha512": "dajCxjDCiPyZuqwZCkFJTwhn/0TJ5VesIs4fXvs56ez1VUi68JjhYMMsPjnJ9gcPqJwTMtXMU1WqUdXYiG1x4w==",
+      "type": "package",
+      "path": "google.protobuf/3.11.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "google.protobuf.3.11.4.nupkg.sha512",
+        "google.protobuf.nuspec",
+        "lib/net45/Google.Protobuf.dll",
+        "lib/net45/Google.Protobuf.pdb",
+        "lib/net45/Google.Protobuf.xml",
+        "lib/netstandard1.0/Google.Protobuf.dll",
+        "lib/netstandard1.0/Google.Protobuf.pdb",
+        "lib/netstandard1.0/Google.Protobuf.xml",
+        "lib/netstandard2.0/Google.Protobuf.dll",
+        "lib/netstandard2.0/Google.Protobuf.pdb",
+        "lib/netstandard2.0/Google.Protobuf.xml"
+      ]
+    },
+    "Grpc.Core.Api/2.27.0": {
+      "sha512": "UAHXfV+n6TEMCybML7V+1qWP7G9byGXUE2mtATWpctP7xB8P5J++iYMuyxrprKkC36X/QuUwHJmHpBxlDHzF2g==",
+      "type": "package",
+      "path": "grpc.core.api/2.27.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "grpc.core.api.2.27.0.nupkg.sha512",
+        "grpc.core.api.nuspec",
+        "lib/net45/Grpc.Core.Api.dll",
+        "lib/net45/Grpc.Core.Api.pdb",
+        "lib/net45/Grpc.Core.Api.xml",
+        "lib/netstandard1.5/Grpc.Core.Api.dll",
+        "lib/netstandard1.5/Grpc.Core.Api.pdb",
+        "lib/netstandard1.5/Grpc.Core.Api.xml",
+        "lib/netstandard2.0/Grpc.Core.Api.dll",
+        "lib/netstandard2.0/Grpc.Core.Api.pdb",
+        "lib/netstandard2.0/Grpc.Core.Api.xml"
+      ]
+    },
+    "Grpc.Net.Client/2.27.0": {
+      "sha512": "1jusirgVs+suNvuF0jsMXFJAF+oPwBVFgGvKuLD7UmmDqbUsHD4m80GKuEs9OR/1JYqwcpOfrBsBWhhFvdUIrA==",
+      "type": "package",
+      "path": "grpc.net.client/2.27.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "grpc.net.client.2.27.0.nupkg.sha512",
+        "grpc.net.client.nuspec",
+        "lib/netstandard2.1/Grpc.Net.Client.dll",
+        "lib/netstandard2.1/Grpc.Net.Client.pdb",
+        "lib/netstandard2.1/Grpc.Net.Client.xml",
+        "packageIcon.png"
+      ]
+    },
+    "Grpc.Net.Common/2.27.0": {
+      "sha512": "qMd5Yf6PsN+TxGmz/wPB1dbih7HHgTkWhIZ2wYQX52znbWG2uBaZsBcyQgda1nNaMrXJzevbGb9eFKnvqmOBkw==",
+      "type": "package",
+      "path": "grpc.net.common/2.27.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "grpc.net.common.2.27.0.nupkg.sha512",
+        "grpc.net.common.nuspec",
+        "lib/netstandard2.1/Grpc.Net.Common.dll",
+        "lib/netstandard2.1/Grpc.Net.Common.pdb",
+        "lib/netstandard2.1/Grpc.Net.Common.xml",
+        "packageIcon.png"
+      ]
+    },
+    "Microsoft.Extensions.Logging.Abstractions/2.1.1": {
+      "sha512": "XRzK7ZF+O6FzdfWrlFTi1Rgj2080ZDsd46vzOjadHUB0Cz5kOvDG8vI7caa5YFrsHQpcfn0DxtjS4E46N4FZsA==",
+      "type": "package",
+      "path": "microsoft.extensions.logging.abstractions/2.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.xml",
+        "microsoft.extensions.logging.abstractions.2.1.1.nupkg.sha512",
+        "microsoft.extensions.logging.abstractions.nuspec"
+      ]
+    },
+    "System.Diagnostics.DiagnosticSource/4.5.1": {
+      "sha512": "zCno/m44ymWhgLFh7tELDG9587q0l/EynPM0m4KgLaWQbz/TEKvNRX2YT5ip2qXW/uayifQ2ZqbnErsKJ4lYrQ==",
+      "type": "package",
+      "path": "system.diagnostics.diagnosticsource/4.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net45/System.Diagnostics.DiagnosticSource.dll",
+        "lib/net45/System.Diagnostics.DiagnosticSource.xml",
+        "lib/net46/System.Diagnostics.DiagnosticSource.dll",
+        "lib/net46/System.Diagnostics.DiagnosticSource.xml",
+        "lib/netstandard1.1/System.Diagnostics.DiagnosticSource.dll",
+        "lib/netstandard1.1/System.Diagnostics.DiagnosticSource.xml",
+        "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.dll",
+        "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.xml",
+        "lib/portable-net45+win8+wpa81/System.Diagnostics.DiagnosticSource.dll",
+        "lib/portable-net45+win8+wpa81/System.Diagnostics.DiagnosticSource.xml",
+        "system.diagnostics.diagnosticsource.4.5.1.nupkg.sha512",
+        "system.diagnostics.diagnosticsource.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Memory/4.5.3": {
+      "sha512": "3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "type": "package",
+      "path": "system.memory/4.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.3.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.1": [
+      "Dapr.Client >= 0.10.0-preview01"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\edwin\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\TrafficControlService.csproj",
+      "projectName": "TrafficControlService",
+      "projectPath": "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\TrafficControlService.csproj",
+      "packagesPath": "C:\\Users\\edwin\\.nuget\\packages\\",
+      "outputPath": "D:\\dev\\git\\dapr-hands-on\\Assignment01\\src\\TrafficControlService\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\edwin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.1": {
+        "dependencies": {
+          "Dapr.Client": {
+            "target": "Package",
+            "version": "[0.10.0-preview01, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
