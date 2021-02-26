@@ -22,6 +22,8 @@ namespace FineCollectionService
         {
             services.AddSingleton<IFineCalculator, HardCodedFineCalculator>();
 
+            services.AddHttpClient();
+
             services.AddSingleton<VehicleRegistrationService>();
 
             services.AddControllers();

@@ -7,11 +7,12 @@ namespace FineCollectionService.Proxies
 {
     public class VehicleRegistrationService
     {
-        private static readonly HttpClient _httpClient = new HttpClient();
+        private HttpClient _httpClient;
         private JsonSerializerOptions _serializerOptions;
 
-        public VehicleRegistrationService()
+        public VehicleRegistrationService(HttpClient httpClient)
         {
+            _httpClient = httpClient;
             _serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
