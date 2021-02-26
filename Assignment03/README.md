@@ -14,7 +14,7 @@ When using state management your application will also be able to leverage sever
 
 See below for a diagram of state management's high level architecture:
 
-![](img/state_management.png)
+<img src="img/state_management.png" style="zoom: 50%;" />
 
 For this hands-on assignment, this is all you need to know about this building-block. If you want to get more detailed information, read the [introduction to this building-block](https://github.com/dapr/docs/blob/master/concepts/state-management/README.md) in the Dapr documentation.
 
@@ -22,14 +22,18 @@ For this hands-on assignment, this is all you need to know about this building-b
 
 In order to complete this assignment, the following goals must be met:
 
-- The TrafficControl service saves the state of a vehicle (VehicleState class) using the state management building block after vehicle entry.
+- The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
 - The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
 
-For both these tasks you can use the Dapr client for .NET.
+This is number **3** in the end-state setup:
+
+<img src="../../dapr-traffic-control/img/dapr-setup.png" style="zoom: 67%;" />
+
+For both these tasks you will use the Dapr client for .NET.
 
 ## DIY instructions
 
-First open the `Assignment 3` folder in this repo in VS Code. Then open the [Dapr documentation](https://github.com/dapr/docs) and start hacking away. Make sure you use the default Redis state-store component provided out of the box by Dapr.
+First open the `src` folder in this repo in VS Code. Then open the [Dapr state management documentation](https://docs.dapr.io/developing-applications/building-blocks/state-management/) and start hacking away. Make sure you use the default Redis state-store component provided out of the box by Dapr.
 
 ## Step by step instructions
 

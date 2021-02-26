@@ -4,89 +4,216 @@
 
 In order to complete this assignment, the following goals must be met:
 
-- The TrafficControl service saves the state of a vehicle (VehicleState class) using the state management building block after vehicle entry.
+- The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
 - The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
 
-For both these tasks you can use the Dapr client for .NET.
+This is number **3** in the end-state setup:
+
+<img src="../../dapr-traffic-control/img/dapr-setup.png" style="zoom: 67%;" />
+
+For both these tasks you will use the Dapr client for .NET.
 
 ## Step 1: Use Dapr state-management building block
 
-1. Open the `Assignment 3` folder in this repo in VS Code.
+1. Open the `src` folder in this repo in VS Code.
 
-2. Open the file `Assignment03/src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
+2. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
-3. Add a private const field in this file holding the name of the state-store:
-
-   ```csharp
-   private const string DAPR_STORE_NAME = "statestore";
-   ```
-
-4. Replace the call to the VehicleStateRepository to store the VehicleState in the `VehicleEntry` method with a call to the the Dapr client:
+3. Inspect the code in the `VehicleEntry` method of this controller. It uses an instance of an `IVehicleStateRepository` to store and retrieve vehicle state:
 
    ```csharp
-   await daprClient.SaveStateAsync<VehicleState>(DAPR_STORE_NAME, msg.LicenseNumber, vehicleState);
+   // store vehicle state
+   var vehicleState = new VehicleState
+   {
+     LicenseNumber = msg.LicenseNumber,
+     EntryTimestamp = msg.Timestamp
+   };
+   await _vehicleStateRepository.SaveVehicleStateAsync(vehicleState);
    ```
 
-5. Add an argument to the `VehicleExit` method that is used to inject the Dapr client:
+4. Open the file `src/TrafficControlService/Repositories/InMemoryVehicleStateRepository.cs` in VS Code.
+
+5. This is the repository used by the TrafficControlService. Inspect the code in this class. As you can see, this repository uses a very simple in-memory Dictionary to store the state. The license-number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
+
+6. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+
+7. Add a reference to the Dapr ASP.NET Core integration library:
+
+   ```console
+   dotnet add package Dapr.AspNetCore
+   ```
+
+8. Restore all references:
+
+   ```console
+   dotnet restore
+   ```
+
+9. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
+
+10. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface:
 
    ```csharp
-   public async Task<ActionResult> VehicleExit(VehicleRegistered msg, [FromServices] IHttpClientFactory httpClientFactory, [FromServices] DaprClient daprClient)
+   using System.Threading.Tasks;
+   using Dapr.Client;
+   using TrafficControlService.Models;
+   
+   namespace TrafficControlService.Repositories
+   {
+     public class DaprVehicleStateRepository : IVehicleStateRepository
+     {
+       public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+       {
+         throw new NotImplementedException();
+       }
+   
+       public async Task SaveVehicleStateAsync(VehicleState vehicleState)
+       {
+         throw new NotImplementedException();
+       }
+     }
+   }
    ```
 
-6. Replace the call to the VehicleStateRepository to retrieve the VehicleState in the `VehicleExit` method with a call to the the Dapr client:
+11. Add a private constant field in this file holding the name of the state-store:
+
+    ```csharp
+    private const string DAPR_STORE_NAME = "statestore";
+    ```
+
+12. Expand the class with a private field named `_daprClient` that holds an instance of a `DaprClient` and a constructor that accepts a `DaprClient` instance as argument and initializes this field:
+
+    ```csharp
+    private readonly DaprClient _daprClient;
+    
+    public DaprVehicleStateRepository(DaprClient daprClient)
+    {
+      _daprClient = daprClient;
+    }
+    ```
+
+13. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
+
+    ```csharp
+    var stateEntry = await _daprClient.GetStateEntryAsync<VehicleState>(
+      DAPR_STORE_NAME, licenseNumber);
+    return stateEntry.Value;
+    ```
+
+14. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
+
+    ```csharp
+    await _daprClient.SaveStateAsync<VehicleState>(
+      DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
+    ```
+
+The repository code should now look like this:
+
+```csharp
+using System.Threading.Tasks;
+using Dapr.Client;
+using TrafficControlService.Models;
+
+namespace TrafficControlService.Repositories
+{
+  public class DaprVehicleStateRepository : IVehicleStateRepository
+  {
+    private const string DAPR_STORE_NAME = "statestore";
+    private readonly DaprClient _daprClient;
+
+    public DaprVehicleStateRepository(DaprClient daprClient)
+    {
+      _daprClient = daprClient;
+    }
+    public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+    {
+      var stateEntry = await _daprClient.GetStateEntryAsync<VehicleState>(
+        DAPR_STORE_NAME, licenseNumber);
+      return stateEntry.Value;
+    }
+
+    public async Task SaveVehicleStateAsync(VehicleState vehicleState)
+    {
+      await _daprClient.SaveStateAsync<VehicleState>(
+        DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
+    }
+  }
+}
+```
+
+Take some time to inspect the code. As you can see, it is very straightforward to use the Dapr state management building block using the .NET SDK for Dapr.  
+
+Now you need to make sure the repository you created is injected into the `TrafficController`. 
+
+1. Open the file `src/TrafficControlService/Startup.cs`.
+
+1. In the `ConfigureServices` method, the `IVehicleStateRepository` implementation to use is registered with dependency injection:
 
    ```csharp
-   // get vehicle state
-   var state = await daprClient.GetStateEntryAsync<VehicleState>(DAPR_STORE_NAME, msg.LicenseNumber);
+   services.AddSingleton<IVehicleStateRepository, InMemoryVehicleRepository>();
    ```
 
-7. The state-data you receive from the Dapr client is not an instance of the `VehicleState` class anymore, but a `StateEntry<VehicleState>`. To get to the actual `VehicleState`, you need to use the `Value` property of the `StateEntry`. So change all statements in the `VehicleExit` method where a property is read from the state instance and add `.Value` to the statement. Here is an example:
+1. Replace the `InMemoryVehicleStateRepository` with your new new `DaprVehicleStateRepository`:
 
    ```csharp
-   string licenseNumber = state.Value.LicenseNumber;
+   services.AddSingleton<IVehicleStateRepository, DaprVehicleRepository>();
    ```
 
-8. Replace the call to the VehicleStateRepository to save the updated VehicleState in the `VehicleExit` method with a call to the the Dapr client:
+1. The last thing you need to do is make sure the `DaprClient` is registered with dependency injection. Append `.AddDapr();` to the call to `services.AddControllers()`:
 
    ```csharp
-   // update state
-   state.Value.ExitTimestamp = msg.Timestamp;
-   await state.SaveAsync();
+   services.AddControllers().AddDapr();
    ```
 
-9. Now that you are using the Dapr state-management for storing vehicle state, remove everything with regards to the `VehicleStateRepository` from the code (do that in both the controller as the Startup class).
+1. Open a new terminal window in VS Code and change the current folder to `src/FineCollectionService`.
+
+1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
+
+   ```
+   dotnet build
+   ```
+
+   If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
 Now you're ready to test the application.
 
 ## Step 2: Test the application
 
-1. Make sure no services from previous tests are running (close the command-shell windows).
+1. Make sure no services from previous tests are running (close the terminal windows).
 
-2. Open a new command-shell window and go to the `Assignment03/src/GovernmentService` folder in this repo.
+2. Open a new terminal window in VS Code and change the current folder to `src/VehicleRegistrationService`.
 
-3. Start the Government service:
+3. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
-   ```
-   dapr run --app-id governmentservice --app-port 6000 --dapr-grpc-port 50002 dotnet run
-   ```
-
-2. Open a new command-shell window and go to the `Assignment03/src/TrafficControlService` folder in this repo.
-
-3. Start the TrafficControl service with a Dapr sidecar. The WebAPI is running on port 5000:
-
-   ```
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-grpc-port 50001 dotnet run
+   ```console
+   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 dotnet run
    ```
 
-4. Open a new command-shell window and go to the `Assignment03/src/Simulation` folder in this repo.
+4. Open a new terminal window in VS Code and change the current folder to `src/FineCollectionService`.
 
-5. Start the Simulation:
+5. Enter the following command to run the FineCollectionService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 dotnet run
+   ```
+
+6. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+
+7. Enter the following command to run the TrafficControlService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 dotnet run
+   ```
+
+8. Open a new terminal window in VS Code and change the current folder to `src/Simulation`.
+
+9. Start the simulation:
 
    ```
    dotnet run
    ```
 
-You should see the same logs as before.
+You should see similar logging as before.
 
 ## Step 2: Verify the state-store
 
@@ -116,7 +243,7 @@ You should see the same logs as before.
 
 5. You should see something similar to this:
 
-   ![](img/redis-cli.png)
+   <img src="img/redis-cli.png" />
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that multiple components exist that implement the state-management building-block. So without changing any code but only specifying a different Dapr configuration, you could use an entirely different storage mechanism. If you're up for it, try to swap-out redis with another state provider (see the [dapr-documentation on state management](https://github.com/dapr/docs/blob/master/concepts/state-management/README.md)).
 
