@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 using TrafficControlService.Events;
 using TrafficControlService.DomainServices;
 using TrafficControlService.Models;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using TrafficControlService.Repositories;
 
 namespace TrafficControlService.Controllers
 {
@@ -15,22 +15,24 @@ namespace TrafficControlService.Controllers
     public class TrafficController : ControllerBase
     {
         private static readonly HttpClient _httpClient = new HttpClient();
-        private static Dictionary<string, VehicleState> _state = new Dictionary<string, VehicleState>();
+        private readonly IVehicleStateRepository _vehicleStateRepository;
         private readonly ILogger<TrafficController> _logger;
         private readonly ISpeedingViolationCalculator _speedingViolationCalculator;
         private readonly string _roadId;
 
         public TrafficController(
-            ILogger<TrafficController> logger, 
+            ILogger<TrafficController> logger,
+            IVehicleStateRepository vehicleStateRepository,
             ISpeedingViolationCalculator speedingViolationCalculator)
         {
             _logger = logger;
+            _vehicleStateRepository = vehicleStateRepository;
             _speedingViolationCalculator = speedingViolationCalculator;
             _roadId = speedingViolationCalculator.GetRoadId();
         }
 
         [HttpPost("entrycam")]
-        public ActionResult VehicleEntry(VehicleRegistered msg)
+        public async Task<ActionResult> VehicleEntry(VehicleRegistered msg)
         {
             try
             {
@@ -44,14 +46,7 @@ namespace TrafficControlService.Controllers
                     LicenseNumber = msg.LicenseNumber,
                     EntryTimestamp = msg.Timestamp
                 };
-                if (_state.ContainsKey(msg.LicenseNumber))
-                {
-                    _state[msg.LicenseNumber] = vehicleState;
-                }
-                else
-                {
-                    _state.Add(msg.LicenseNumber, vehicleState);
-                }
+                await _vehicleStateRepository.SaveVehicleStateAsync(vehicleState);
 
                 return Ok();
             }
@@ -67,12 +62,11 @@ namespace TrafficControlService.Controllers
             try
             {
                 // get vehicle state
-                if (!_state.ContainsKey(msg.LicenseNumber))
+                var vehicleState = await _vehicleStateRepository.GetVehicleStateAsync(msg.LicenseNumber);
+                if (vehicleState == null)
                 {
                     return NotFound();
                 }
-
-                var vehicleState = _state[msg.LicenseNumber];
 
                 // log exit
                 _logger.LogInformation($"EXIT detected in lane {msg.Lane} at {msg.Timestamp.ToString("hh:mm:ss")} " +
@@ -80,7 +74,7 @@ namespace TrafficControlService.Controllers
 
                 // update state
                 vehicleState.ExitTimestamp = msg.Timestamp;
-                _state[msg.LicenseNumber] = vehicleState;
+                await _vehicleStateRepository.SaveVehicleStateAsync(vehicleState);
 
                 // handle possible speeding violation
                 int violation = _speedingViolationCalculator.DetermineSpeedingViolationInKmh(
