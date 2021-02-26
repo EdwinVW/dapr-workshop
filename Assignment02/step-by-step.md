@@ -138,7 +138,7 @@ First stop the simulation:
 
 1. Open to the command-shell window in which the FineCollectionService runs.
 
-1. Stop de service by pressing `Ctrl-C` and close the command-shell by clicking the trashcan icon in its title bar (or typing the `exit` command).
+1. Stop de service by pressing `Ctrl-C`. Keep this terminal window open and focused.
 
 1. Add a reference to the Dapr ASP.NET Core integration library:
 
