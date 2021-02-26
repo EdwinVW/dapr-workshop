@@ -2,21 +2,23 @@
 
 In this assignment, you're going to run the application to make sure everything works correctly.
 
-> If you want to check-out the code of the application, open the `Assignment 1` folder in this repo in VS Code.
+> Before executing this assignment, I suggest you check-out the code of the different services. Uou can open the `src` folder in this repo in VS Code.
 
-### Step 1. Run the Government service
+### Step 1. Run the VehicleRegistration service
 
-1. Open a new command-shell window.
+1. Open a new terminal window in VS Code.
 
-2. Go to the folder `Assignment01/src/GovernmentService`.
+   > You can do this by clicking on the `+` button in the Terminal Window title-bar or by using the hotkey ``Ctrl-Shift-` ``.
+
+2. Go to the folder `src/VehicleRegistrationService`.
 
 3. Start the service using `dotnet run`.
 
+> If you receive an error here, please double-check whether or not you have installed all the [prerequisites](..\README.md#Prerequisites) ) for the workshop!
+
 Now you can test whether you can call the Government service's Web-API. You can do this using a browser, CURL or some other HTTP client. But there is a convenient way of testing RESTful APIs directly from VS Code:
 
-4. Install the [**REST Client**](https://github.com/Huachao/vscode-restclient) extension for VS Code.
-
-5. Open the `test.http` file in the in VS Code.
+4. Open the `test.http` file in the project folder in VS Code. The request in this file simulates retrieving the vehicle- and owner information for a certain license-number.
 
 6. Click on `Execute request` in the file to send a request to the API. The result will be shown in a separate window on the right:
 
@@ -24,50 +26,65 @@ Now you can test whether you can call the Government service's Web-API. You can 
 
 7. Check the logging in the command-shell window. It should look like this:
 
-   ![](img/logging-governmentservice.png)
+   ![VehicleRegistrationService logging](img/logging-vehicleregistrationservice.png)
 
-### Step 2. Run the TrafficControl service
+### Step 2. Run the FineCollection service
 
-1. Make sure the Government service is running (see step 1).
+1. Make sure the VehicleRegistrationService service is running (see step 1).
+1. Open a new terminal window in VS Code.
+1. Go to the folder `src/FineCollectionService`.
+1. Start the service using `dotnet run`.
 
-2. Open a new command-shell window.
+4. Open the `test.http` file in the project folder in VS Code. The request in this file simulates sending a detected speeding-violation to the FineCollectionService.
 
-3. Go to the folder `Assignment01/src/TrafficControlService`.
+4. Click on `Execute request` in the file to send a request to the API. The result will be shown in a separate window on the right.
+
+4. Check the logging in the command-shell window. It should look like this:
+
+   ![FineCollectionService logging](img/logging-finecollectionservice.png)
+
+### Step 3. Run the TrafficControl service
+
+1. Make sure the VehicleRegistrationService and FineCollectionService are running (see step 1 and 2).
+
+2. Open a new terminal window in VS Code.
+
+3. Go to the folder `src/TrafficControlService`.
 
 4. Start the service using `dotnet run`.
 
-5. Open the `test.http` file in the folder in VS Code.
+4. Open the `test.http` file in the project folder in VS Code.
 
-6. Click on `Execute request` in the file to send a request to the API.
+4. Click on `Execute request` for both requests in the file to send two requests to the API. The result will be shown in a separate window on the right.
 
-7. Check the logging in both the command-shell windows. The logging should look like this:
-   TrafficControl service:
+4. Check the logging in the command-shell window. It should look like this:
 
-   ![](img/logging-trafficcontrolservice.png)
-   Government service:
-
-   ![](img/logging-governmentservice2.png)
+   ![TrafficControlService logging](img/logging-trafficcontrolservice.png)
+   
+   If you now also inspect the logging of the FineCollectionService (select the other Terminal in the dropdown on the title-bar of the Terminal Window), you should see the speeding-violation being logged:
+   
+   ![FineCollectionService logging](img/logging-finecollectionservice2.png)
 
 ### Step 3. Run the simulation
 
 You've tested the APIs directly by using a REST client. Now you're going to run the simulation that actually simulates cars driving on the highway. The simulation will simulate 3 entry- and exit-cameras (one for each lane).
 
-1. Make sure both the TrafficControl service and the Government service are running (see step 1 and 2).
+1. Open a new terminal window in VS Code.
 
-2. Open a new command-shell window.
+2. Go to the folder `src/Simulation`.
 
-3. Go to the folder `Assignment01/src/Simulation`.
+3. Start the service using `dotnet run`.
 
-4. Start the service using `dotnet run`.
-
-5. Check the logging in all three command-shell windows. You should see similar output as before for the Government service and TrafficControl service. In the simulation window you should see something like this:
+4. In the simulation window you should see something like this:
 
    ![](img/logging-simulation.png)
+
+5. Also check the logging in all the other Terminal windows. You should see all entry- and exit events and any speeding-violations that were detected in the logging.
 
 Now we know the application runs correctly. It's time to start adding Dapr to the application.
 
 ## Next assignment
 
-Make sure you stop all running processes before proceeding to the next assignment.
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
 
 Go to [assignment 2](../Assignment02/README.md).

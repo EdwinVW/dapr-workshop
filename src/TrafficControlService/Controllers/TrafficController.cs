@@ -100,7 +100,7 @@ namespace TrafficControlService.Controllers
 
                     // publish speedingviolation
                     var message = JsonContent.Create<SpeedingViolation>(speedingViolation);
-                    await _httpClient.PostAsync("http://localhost:5001/collection/collectfine", message);
+                    await _httpClient.PostAsync("http://localhost:5001/collectfine", message);
                 }
 
                 return Ok();

@@ -3,4 +3,4 @@
 POST http://127.0.0.1:5001/collection/collectfine
 Content-Type: application/json
 
-{ "vehicleId": "RK-546-V", "roadId": "A12", "violationInKmh": 15, "timestamp": "2020-09-20T08:33:41" }
+{ "vehicleId": "RT-318-K", "roadId": "A12", "violationInKmh": 15, "timestamp": "2020-09-20T08:33:41" }
