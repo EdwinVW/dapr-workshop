@@ -94,6 +94,26 @@ The `src` folder in the repo contains the starting-point for the workshop. It co
 
 Every description of an assignment (accept the first one) contains two parts with each a certain approach to executing the assignment: a **DIY** part and a **step-by-step** part. The DIY part just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step part describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step approach for some help.
 
+#### Prevent port collisions
+
+During the workshop you will run the services in the solution on your local machine. To prevent port-collisions, all services listen on a different HTTP port. When running the services with Dapr, you need additional ports voor HTTP and gRPC communication with the sidecars. If you follow the instructions, the services will use the following ports for their Dapr sidecars to prevent port collisions:
+
+| Service                    | Application Port | Dapr sidecar HTTP port | Dapr sidecar gRPC port |
+| -------------------------- | ---------------- | ---------------------- | ---------------------- |
+| TrafficControlService      | 5000             | 3500                   | 50000                  |
+| FineCollectionService      | 5001             | 3501                   | 50001                  |
+| VehicleRegistrationService | 5002             | 3502                   | 50002                  |
+
+If you're doing the DIY approach, make sure you use the ports specified in the table above. 
+
+The ports can be specified on the command-line when starting a service with the Dapr CLI. The following command-line flags can be used:
+
+- `--app-port`
+- `--dapr-http-port`
+- `--dapr-grpc-port`
+
+#### Get started
+
 Now it's time for you to get your hands dirty and start with the first assignment started:
 
 1. Clone the Github repository to a local folder on your machine:

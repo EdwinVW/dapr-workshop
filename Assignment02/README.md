@@ -33,15 +33,7 @@ This is number **1** in the end-state setup:
 
 ## DIY instructions
 
-Open the `src` folder in this repo in VS Code. Then open the [Dapr documentation](https://github.com/dapr/docs) and start hacking away. Make sure the services use the following ports for their Dapr sidecars (configured on the command-line) to prevent port collisions:
-
-| Service                    | --dapr-http-port | --dapr-grpc-port |
-| -------------------------- | ---------------- | ---------------- |
-| TrafficControlService      | 3500             | 50000            |
-| FineCollectionService      | 3501             | 50001            |
-| VehicleRegistrationService | 3502             | 50002            |
-
-If you need any hints, you may peek in the step-by-step part.
+Open the `src` folder in this repo in VS Code. Then open the [Dapr service invocation documentation](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/) and start hacking away. If you need any hints, you may peek in the step-by-step part.
 
 ## Step by step instructions
 
