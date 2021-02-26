@@ -6,7 +6,7 @@ In this assignment, you're going to add Dapr into the mix. You will use the **Se
 
 In a microservices application, it is important to be able to communicate with other services without knowing where they live. Especially when the services are running in Kubernetes (or some other orchestration platform), services can be moved around and replaced with a new version all the time. This is where the Dapr service-to-service building block comes in. It works like this:
 
-![](img/service-invocation.png)
+<img src="img/service-invocation.png" style="zoom: 33%;" />
 
 1. Service A makes an HTTP or gRPC call meant for Service B.  The call goes to Service A's Dapr sidecar.
 2. Dapr discovers Service B's location using its name-resolution component for the hosting environment the solution is running in. 
@@ -24,12 +24,24 @@ For this hands-on assignment, this is all you need to know about this building-b
 
 In order to complete this assignment, the following goals must be met:
 
-- The VehicleRegistrationService is started running Dapr.
-- The TrafficControl service uses the Dapr client for .NET to call the GetVehicleInfo method on the Government service using a Dapr direct service-to-service invocation.
+- The VehicleRegistrationService and FineCollectionService are running with Dapr.
+- The FineCollectionService uses the Dapr client for .NET to call the `/vehicleinfo/{licensenumber}` endpoint on the VehicleRegistrationService using Dapr service invocation.
+
+This is number **1** in the end-state setup:
+
+<img src="../../dapr-traffic-control/img/dapr-setup.png" style="zoom: 67%;" />
 
 ## DIY instructions
 
-First open the `Assignment 2` folder in this repo in VS Code. Then open the [Dapr documentation](https://github.com/dapr/docs) and start hacking away. Make sure the Government service is using `50001` as the dapr-grpc-port. If you need any hints, you may peek in the step-by-step part.
+Open the `src` folder in this repo in VS Code. Then open the [Dapr documentation](https://github.com/dapr/docs) and start hacking away. Make sure the services use the following ports for their Dapr sidecars (configured on the command-line) to prevent port collisions:
+
+| Service                    | --dapr-http-port | --dapr-grpc-port |
+| -------------------------- | ---------------- | ---------------- |
+| TrafficControlService      | 3500             | 50000            |
+| FineCollectionService      | 3501             | 50001            |
+| VehicleRegistrationService | 3502             | 50002            |
+
+If you need any hints, you may peek in the step-by-step part.
 
 ## Step by step instructions
 

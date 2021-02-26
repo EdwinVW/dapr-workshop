@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FineCollectionService.Models;
@@ -22,12 +23,8 @@ namespace FineCollectionService.Proxies
 
         public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
         {
-            HttpResponseMessage response =
-                await _httpClient.GetAsync($"http://localhost:5002/vehicleinfo/{licenseNumber}");
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
-            var vehicleInfo = JsonSerializer.Deserialize<VehicleInfo>(responseBody, _serializerOptions);
-            return vehicleInfo;
+            return await _httpClient.GetFromJsonAsync<VehicleInfo>(
+                $"http://localhost:5002/vehicleinfo/{licenseNumber}", _serializerOptions);
         }       
     }
 }

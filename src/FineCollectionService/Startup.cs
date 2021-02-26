@@ -22,8 +22,8 @@ namespace FineCollectionService
         {
             services.AddSingleton<IFineCalculator, HardCodedFineCalculator>();
 
+            // add service proxies
             services.AddHttpClient();
-
             services.AddSingleton<VehicleRegistrationService>();
 
             services.AddControllers();
@@ -43,6 +43,6 @@ namespace FineCollectionService
             {
                 endpoints.MapControllers();
             });
-        }   
+        }
     }
 }

@@ -33,22 +33,22 @@ In order to simulate this in code, the following services are defined:
 The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building-block to the solution. 
 
 - The **Camera Simulation** is a .NET Core console application that will simulate passing cars.
-- The **Traffic Control Service** is an ASP.NET Core WebAPI application that offers 2 endpoints: */entrycam* and */exitcam*.
-- The **Fine Collection Service** is an ASP.NET Core WebAPI application that offers 1 endpoint: */collectfine* for for collecting fines.
-- The **Vehicle Registration Service** is an ASP.NET Core WebAPI application that offers 2 endpoints: */getvehicleinfo/{license-number}* for getting the vehicle- and owner-information of speeding vehicle.
+- The **Traffic Control Service** is an ASP.NET Core WebAPI application that offers 2 endpoints: `/entrycam` and `/exitcam`.
+- The **Fine Collection Service** is an ASP.NET Core WebAPI application that offers 1 endpoint: `/collectfine` for for collecting fines.
+- The **Vehicle Registration Service** is an ASP.NET Core WebAPI application that offers 1 endpoint: `/getvehicleinfo/{license-number}` for getting the vehicle- and owner-information of speeding vehicle.
 
 The way the simulation works is depicted in the sequence diagram below:
 
-![Sequence diagram](img/sequence.png)
+<img src="img/sequence.png" alt="Sequence diagram" style="zoom:67%;" />
 
-1. The Camera Simulation generates a random license-number and sends a *VehicleRegistered* message (containing this license-number, a random entry-lane (1-3) and the timestamp) to the */entrycam* endpoint of the TrafficControlService.
+1. The Camera Simulation generates a random license-number and sends a *VehicleRegistered* message (containing this license-number, a random entry-lane (1-3) and the timestamp) to the `/entrycam` endpoint of the TrafficControlService.
 1. The TrafficControlService stores the VehicleState (license-number and entry-timestamp).
-1. After some random interval, the Camera Simulation sends a *VehicleRegistered* message to the */exitcam* endpoint of the TrafficControlService (containing the license-number generated in step 1, a random exit-lane (1-3) and the exit timestamp).
+1. After some random interval, the Camera Simulation sends a *VehicleRegistered* message to the `/exitcam` endpoint of the TrafficControlService (containing the license-number generated in step 1, a random exit-lane (1-3) and the exit timestamp).
 1. The TrafficControlService retrieves the VehicleState that was stored at vehicle entry.
 1. The TrafficControlService calculates the average speed of the vehicle using the entry- and exit-timestamp.
-1. If the average speed is above the speed-limit, the TrafficControlService calls the */collectfine* endpoint of the FineCollectionService. The request payload will be a *SpeedingViolation* containing the license-number of the vehicle, the identifier of the road, the speeding-violation in KMh and the timestamp of the violation.
+1. If the average speed is above the speed-limit, the TrafficControlService calls the `/collectfine` endpoint of the FineCollectionService. The request payload will be a *SpeedingViolation* containing the license-number of the vehicle, the identifier of the road, the speeding-violation in KMh and the timestamp of the violation.
 1. The FineCollectionService calculates the fine for the speeding-violation.
-1. The FineCollectionSerivice calls the */getvehicleinfo/{license-number}* endpoint of the VehicleRegistrationService with the license-number of the speeding vehicle to retrieve its vehicle- and owner-information.
+1. The FineCollectionSerivice calls the `/vehicleinfo/{license-number}` endpoint of the VehicleRegistrationService with the license-number of the speeding vehicle to retrieve its vehicle- and owner-information.
 1. The FineCollectionService sends a fine to the owner of the vehicle by email.
 
 All actions described in this sequence are logged to the console during execution so you can follow the flow.
@@ -57,7 +57,7 @@ All actions described in this sequence are logged to the console during executio
 
 After completing all the assignments, the architecture has been changed to work with Dapr and should look like this:
 
-![Dapr setup](img/dapr-setup.png)
+<img src="img/dapr-setup.png" alt="Dapr setup" style="zoom:67%;" />
 
 1. For doing request/response type communication between the FineCollectionService and the VehicleRegistrationService, the **service invocation** building-block is used.
 1. For communicating messages, the **publish and subscribe** building-block is used. RabbitMQ is used as message broker.
@@ -68,7 +68,7 @@ After completing all the assignments, the architecture has been changed to work 
 
 The sequence diagram below shows how the solution will work with Dapr:
 
-![Sequence diagram with Dapr](../dapr-traffic-control/img/sequence-dapr.png)
+<img src="../dapr-traffic-control/img/sequence-dapr.png" alt="Sequence diagram with Dapr" style="zoom:67%;" />
 
 > If during the workshop you are lost on what the end result of an assignment should be, come back to this README to see the end result.
 
