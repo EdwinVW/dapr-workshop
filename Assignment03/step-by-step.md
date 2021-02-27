@@ -1,175 +1,81 @@
-# Assignment 3 - Add Dapr state management
+# Assignment 3 - Add pub/sub messaging
 
 ## Assignment goals
 
 In order to complete this assignment, the following goals must be met:
 
-- The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
-- The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
+1. The TrafficControlService sends `SpeedingViolation` messages using the Dapr pub/sub building block to the FineCollectionService.
 
-This is number **3** in the end-state setup:
+1. The FineCollectionService receives `SpeedingViolation` messages using the Dapr pub/sub building block.
+
+1. RabbitMQ is used as pub/sub message broker. Don't worry if you have no experience with RabbitMQ. You will run it as a container in the background and don't need to interact with it directly in any way. The instructions will explain exactly how to do that.
+
+This is number **2** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-For both these tasks you will use the Dapr client for .NET.
+## Step 1: Consume messages in the FineCollectionService
 
-## Step 1: Use the Dapr state management building block
+First you are going to prepare the FineCollectionService service so it can receive messages sent using Dapr pub/sub.
+
+With the Dapr pub/sub building-block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. The Dapr ASP.NET integration library offers an elegant way of linking a WebAPI method to a pub/sub topic. For every message sent to that topic, the WebAPI method is called (as if it was called directly over HTTP).
 
 1. Open the `src` folder in this repo in VS Code.
 
-1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
+1. Open a new terminal window in VS Code and change the current folder to `src/FineCollectionService`.
 
-1. Inspect the code in the `VehicleEntry` method of this controller. It uses an instance of an `IVehicleStateRepository` to store vehicle state:
+1. Add a reference to the Dapr ASP.NET Core integration library:
+
+   ```console
+   dotnet add package Dapr.AspNetCore
+   ```
+
+1. Restore all references:
+
+   ```console
+   dotnet restore
+   ```
+
+1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
+
+1. Add a using statement in this file so you can use Dapr classes:
 
    ```csharp
-   // store vehicle state
-   var vehicleState = new VehicleState
+   using Dapr;
+   ```
+
+1. Add an attribute above the `CollectFine` method to link this method to a topic called `collectfine`:
+
+   ```csharp
+   [Topic("pubsub", "collectfine")]
+   ```
+
+   The *"pubsub"* argument passed to this attribute specifies the name of the pub/sub component to use. You will configure a pub/sub component that uses the RabbitMQ message-broker later in this assignment.
+
+Now you need to make sure that Dapr knows this controller and also knows which pub/sub topics the controller subscribes to. To determine this, Dapr will call your service on a default endpoint to retrieve the subscriptions. To make sure your service handles this request and returns the correct information, you need to add some statements to the `Startup` class:
+
+1. Open the file `src/FineCollectionService/Startup.cs` in VS Code.
+
+1. Change the `AddControllers` line in the `ConfigureServices` method in this file to:
+
+   ```csharp
+   services.AddControllers().AddDapr();
+   ```
+
+1. Dapr uses the *CloudEvent* message-format standard when sending messages over pub/sub. To enable this, add the following line just after the call to `app.UseRouting();` in the `Configure` method:
+
+   ```csharp
+   app.UseCloudEvents();
+   ```
+
+1. To register every controller that uses pub/sub as a subscriber, change the call to `UseEndpoints` in the `Configure` method so it looks like this:
+
+   ```csharp
+   app.UseEndpoints(endpoints =>
    {
-     LicenseNumber = msg.LicenseNumber,
-     EntryTimestamp = msg.Timestamp
-   };
-   await _vehicleStateRepository.SaveVehicleStateAsync(vehicleState);
-   ```
-
-1. Open the file `src/TrafficControlService/Repositories/InMemoryVehicleStateRepository.cs` in VS Code.
-
-1. This is the repository used by the TrafficControlService. Inspect the code in this class. As you can see, this repository uses a very simple in-memory Dictionary to store the state. The license-number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
-
-1. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
-
-7. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. You can use this snippet:
-   ```csharp
-   using System.Net.Http;
-using System.Net.Http.Json;
-   using System.Threading.Tasks;
-   using TrafficControlService.Models;
-   ​```
-   
-     namespace TrafficControlService.Repositories
-   {
-     public class DaprVehicleStateRepository : IVehicleStateRepository
-     {
-       public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-       {
-         throw new NotImplementedException();
-       }
-   
-       public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-       {
-         throw new NotImplementedException();
-       }
-     }
-   }  
-   ```
-   
-8. Add a private constant field in this file holding the name of the state-store:
-
-   ```csharp
-   private const string DAPR_STORE_NAME = "statestore";
-   ```
-   
-9. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
-
-    ```csharp
-    private readonly HttpClient _httpClient;
-    
-    public DaprVehicleStateRepository(HttpClient httpClient)
-    {
-      _httpClient = httpClient;
-    }
-    ```
-
-1. The URL for saving data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>`. You'll use this API to store the VehicleState. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
-
-    ```csharp
-    var state = new[]
-    {
-      new { 
-        key = vehicleState.LicenseNumber,
-        value = vehicleState
-      }
-    };
-    
-    await _httpClient.PostAsJsonAsync(
-      $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
-      state);
-   ```
-
-    > As you can see here, the structure of the data when saving state is an array of key / value pairs. In this example you use an anonymous type as payload.
-
-1. The URL for getting data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>/<key>`. You'll use this API to retrieve the VehicleState. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
-
-    ```csharp
-    var state = await _httpClient.GetFromJsonAsync<VehicleState>(
-      $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
-    return state;
-    ```
-
-The repository code should now look like this:
-
-```csharp
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using TrafficControlService.Models;
-
-namespace TrafficControlService.Repositories
-{
-  public class DaprVehicleStateRepository : IVehicleStateRepository
-  {
-    private const string DAPR_STORE_NAME = "statestore";
-    private readonly HttpClient _httpClient;
-
-    public DaprVehicleStateRepository(HttpClient httpClient)
-    {
-      _httpClient = httpClient;
-    }
-
-    public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-    {
-      var state = await _httpClient.GetFromJsonAsync<VehicleState>(
-        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
-      return state;
-    }
-
-    public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-    {
-      var state = new[]
-      {
-        new {
-          key = vehicleState.LicenseNumber,
-          value = vehicleState
-        }
-      };
-
-      await _httpClient.PostAsJsonAsync(
-        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
-        state);
-    }
-  }
-}
-```
-
-Now you need to make sure your new repository is registered with dependency-injection. 
-
-1. Open the file `src/TrafficControlService/Startup.cs`.
-
-1. In the `ConfigureServices` method, the `IVehicleStateRepository` implementation to use is registered with dependency injection:
-
-   ```csharp
-   services.AddSingleton<IVehicleStateRepository, InMemoryVehicleStateRepository>();
-   ```
-
-1. Replace the `InMemoryVehicleStateRepository` with your new new `DaprVehicleStateRepository`:
-
-   ```csharp
-   services.AddSingleton<IVehicleStateRepository, DaprVehicleRepository>();
-   ```
-
-1. Your repository uses the `HttpClient`. So add the following line above the registration of the `IVehicleStateRepository`:
-
-   ```csharp
-   services.AddHttpClient();
+         endpoints.MapSubscribeHandler();
+         endpoints.MapControllers();
+   });
    ```
 
 1. Open a new terminal window in VS Code and change the current folder to `src/FineCollectionService`.
@@ -182,11 +88,157 @@ Now you need to make sure your new repository is registered with dependency-inje
 
    If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
-Now you're ready to test the application.
+This is the receiving part done. Now you need to update the simulation so that it uses Dapr pub/sub to send messages to the TrafficControl service.
 
-## Step 2a: Test the application
+## Step 2: Publish messages from the TrafficControl service
 
-1. Make sure no services from previous tests are running (close the terminal windows).
+1. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+
+1. Add a reference to the Dapr ASP.NET Core integration package:
+
+   ```
+   dotnet add package Dapr.AspNetCore
+   ```
+
+1. Restore all references:
+
+   ```
+   dotnet restore
+   ```
+
+1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
+
+1. In this file, add a using statement for the Dapr client:
+
+   ```csharp
+   using Dapr.Client;
+   ```
+
+1. Add an argument named `daprClient` of type `DaprClient` to the `ExitCam` method that is decorated with the `[FromServices]` attribute:
+
+   ```csharp
+   public async Task<ActionResult> VehicleExit(VehicleRegistered msg, [FromServices] DaprClient daprClient)
+   ```
+   
+   > The `[FromServices]` attribute This makes sure that the `DaprClient` is automatically injected by the ASP.NET Core dependency injection system.
+
+1. Near the end of the method, you find the code that sends a `SpeedingViolation` message to the FineCollectionService over HTTP:
+
+   ```csharp
+   // publish speedingviolation
+   var message = JsonContent.Create<SpeedingViolation>(speedingViolation);
+   await _httpClient.PostAsync("http://localhost:5001/collectfine", message);
+   ```
+
+1. Replace this code with a call to the Dapr pub/sub building block using the DaprClient:
+
+   ```csharp
+   // publish speedingviolation
+   await daprClient.PublishEventAsync("pubsub", "collectfine", speedingViolation);
+   ```
+
+1. Open the file `src/TrafficControlService/Startup.cs`.
+
+1. The service now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. The `Dapr.AspNetCore` has all kinds of convenience methods for these kinds of things. Add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
+
+    ```csharp
+    services.AddDaprClient();
+    ```
+
+1. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+
+1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
+
+    ```console
+    dotnet build
+    ```
+
+    If you see any warnings or errors, review the previous steps to make sure the code is correct.
+
+## Step 4: Run RabbitMQ as message broker
+
+Now it's time to add a new infrastructural component to the solution. You're going to pull a standard Docker image containing RabbitMQ to your machine and start it as a container.
+
+1. Open a new terminal window in VS Code.
+
+1. Start a RabbitMQ message-broker by entering the following command:
+
+   ```console
+   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
+   ```
+
+This will pull the docker image `rabbitmq:3-alpine` from Docker Hub and start it. The name of the container will be `dtc-rabbitmq`. The server will be listening for connections on port `5672` (which is the default port for RabbitMQ).
+
+If everything goes well, you should see some output like this:
+
+![](img/docker-rmq-output.png)
+
+> If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
+
+The container will keep running in the background. If you want to stop it, enter the following command:
+
+```console
+docker stop dtc-rabbitmq
+```
+
+You can then start the container later by entering the following command:
+
+```console
+docker start dtc-rabbitmq
+```
+
+If you are done using the container, you can also remove it by entering the following command:
+
+```console
+docker rm dtc-rabbitmq -f
+```
+
+Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
+
+## Step 5: Configure the pub/sub component
+
+Until now, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac. 
+
+Because you need to change the message-broker from Redis to RabbitMQ, you will create a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag. 
+
+1. Create a new folder `src/dapr/components`. 
+
+1. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac to the `src/dapr/components` folder.
+
+1. Open the file `src/dapr/components/pubsub.yaml` in VS Code.
+
+1. Inspect this file. As you can see, it specifies the type of the message-broker to use (`pubsub.redis`) and specifies information on how to connect to the Redis server in the `metadata` section.
+
+1. Change the content of this file to:
+
+   ```yaml
+   apiVersion: dapr.io/v1alpha1
+   kind: Component
+   metadata:
+     name: pubsub
+   spec:
+     type: pubsub.rabbitmq
+     version: v1
+     metadata:
+     - name: host
+       value: "amqp://localhost:5672"
+     - name: durable
+       value: "false"
+     - name: deletedWhenUnused
+       value: "false"
+     - name: autoAck
+       value: "false"
+     - name: reconnectWait
+       value: "0"
+     - name: concurrency
+       value: parallel
+   ```
+
+As you can see, you specify a different type of pub/sub component (`pubsub.rabbitmq`) and you specify in the `metadata` how to connect to the RabbitMQ container you started in step 4 (running on localhost on port `5672`). The other metadata can be ignored for now.
+
+## Step 6: Test the application
+
+1. Make sure no services from previous tests are running (close the command-shell windows).
 
 1. Open a new terminal window in VS Code and change the current folder to `src/VehicleRegistrationService`.
 
@@ -201,15 +253,17 @@ Now you're ready to test the application.
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 dotnet run
+   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
    ```
+
+   > Notice that you specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use RabbitMQ for pub/sub.
 
 1. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 dotnet run
+   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a new terminal window in VS Code and change the current folder to `src/Simulation`.
@@ -220,142 +274,13 @@ Now you're ready to test the application.
    dotnet run
    ```
 
-You should see similar logging as before.
+You should see the same logs as before. Obviously, the behavior of the application is exactly the same as before. But if you look closely at the Dapr logs of the TrafficControlService, you should see something like this in there:
 
-## Step 2b: Verify the state-store
-
- Obviously, the behavior of the application is exactly the same as before. But are the VehicleState entries actually stored in the default Redis state-store? To check this, you will use the redis CLI inside the `dapr_redis` container that is used as state-store in the default Dapr installation.
-
-1. Open a new command-shell window.
-
-1. Execute the following command to start the redis-cli inside the running `dapr_redis` container:
-
-   ```console
-   docker exec -it dapr_redis redis-cli
-   ```
-
-1. In the redis-cli enter the following command to get the list of keys of items stored in the redis cache:
-
-   ```console
-   keys *
-   ```
-
-   You should see a list of entries with keys in the form `"trafficcontrolservice||<license-number>"`.
-
-1. Enter the following command in the redis-cli to get the data stored with this key (change the license-number to one in the list you see):
-
-   ```console
-   hgetall trafficcontrolservice||KL-495-J
-   ```
-
-1. You should see something similar to this:
-
-   <img src="img/redis-cli.png" />
-
-As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that multiple components exist that implement the state-management building-block. So without changing any code but only specifying a different Dapr configuration, you could use an entirely different storage mechanism. If you're up for it, try to swap-out redis with another state provider (see the [dapr-documentation on state management](https://github.com/dapr/docs/blob/master/concepts/state-management/README.md)).
-
-## Step 3: Use Dapr state management with the Dapr SDK for .NET
-
-In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP by using the `DaprClient` from the Dapr SDK for .NET. 
-
-1. Open the `src` folder in this repo in VS Code.
-
-2. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
-
-7. Add a reference to the Dapr ASP.NET Core integration library:
-
-   ```console
-   dotnet add package Dapr.AspNetCore
-   ```
-
-8. Restore all references:
-
-   ```console
-   dotnet restore
-   ```
-
-9. Open the file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
-
-6. Add a using statement for the Dapr client:
-
-   ```csharp
-   using Dapr.Client;
-   ```
-
-7. Change all occurrences of the `HttpClient` with `DaprClient` and rename the private field `_httpClient` to `_daprClient`.
-
-13. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
-
-    ```csharp
-    await _daprClient.SaveStateAsync(
-      DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
-    ```
-    
-2. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
-
-   ```csharp
-   return await _daprClient.GetStateAsync<VehicleState>(
-     DAPR_STORE_NAME, licenseNumber);
-   ```
-
-The repository code should now look like this:
-
-```csharp
-using System.Threading.Tasks;
-using Dapr.Client;
-using TrafficControlService.Models;
-
-namespace TrafficControlService.Repositories
-{
-  public class DaprVehicleStateRepository : IVehicleStateRepository
-  {
-    private const string DAPR_STORE_NAME = "statestore";
-    private readonly DaprClient _daprClient;
-
-    public DaprVehicleStateRepository(DaprClient daprClient)
-    {
-      _daprClient = daprClient;
-    }
-
-    public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-    {
-      return await _daprClient.GetStateAsync<VehicleState>(
-        DAPR_STORE_NAME, licenseNumber);
-    }
-
-    public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-    {
-      await _daprClient.SaveStateAsync(
-        DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
-    }
-  }
-}
+```console
+time="2021-02-27T16:46:02.5989612+01:00" level=info msg="app is subscribed to the following topics: [collectfine] through pubsub=pubsub" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
 ```
 
-Now you need to make sure the repository you created is injected into the `TrafficController`. 
-
-1. Open the file `src/TrafficControlService/Startup.cs`.
-
-1. In the `ConfigureServices` method, remove the registration of the `HttpClient`.
-
-1. In stead of the `HttpClient`, your repository now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. The `Dapr.AspNetCore` has all kinds of convenience methods for these kinds of things. Add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
-
-   ```csharp
-   services.AddDaprClient();
-   ```
-
-1. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
-
-1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
-
-   ```console
-   dotnet build
-   ```
-
-   If you see any warnings or errors, review the previous steps to make sure the code is correct.
-
-Now you're ready to test the application. Just repeat steps 2a and 2b.
-
+So you can see that Dapr has asked the service which topics it subscribes on and created the subscriptions. 
 
 ## Next assignment
 

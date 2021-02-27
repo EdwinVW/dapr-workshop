@@ -1,39 +1,32 @@
-# Assignment 3 - Add Dapr state management
+# Assignment 3 - Add pub/sub messaging
 
-In this assignment, you're going to add Dapr **state management** in the TrafficControl service to store vehicle information.
+In this assignment, you're going to add Dapr **publish/subscribe** messaging to send messages from the simulation to the TrafficControl service and from the TrafficControl service to the Government service.
 
-## Dapr State management building block
+## Dapr pub/sub building block
 
-Dapr offers key/value storage APIs for state management. If a microservice uses state management, it can use these APIs to leverage any of the supported state stores, without adding or learning a third party SDK.
+The publish/subscribe pattern allows your microservices to communicate with each other purely by sending messages. In this system, the producer of a message sends it to a topic, with no knowledge of what service will receive the message. A messages can even be sent if there's no consumer for it.
 
-When using state management your application will also be able to leverage several other features that would otherwise be complicated and error-prone to build yourself such as:
+Similarly, a consumer will receive messages from a topic without knowledge of what producer sent it. This pattern is especially useful when you need to decouple microservices from one another. See the diagram below for an overview of how this pattern works with Dapr:
 
-- Distributed concurrency and data consistency
-- Retry policies
-- Bulk CRUD operations
+![](img/pub-sub.png)
 
-See below for a diagram of state management's high level architecture:
-
-<img src="img/state_management.png" style="zoom: 50%;" />
-
-For this hands-on assignment, this is all you need to know about this building-block. If you want to get more detailed information, read the [introduction to this building-block](https://github.com/dapr/docs/blob/master/concepts/state-management/README.md) in the Dapr documentation.
+For this hands-on assignment, this is all you need to know about this building-block. If you want to get more detailed information, read the [overview of this building-block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) in the Dapr documentation.
 
 ## Assignment goals
 
 In order to complete this assignment, the following goals must be met:
 
-- The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
-- The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
+1. The TrafficControlService sends `SpeedingViolation` messages using the Dapr pub/sub building block to the FineCollectionService.
+2. The FineCollectionService receives `SpeedingViolation` messages using the Dapr pub/sub building block.
+3. RabbitMQ is used as pub/sub message broker.
 
-This is number **3** in the end-state setup:
+This is number **2** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-For both these tasks you will use the Dapr client for .NET.
-
 ## DIY instructions
 
-First open the `src` folder in this repo in VS Code. Then open the [Dapr state management documentation](https://docs.dapr.io/developing-applications/building-blocks/state-management/) and start hacking away. Make sure you use the default Redis state-store component provided out of the box by Dapr.
+First open the `src` folder in this repo in VS Code. Then open the [Dapr documentation for publish / subscribe](https://github.com/dapr/docs) and start hacking away. Make sure you use the RabbitMQ pub/sub component and spin up a RabbitMQ container to act as message-broker.
 
 ## Step by step instructions
 
