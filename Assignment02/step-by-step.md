@@ -126,9 +126,9 @@ The services are up & running. Now you're going to test this using the simulatio
 
 You should see similar logging as before when you ran the application. So all the functionality works the same, but now you use Dapr service invocation to communicate between the FineCollectionService and the VehicleRegistrationService. 
 
-## Step 3: Call the VehicleRegistrationService using the .NET SDK for Dapr
+## Step 3: Use Dapr service invocation with the Dapr SDK for .NET
 
-In this step, you're going to change the code of the FineCollectionService so it uses the Dapr client for .NET to call the VehicleRegistrationService.
+In this step, you're going to change the code of the FineCollectionService so it uses the .NET `DaprClient` to call the VehicleRegistrationService.
 
 First stop the simulation:
 
