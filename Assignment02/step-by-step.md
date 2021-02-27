@@ -16,7 +16,7 @@ This assignment targets number **1** in the end-state setup:
 In assignment 1, you started all the services using `dotnet run`. When you want to run a service with a Dapr side-car that handles its communication, you need to start it using the Dapr CLI. There are a couple of things you need to specify when starting the service:
 
 - The service needs a unique id which Dapr can use to find it. This is called the *app-id* (or application Id). You specify this with the `--app-id` flag on the command-line.
-- Each of the services listen on a different HTTP port for requests. The VehicleRegistrationService runs on port `5002` for instance. You need to tell Dapr this port so the Dapr sidecar can communicate with the service. You specify this with the `--app-port` flag on the command-line.
+- Each of the services listens on a different HTTP port for requests (to prevent port collisions on localhost). The VehicleRegistrationService runs on port `5002` for instance. You need to tell Dapr this port so the Dapr sidecar can communicate with the service. You specify this with the `--app-port` flag on the command-line.
 - Dapr uses HTTP or gRPC to communicate with the Dapr side-car. The ports used for this communication is `3500` for HTTP and `50001` for gRPC by default. But to prevent port collisions on the local machine when running multiple services, you have to specify a unique HTTP and gRPC port per service. You specify this with the `--dapr-http-port` and `--dapr-grpc-port` flags on the command-line.
 - Finally you need to tell Dapr how to start the service. We are using .NET so we can specify `dotnet run`.
 
@@ -65,7 +65,7 @@ First you're going to change the code so it calls the Dapr sidecar:
    public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
    {
    	return await _httpClient.GetFromJsonAsync<VehicleInfo>(
-   		$"http://localhost:5002/vehicleinfo/{licenseNumber}", _serializerOptions);
+   		$"http://localhost:5002/vehicleinfo/{licenseNumber}");
    }
    ```
 
@@ -77,13 +77,12 @@ First you're going to change the code so it calls the Dapr sidecar:
    public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
    {
    	return await _httpClient.GetFromJsonAsync<VehicleInfo>(
-   		$"http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}", 
-   		_serializerOptions);
+   		$"http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}");
    }
    ```
-
-   > It's important to really grasp this sidecar pattern. In this case, the FineCollectionService calls the VehicleRegistrationService by **calling its own dapr sidecar**! The FineCollectionService doesn't need to know anymore where the VehicleRegistrationService lives because its Dapr sidecar will take care of that. It will find it based on the `app-id` specified in the URL and call the target service's sidecar.
-
+   
+> It's important to really grasp this sidecar pattern. In this case, the FineCollectionService calls the VehicleRegistrationService by **calling its own dapr sidecar**! The FineCollectionService doesn't need to know anymore where the VehicleRegistrationService lives because its Dapr sidecar will take care of that. It will find it based on the `app-id` specified in the URL and call the target service's sidecar.
+   
 1. Open a **new** terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code:
