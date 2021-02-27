@@ -19,7 +19,7 @@ For both these tasks you will use the Dapr client for .NET.
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
-1. Inspect the code in the `VehicleEntry` method of this controller. It uses an instance of an `IVehicleStateRepository` to store and retrieve vehicle state:
+1. Inspect the code in the `VehicleEntry` method of this controller. It uses an instance of an `IVehicleStateRepository` to store vehicle state:
 
    ```csharp
    // store vehicle state
@@ -37,38 +37,38 @@ For both these tasks you will use the Dapr client for .NET.
 
 1. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
-1. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. You can use this snippet:
+7. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. You can use this snippet:
+   ```csharp
+   using System.Net.Http;
+using System.Net.Http.Json;
+   using System.Threading.Tasks;
+   using TrafficControlService.Models;
+   ​```
+   
+     namespace TrafficControlService.Repositories
+   {
+     public class DaprVehicleStateRepository : IVehicleStateRepository
+     {
+       public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+       {
+         throw new NotImplementedException();
+       }
+   
+       public async Task SaveVehicleStateAsync(VehicleState vehicleState)
+       {
+         throw new NotImplementedException();
+       }
+     }
+   }  
+   ```
+   
+8. Add a private constant field in this file holding the name of the state-store:
 
    ```csharp
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using TrafficControlService.Models;
-
-namespace TrafficControlService.Repositories
-{
-  public class DaprVehicleStateRepository : IVehicleStateRepository
-  {
-    public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-    {
-      throw new NotImplementedException();
-    }
-
-    public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-    {
-      throw new NotImplementedException();
-    }
-  }
-}
+   private const string DAPR_STORE_NAME = "statestore";
    ```
-
-11. Add a private constant field in this file holding the name of the state-store:
-
-    ```csharp
-    private const string DAPR_STORE_NAME = "statestore";
-    ```
-
-11. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
+   
+9. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
 
     ```csharp
     private readonly HttpClient _httpClient;
@@ -79,7 +79,7 @@ namespace TrafficControlService.Repositories
     }
     ```
 
-11. The URL for saving data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>`. You'll use this API to store the VehicleState. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
+1. The URL for saving data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>`. You'll use this API to store the VehicleState. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
 
     ```csharp
     var state = new[]
@@ -93,11 +93,11 @@ namespace TrafficControlService.Repositories
     await _httpClient.PostAsJsonAsync(
       $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
       state);
-    ```
+   ```
 
     > As you can see here, the structure of the data when saving state is an array of key / value pairs. In this example you use an anonymous type as payload.
 
-11. The URL for getting data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>/<key>`. You'll use this API to retrieve the VehicleState. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
+1. The URL for getting data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>/<key>`. You'll use this API to retrieve the VehicleState. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
 
     ```csharp
     var state = await _httpClient.GetFromJsonAsync<VehicleState>(
