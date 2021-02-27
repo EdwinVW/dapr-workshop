@@ -176,7 +176,7 @@ Now you need to make sure your new repository is registered with dependency-inje
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
-   ```
+   ```console
    dotnet build
    ```
 
@@ -216,7 +216,7 @@ Now you're ready to test the application.
 
 1. Start the simulation:
 
-   ```
+   ```console
    dotnet run
    ```
 
@@ -230,13 +230,13 @@ You should see similar logging as before.
 
 1. Execute the following command to start the redis-cli inside the running `dapr_redis` container:
 
-   ```
+   ```console
    docker exec -it dapr_redis redis-cli
    ```
 
 1. In the redis-cli enter the following command to get the list of keys of items stored in the redis cache:
 
-   ```
+   ```console
    keys *
    ```
 
@@ -244,7 +244,7 @@ You should see similar logging as before.
 
 1. Enter the following command in the redis-cli to get the data stored with this key (change the license-number to one in the list you see):
 
-   ```
+   ```console
    hgetall trafficcontrolservice||KL-495-J
    ```
 
@@ -348,7 +348,7 @@ Now you need to make sure the repository you created is injected into the `Traff
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
-   ```
+   ```console
    dotnet build
    ```
 

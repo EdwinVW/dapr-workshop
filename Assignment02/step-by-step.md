@@ -88,7 +88,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
 1. Check all your code-changes are correct by building the code:
 
-   ```
+   ```console
    dotnet build
    ```
 
@@ -120,7 +120,7 @@ The services are up & running. Now you're going to test this using the simulatio
 
 1. Start the simulation:
 
-   ```
+   ```console
    dotnet run
    ```
 
@@ -221,7 +221,7 @@ The services are up & running. Now you're going to test this using the simulatio
 
 1. Start the simulation:
 
-   ```
+   ```console
    dotnet run
    ```
 
