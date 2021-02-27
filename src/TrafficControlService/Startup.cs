@@ -23,7 +23,7 @@ namespace TrafficControlService
             services.AddSingleton<ISpeedingViolationCalculator>(
                 new DefaultSpeedingViolationCalculator("A12", 10, 100, 5));
 
-            services.AddSingleton<IVehicleStateRepository, InMemoryVehicleRepository>();
+            services.AddSingleton<IVehicleStateRepository, InMemoryVehicleStateRepository>();
 
             services.AddControllers();
         }

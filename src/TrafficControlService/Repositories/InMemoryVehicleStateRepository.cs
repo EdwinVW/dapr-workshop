@@ -4,11 +4,11 @@ using TrafficControlService.Models;
 
 namespace TrafficControlService.Repositories
 {
-    public class InMemoryVehicleRepository : IVehicleStateRepository
+    public class InMemoryVehicleStateRepository : IVehicleStateRepository
     {
         private readonly Dictionary<string, VehicleState> _state;
 
-        public InMemoryVehicleRepository()
+        public InMemoryVehicleStateRepository()
         {
             _state = new Dictionary<string, VehicleState>();
         }
