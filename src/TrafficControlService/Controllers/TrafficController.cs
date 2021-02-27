@@ -14,7 +14,7 @@ namespace TrafficControlService.Controllers
     [Route("")]
     public class TrafficController : ControllerBase
     {
-        private static readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
         private readonly IVehicleStateRepository _vehicleStateRepository;
         private readonly ILogger<TrafficController> _logger;
         private readonly ISpeedingViolationCalculator _speedingViolationCalculator;
@@ -22,10 +22,12 @@ namespace TrafficControlService.Controllers
 
         public TrafficController(
             ILogger<TrafficController> logger,
+            HttpClient httpClient,
             IVehicleStateRepository vehicleStateRepository,
             ISpeedingViolationCalculator speedingViolationCalculator)
         {
             _logger = logger;
+            _httpClient = httpClient;
             _vehicleStateRepository = vehicleStateRepository;
             _speedingViolationCalculator = speedingViolationCalculator;
             _roadId = speedingViolationCalculator.GetRoadId();
