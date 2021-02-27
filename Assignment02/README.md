@@ -29,7 +29,7 @@ In order to complete this assignment, the following goals must be met:
 
 This is number **1** in the end-state setup:
 
-<img src="../../dapr-traffic-control/img/dapr-setup.png" style="zoom: 67%;" />
+<img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
 ## DIY instructions
 
