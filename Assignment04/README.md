@@ -25,7 +25,7 @@ In order to complete this assignment, the following goals must be met:
 - The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
 - The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
 
-This is number **3** in the end-state setup:
+This assignment targets number **3** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
@@ -41,6 +41,6 @@ To get step-by-step instructions to achieve the goals, open the [step-by-step in
 
 ## Next assignment
 
-Make sure you stop all running processes before proceeding to the next assignment.
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
 
 Go to [assignment 5](../Assignment04/README.md).

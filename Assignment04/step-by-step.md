@@ -7,7 +7,7 @@ In order to complete this assignment, the following goals must be met:
 - The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
 - The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
 
-This is number **3** in the end-state setup:
+This assignment targets number **3** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
@@ -37,15 +37,15 @@ For both these tasks you will use the Dapr client for .NET.
 
 1. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
-7. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. You can use this snippet:
+1. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. You can use this snippet:
+
    ```csharp
    using System.Net.Http;
-using System.Net.Http.Json;
+   using System.Net.Http.Json;
    using System.Threading.Tasks;
    using TrafficControlService.Models;
-   ​```
-   
-     namespace TrafficControlService.Repositories
+
+   namespace TrafficControlService.Repositories
    {
      public class DaprVehicleStateRepository : IVehicleStateRepository
      {
@@ -61,14 +61,14 @@ using System.Net.Http.Json;
      }
    }  
    ```
-   
-8. Add a private constant field in this file holding the name of the state-store:
+
+1. Add a private constant field in this file holding the name of the state-store:
 
    ```csharp
    private const string DAPR_STORE_NAME = "statestore";
    ```
-   
-9. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
+
+1. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
 
     ```csharp
     private readonly HttpClient _httpClient;
@@ -150,7 +150,7 @@ namespace TrafficControlService.Repositories
 }
 ```
 
-Now you need to make sure your new repository is registered with dependency-injection. 
+Now you need to make sure your new repository is registered with dependency-injection.
 
 1. Open the file `src/TrafficControlService/Startup.cs`.
 
@@ -166,7 +166,7 @@ Now you need to make sure your new repository is registered with dependency-inje
    services.AddSingleton<IVehicleStateRepository, DaprVehicleRepository>();
    ```
 
-1. Open a new terminal window in VS Code and change the current folder to `src/FineCollectionService`.
+1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -182,7 +182,7 @@ Now you're ready to test the application.
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. Open a new terminal window in VS Code and change the current folder to `src/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -190,7 +190,7 @@ Now you're ready to test the application.
    dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 dotnet run
    ```
 
-1. Open a new terminal window in VS Code and change the current folder to `src/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -198,7 +198,7 @@ Now you're ready to test the application.
    dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 dotnet run
    ```
 
-1. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -206,7 +206,7 @@ Now you're ready to test the application.
    dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 dotnet run
    ```
 
-1. Open a new terminal window in VS Code and change the current folder to `src/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.
 
 1. Start the simulation:
 
@@ -220,7 +220,7 @@ You should see similar logging as before.
 
  Obviously, the behavior of the application is exactly the same as before. But are the VehicleState entries actually stored in the default Redis state-store? To check this, you will use the redis CLI inside the `dapr_redis` container that is used as state-store in the default Dapr installation.
 
-1. Open a new command-shell window.
+1. Open a **new** terminal window in VS Code.
 
 1. Execute the following command to start the redis-cli inside the running `dapr_redis` container:
 
@@ -250,13 +250,13 @@ As you can see, the data is actually stored in the redis cache. The cool thing a
 
 ## Step 3: Use Dapr state management with the Dapr SDK for .NET
 
-In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP by using the `DaprClient` from the Dapr SDK for .NET. 
+In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP by using the `DaprClient` from the Dapr SDK for .NET.
 
 1. Open the `src` folder in this repo in VS Code.
 
-2. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 steps. 
+2. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 steps.
 
-3. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+3. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
 
 4. Add a reference to the Dapr ASP.NET Core integration library:
 
@@ -328,7 +328,7 @@ namespace TrafficControlService.Repositories
 }
 ```
 
-Now you need to make sure the repository you created is injected into the `TrafficController`. 
+Now you need to make sure the repository you created is injected into the `TrafficController`.
 
 1. Open the file `src/TrafficControlService/Startup.cs`.
 
@@ -338,7 +338,7 @@ Now you need to make sure the repository you created is injected into the `Traff
    services.AddDaprClient();
    ```
 
-1. Open a new terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -350,9 +350,8 @@ Now you need to make sure the repository you created is injected into the `Traff
 
 Now you're ready to test the application. Just repeat steps 2a and 2b.
 
-
 ## Next assignment
 
-Make sure you stop all running processes before proceeding to the next assignment.
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
 
 Go to [assignment 5](../Assignment05/README.md).

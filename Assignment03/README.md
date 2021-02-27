@@ -16,11 +16,11 @@ For this hands-on assignment, this is all you need to know about this building-b
 
 In order to complete this assignment, the following goals must be met:
 
-1. The TrafficControlService sends `SpeedingViolation` messages using the Dapr pub/sub building block to the FineCollectionService.
+1. The TrafficControlService sends `SpeedingViolation` messages using the Dapr pub/sub building block.
 2. The FineCollectionService receives `SpeedingViolation` messages using the Dapr pub/sub building block.
 3. RabbitMQ is used as pub/sub message broker.
 
-This is number **2** in the end-state setup:
+This assignment targets number **2** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
@@ -34,6 +34,6 @@ To get step-by-step instructions to achieve the goals, open the [step-by-step in
 
 ## Next assignment
 
-Make sure you stop all running processes before proceeding to the next assignment.
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
 
 Go to [assignment 4](../Assignment04/README.md).
