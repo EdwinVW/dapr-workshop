@@ -1,4 +1,4 @@
-# Assignment 5 - Add secrets management
+# Assignment 7 - Add secrets management
 
 In this assignment, you're going to add Dapr **secrets management** to retrieve an API key for calling the RDW Government service.
 
