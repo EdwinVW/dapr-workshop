@@ -5,13 +5,15 @@
 In order to complete this assignment, the following goals must be met:
 
 - The FineCollectionService uses the Dapr SMTP output binding to send an email.
-- The SMTP binding calls a development SMTP server  that runs as part of the solution in a Docker container.
+- The SMTP binding calls a development SMTP server that runs as part of the solution in a Docker container.
 
 This assignment targets number **4** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-## Step 1: Use the Dapr state management building block
+## Step 1: Use the Dapr output binding in the FineCollectionService
+
+You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
 
 1. Open the `src` folder in this repo in VS Code.
 
@@ -82,7 +84,7 @@ This assignment targets number **4** in the end-state setup:
 
 That's it, that's all the code you need to ask to send an email over SMTP.  
 
-## Step 2: Run SMTP server
+## Step 2: Run the SMTP server
 
 As SMTP server you will use [MailDev](https://github.com/maildev/maildev). This is a development SMTP server that doesn't actually send out emails (by default), but collects them and shows them in an inbox type web application it has built-in. This is extremely handy in test or demo scenarios.
 
@@ -182,6 +184,12 @@ daprClient.InvokeBindingAsync("sendmail", "create", body, metadata).Wait();
 You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
 
 1. Make sure no services from previous tests are running (close the command-shell windows).
+
+1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
+
+   ```console
+   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
+   ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 

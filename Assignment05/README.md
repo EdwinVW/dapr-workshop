@@ -15,7 +15,7 @@ For this hands-on assignment, this is all you need to know about output bindings
 In order to complete this assignment, the following goals must be met:
 
 - The FineCollectionService uses the Dapr SMTP output binding to send an email.
-- The SMTP binding calls a development SMTP server  that runs as part of the solution in a Docker container.
+- The SMTP binding calls a development SMTP server that runs as part of the solution in a Docker container.
 
 This assignment targets number **4** in the end-state setup:
 

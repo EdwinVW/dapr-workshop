@@ -1,0 +1,297 @@
+# Assignment 6 - Add a Dapr input binding
+
+## Assignment goals
+
+In order to complete this assignment, the following goals must be met:
+
+- The TrafficControlService uses the Dapr MQTT input binding to receive entry- and exit-cam messages over the MQTT protocol.
+- The MQTT binding uses the lightweight MQTT message-broker Mosquitto that runs as part of the solution in a Docker container.
+- The Camera Simulation publishes entry- and exit-cam messages to the MQTT broker.
+
+This assignment targets number **5** in the end-state setup:
+
+<img src="../img/dapr-setup.png" style="zoom: 67%;" />
+
+## Step 1: Use the Dapr input binding in the TrafficControlService
+
+You will add code to the TrafficControlService so it uses the Dapr input MQTT binding to receive entry- and exit-cam messages:
+
+1. Open the `src` folder in this repo in VS Code.
+1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
+1. Inspect the `EntryCam` and `ExitCam` methods.
+
+And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed WebAPI operations based on the name of the binding you will specify in the component configuration in the next step. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings. 
+
+## Step 2: Run the Mosquitto MQTT broker 
+
+As MQTT broker you will use [Mosquitto](https://mosquitto.org/). This is a lightweight MQTT broker. You will run this server as a Docker container. 
+
+In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `src/Infrastructure/mosquitto` already contains a config file you can use.
+
+1. Open the terminal window in VS Code and make sure the current folder is `src/Infrastructure/mosquitto`.
+
+1. Start a Mosquitto MQTT broker by entering the following command: 
+**When running on Windows**:
+   
+   ```console
+   docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   ```
+   
+   **When running on Mac or Linux**:
+   
+   ```console
+   docker run -d -p 1883:1883 -p 9001:9001 -v $(pwd)/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   ```
+
+This will pull the docker image `eclipse-mosquitto` from Docker Hub and start it. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on port `1883` for MQTT traffic. 
+
+The `-v` flag specifies a Docker volume mount. It mounts the current folder (containing the config file) as the ``/mosquitto/config/` folder in the container. Mosquitto reads its config file from that folder.  
+
+If everything goes well, you should see some output like this:
+
+![](img/docker-mosquitto-output.png)
+
+> If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
+
+The container will keep running in the background. If you want to stop it, enter the following command:
+
+```console
+docker stop dtc-mosquitto
+```
+
+You can then start the container later by entering the following command:
+
+```console
+docker start dtc-mosquitto
+```
+
+If you are done using the container, you can also remove it by entering the following command:
+
+```console
+docker rm dtc-mosquitto -f
+```
+
+Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
+
+## Step 3: Configure the input binding
+
+If you haven't executed assignment 3 or 5 yet, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac.
+
+Because you need to add configuration for an output binding, you will use a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
+
+If you have already executed assignment 3 or 5, you can skip the first 2 tasks:
+
+1. Create a new folder `src/dapr/components`.
+
+1. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac to the `src/dapr/components` folder.
+
+1. Add a new file in the `src/dapr/components` folder named `entrycam.yaml`.
+
+1. Open the file `src/dapr/components/entrycam.yaml` in VS Code.
+
+1. Change the content of this file to:
+
+   ```yaml
+   apiVersion: dapr.io/v1alpha1
+   kind: Component
+   metadata:
+     name: entrycam
+     namespace: dapr-trafficcontrol
+   spec:
+     type: bindings.mqtt
+     version: v1
+     metadata:
+     - name: url
+       value: mqtt://localhost:1883
+     - name: topic
+       value: trafficcontrol/entrycam
+   ```
+
+As you can see, you specify the binding type MQTT (`bindings.mqtt`) and you specify in the `metadata` how to connect to the Mosquitto server container you started in step 2 (running on localhost on port `1883`). Also the topic to use is configured in metadata: `trafficcontrol/entrycam`.
+
+Important to notice with bindings is the `name` of the binding. This name must be the same as the name of the WebAPI URL you want to be called on your service. In your case this is `/entrycam`. 
+
+Now you need to also add an input binding voor the `/exitcam` operation:
+
+1. Add a new file in the `src/dapr/components` folder named `exitcam.yaml`.
+
+1. Open the file `src/dapr/components/exitcam.yaml` in VS Code.
+
+1. Change the content of this file to:
+
+   ```yaml
+   apiVersion: dapr.io/v1alpha1
+   kind: Component
+   metadata:
+     name: exitcam
+     namespace: dapr-trafficcontrol
+   spec:
+     type: bindings.mqtt
+     version: v1
+     metadata:
+     - name: url
+       value: mqtt://localhost:1883
+     - name: topic
+       value: trafficcontrol/exitcam
+   ```
+
+Now your input bindings are configured and it's time to change the Camera Simulation so it will send MQTT messages to Mosquitto.
+
+## Step 4: Send MQTT messages from the Camera Simulation
+
+In this step you change the Camera Simulation so it sends MQTT messages in stead of doing HTTP requests:
+
+1. Open the terminal window in VS Code and make sure the current folder is `src/Simulation`.
+
+1. Add a reference to the `System.Net.Mqtt` library:
+
+   ```console
+   dotnet add package System.Net.Mqtt --prerelease
+   ```
+
+1. Restore all references:
+
+   ```console
+   dotnet restore
+   ```
+
+1. Open the file `src/Simulation/CameraSimulation.cs` file in VS Code.
+
+1. Inspect the code in this file.
+
+As you can see, the simulation gets an `ITrafficControlService` instance injected in its constructor. This is the proxy that is used by the simulation to send entry- and exit-cam messages to the TrafficControlService. 
+
+1. Open the file `src/Simulation/Proxies/HttpTrafficControlService.cs` in VS Code and inspect the code.
+
+1. Inspect the code in this file. 
+
+As you can see, this proxy uses HTTP to send the message to the TrafficControlService. You will replace this now with an implementation that uses MQTT:
+
+1. Add a new file in the `src/Simulation/Proxies` folder named `MqttTrafficControlService.cs`.
+
+1. Paste the following code into this file:
+
+   ```csharp
+   using System;
+   using System.Net.Mqtt;
+   using System.Text;
+   using System.Text.Json;
+   using Simulation.Events;
+   
+   namespace Simulation.Proxies
+   {
+     public class MqttTrafficControlService : ITrafficControlService
+     {
+       private readonly IMqttClient _client;
+   
+       public MqttTrafficControlService(int camNumber)
+       {
+         // connect to mqtt broker
+         var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
+         _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
+         var sessionState = _client.ConnectAsync(
+           new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
+       }
+   
+       public void SendVehicleEntry(VehicleRegistered vehicleRegistered)
+       {
+         var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+         var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
+         _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+       }
+   
+       public void SendVehicleExit(VehicleRegistered vehicleRegistered)
+       {
+         var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+         var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
+         _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+       }
+     }
+   }
+   ```
+   
+1. Inspect the new code. 
+
+As you can see, it uses the `System.Net.Mqtt` library to connect to a MQTT broker and send message to it.
+
+Now you need to make sure this implementation is used in stead of the HTTP one:
+
+1. Open the file `src/Simulation/Program.cs` in VS Code.
+
+1. Remove the first line where an instance of the `HttpClient` instance is created.
+
+1. Replace the creation of a `HttpTrafficControlService` instance with the creation of a `MqttTrafficControlService` instance:
+
+   ```csharp
+   var trafficControlService = new MqttTrafficControlService(camNumber);
+   ```
+
+1. Open the terminal window in VS Code and make sure the current folder is `src/Simulation`.
+
+1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
+
+```console
+dotnet build
+```
+
+If you see any warnings or errors, review the previous steps to make sure the code is correct.
+
+Now you're ready to test the application. 
+
+## Step 5: Test the application
+
+You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
+
+1. Make sure no services from previous tests are running (close the command-shell windows).
+
+1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
+
+   ```console
+   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
+   ```
+
+1. If you have executed assignment 5 and the MailDev SMTP server container is not yet running, start it by entering the following command:
+
+   ```console
+   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
+   ```
+
+1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
+
+1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
+   ```
+
+1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
+
+1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   ```
+
+1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+
+1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
+   ```
+
+1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.
+
+1. Start the simulation:
+
+   ```console
+   dotnet run
+   ```
+
+You should see the same logs as before. 
+
+## Next assignment
+
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
+
+Go to [assignment 7](../Assignment07/README.md).

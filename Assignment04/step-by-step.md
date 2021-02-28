@@ -13,6 +13,8 @@ This assignment targets number **3** in the end-state setup:
 
 ## Step 1: Use the Dapr state management building block
 
+You will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
+
 1. Open the `src` folder in this repo in VS Code.
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
@@ -144,6 +146,12 @@ Now you're ready to test the application.
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
+1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start a RabbitMQ message-broker by entering the following command:
+
+   ```console
+   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
+   ```
+
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
@@ -175,6 +183,8 @@ Now you're ready to test the application.
    ```console
    dotnet run
    ```
+
+
 
 You should see similar logging as before.
 
