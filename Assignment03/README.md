@@ -18,7 +18,7 @@ In order to complete this assignment, the following goals must be met:
 
 1. The TrafficControlService sends `SpeedingViolation` messages using the Dapr pub/sub building block.
 2. The FineCollectionService receives `SpeedingViolation` messages using the Dapr pub/sub building block.
-3. RabbitMQ is used as pub/sub message broker.
+3. RabbitMQ is used as pub/sub message broker that runs as part of the solution in a Docker container.
 
 This assignment targets number **2** in the end-state setup:
 

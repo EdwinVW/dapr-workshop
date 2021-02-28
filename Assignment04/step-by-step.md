@@ -11,8 +11,6 @@ This assignment targets number **3** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-For both these tasks you will use the Dapr client for .NET.
-
 ## Step 1: Use the Dapr state management building block
 
 1. Open the `src` folder in this repo in VS Code.
@@ -218,7 +216,7 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 1. Open the `src` folder in this repo in VS Code.
 
-2. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 steps.
+2. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 tasks.
 
 3. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
 

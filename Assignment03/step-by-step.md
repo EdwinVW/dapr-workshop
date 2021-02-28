@@ -8,7 +8,7 @@ In order to complete this assignment, the following goals must be met:
 
 1. The FineCollectionService receives `SpeedingViolation` messages using the Dapr pub/sub building block.
 
-1. RabbitMQ is used as pub/sub message broker.
+1. RabbitMQ is used as pub/sub message broker that runs as part of the solution in a Docker container.
 
 > Don't worry if you have no experience with RabbitMQ. You will run it as a container in the background and don't need to interact with it directly in any way. The instructions will explain exactly how to do that.
 
@@ -240,6 +240,8 @@ As you can see, you specify a different type of pub/sub component (`pubsub.rabbi
 
 ## Step 6: Test the application
 
+You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
+
 1. Make sure no services from previous tests are running (close the command-shell windows).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
@@ -247,7 +249,7 @@ As you can see, you specify a different type of pub/sub component (`pubsub.rabbi
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.

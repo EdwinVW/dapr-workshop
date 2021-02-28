@@ -16,7 +16,7 @@ See below for a diagram of state management's high level architecture:
 
 <img src="img/state_management.png" style="zoom: 50%;" />
 
-For this hands-on assignment, this is all you need to know about this building-block. If you want to get more detailed information, read the [introduction to this building-block](https://github.com/dapr/docs/blob/master/concepts/state-management/README.md) in the Dapr documentation.
+For this hands-on assignment, this is all you need to know about this building-block. If you want to get more detailed information, read the [introduction to this building-block](https://docs.dapr.io/developing-applications/building-blocks/state-management/) in the Dapr documentation.
 
 ## Assignment goals
 
@@ -28,8 +28,6 @@ In order to complete this assignment, the following goals must be met:
 This assignment targets number **3** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
-
-For both these tasks you will use the Dapr client for .NET.
 
 ## DIY instructions
 
@@ -43,4 +41,4 @@ To get step-by-step instructions to achieve the goals, open the [step-by-step in
 
 Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
 
-Go to [assignment 5](../Assignment04/README.md).
+Go to [assignment 5](../Assignment05/README.md).
