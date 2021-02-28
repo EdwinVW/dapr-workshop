@@ -46,15 +46,7 @@ namespace FineCollectionService.Controllers
                 $"at {speedingViolation.Timestamp.ToString("hh:mm:ss")}.");
 
             // send fine by email
-            var body = EmailUtils.CreateEmailBody(speedingViolation, vehicleInfo, fineString);
-            var metadata = new Dictionary<string, string>
-            {
-                ["emailFrom"] = "noreply@cfca.gov",
-                ["emailTo"] = vehicleInfo.OwnerEmail,
-                ["subject"] = $"Speeding violation on the {speedingViolation.RoadId}"
-            };
-
-            // TODO: send email
+            // TODO
 
             return Ok();
         }
