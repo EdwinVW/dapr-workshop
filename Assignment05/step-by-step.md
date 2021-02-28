@@ -23,7 +23,7 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
 1. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 tasks.
 
-1. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
 1. Add a reference to the Dapr ASP.NET Core integration library:
 
@@ -69,7 +69,7 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 1. Now you have everything you need to call the SMTP server using the Dapr output binding. Add the following code right after the creation of the metadata:
 
      ```csharp
-     await daprClient.InvokeBindingAsync("sendmail", "create", body, metadata).Wait();
+     await daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
      ```
 
      > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
@@ -158,17 +158,11 @@ If you have already executed assignment 3, you can skip the first 2 tasks:
      - name: port
        value: 4025
      - name: user
-       secretKeyRef:
-         name: smtp.user
-         key: smtp.user
+       value: "_username"
      - name: password
-       secretKeyRef:
-         name: smtp.password
-         key: smtp.password
+       value: "_password"
      - name: skipTLSVerify
        value: true
-   auth:
-     secretStore: secret-store-file
    ```
 
 As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 2 (running on localhost on port `4025`). The other metadata can be ignored for now.
@@ -176,7 +170,7 @@ As you can see, you specify the binding type SMTP (`bindings.smtp`) and you spec
 Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in step 1:
 
 ```csharp
-daprClient.InvokeBindingAsync("sendmail", "create", body, metadata).Wait();
+daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
 ```
 
 ## Step 4: Test the application

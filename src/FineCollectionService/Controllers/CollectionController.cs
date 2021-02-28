@@ -14,7 +14,7 @@ namespace FineCollectionService.Controllers
     [Route("")]
     public class CollectionController : ControllerBase
     {
-        private readonly string _fineCalculatorLicenseKey;
+        private static string _fineCalculatorLicenseKey;
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly ILogger<CollectionController> _logger;
         private readonly IFineCalculator _fineCalculator;
@@ -28,7 +28,10 @@ namespace FineCollectionService.Controllers
             _vehicleRegistrationService = vehicleRegistrationService;
 
             // set finecalculator component license-key
-            _fineCalculatorLicenseKey = "HX783-K2L7V-CRJ4A-5PN1G";
+            if (_fineCalculatorLicenseKey == null)
+            {
+                _fineCalculatorLicenseKey = "HX783-K2L7V-CRJ4A-5PN1G";
+            }
         }
 
         [Route("collectfine")]

@@ -1,248 +1,211 @@
-# Assignment 5 - Add secrets management
+# Assignment 7 - Add secrets management
 
 ## Assignment goals
 
 In order to complete this assignment, the following goals must be met:
 
-- The `GetVehicleDetails` method of the `RDWController` in the Government service requires an API key to be specified in the URL like this: `/rdw/{apiKey}/vehicle/{licenseNumber}`.
-- The Government service reads this API key from a Dapr secret store.
-- The TrafficControl service reads this API key from a Dapr secret store and passes it in the call to the Government service.
+- The credentials used by the SMTP output binding to connect to the SMTP server are retrieved using the Dapr secrets management building block.
+- The FineCollectionService retrieves the license-key for the `FineCalculator` component it uses from the Dapr secrets management building block.
+
+**This assignment can only be executed if you have executed assignment 5!**
+
+This assignment targets number **6** in the end-state setup:
+
+<img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
 ## Step 1: Add a secret-store component
 
-Before you can use the Dapr secret-store from the services, we first have to add this component to the Dapr configuration. By default, when you install Dapr there are 2 components installed:
+First, you will add a secrets management component configuration to the solution:
 
-- pub/sub (Redis cache)
-- State-store (Redis cache)
+1. Add a new file in the `src/dapr/components` folder named `secrets.json`.
 
-Each one of these components is configured using a yaml file in a well known location (e.g. on Windows this is the `.dapr/components` folder in your user's profile folder). By default, Dapr uses these config files when starting an application with a Dapr sidecar. But you can specify a different location on the command-line. You will do that later when you're testing the application and therefore you are going to create a custom components folder for the TrafficControl service.
+1. Open the file `src/dapr/components/secrets.json` in VS Code. This file will hold the secrets used in the application.
 
-1. Create a new folder: `Assignment05/src/components`.
-   
-1. Create a new file in this folder named `pubsub.yaml` and paste this snippet into the file:
-
-   ```yaml
-   apiVersion: dapr.io/v1alpha1
-   kind: Component
-   metadata:
-     name: pubsub
-   spec:
-     type: pubsub.redis
-     metadata:
-       - name: redisHost
-         value: localhost:6379
-       - name: redisPassword
-         value: ""
-   ```
-
-   This is how you configure Dapr components. They have a name which you can use in your code to specify the component to use (remember the `pubsub` name you used in the previous assignment when publishing or subscribing to a pub/sub topic). They also have a type (to specify the building-block (pub/sub in this case) and component (Redis in this case)).
-
-1. Create a new file in the components folder named `statestore.yaml` and paste this snippet into the file:
-
-   ```yaml
-   apiVersion: dapr.io/v1alpha1
-   kind: Component
-   metadata:
-     name: statestore
-   spec:
-     type: state.redis
-     metadata:
-       - name: redisHost
-         value: localhost:6379
-       - name: redisPassword
-         value: ""
-       - name: actorStateStore
-         value: "true"
-   ```
-
-1. Create a new file in the components folder names `secrets.json` and paste this snippet into the file:
+1. Add the following content to the file:
 
    ```json
    {
-       "rdw-api-key": "A6k9D42L061Fx4Rm2K8"
+     "smtp":{
+       "user": "_username",
+       "password": "_password"
+     },
+     "finecalculator":{
+       "licensekey": "HX783-K2L7V-CRJ4A-5PN1G"
+     }
    }
    ```
 
-   This file holds the secrets you want to use in your application. Now we need a secret-store component that uses this file so we can read the secrets using the Dapr client.
+1. Add a new file in the `src/dapr/components` folder named `secrets-file.yaml`.
 
-1. Create a new file in the components folder named `secrets-file.yaml` and paste this snippet into the file:
+1. Open the file `src/dapr/components/secrets-file.yaml` in VS Code.
+
+1. Add the following content to the file:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
    kind: Component
    metadata:
-     name: local-secret-store
-     namespace: default
+     name: trafficcontrol-secrets
    spec:
      type: secretstores.local.file
+     version: v1  
      metadata:
-       - name: secretsFile
-         value: ../components/secrets.json
+     - name: secretsFile
+       value: ../dapr/components/secrets.json
+     - name: nestedSeparator
+       value: "."
    ```
 
-   This config file configures the file-based local secret-store. You have to specify the file containing the secrets in the metadata. Important to notice here, is that the file should be specified relative to the folder where the application is started (in this case the `Assignment05/src/GovernmentService` and `Assignment05/src/TrafficControlService` folder).
+As you can see, the `local.file` secret-store is used. Important to note here, is that If you specify the path to the `secretsFile` using a relative path (as is the case here), you need to specify this path relative to the folder where you start your service using the Dapr CLI. Because you start the services from their project folders, the relative path to the components folder is always `../dapr/components`.
 
-Now you're ready to add code to the Government and TrafficControl services to read the API key from the secrets-store.
+> As stated, the file-based local secret-store component is only for development or testing purposes and is not suitable for production!
 
-## Step 2: Add API key requirement to the RDW controller in the Government service
+The `nestedSeparator` in the `metadata` section specifies the character that Dapr will use when it flattens the secret file's hierarchy. Eventually, each secret will be uniquely identifiable by 1 key. In this case, you're using the period (`.`) as character. That means that the secrets from the `secrets.json` file will be identified by the following keys:
 
-1. Open the `Assignment 5` folder in this repo in VS Code.
+- `smtp.user`
+- `smtp.password`
+- `finecalculator.licensekey`
 
-You're going to change the `GetVehicleDetails` method of the `RDWController` in the Government service so it requires an API key.
+Now you've configured the secrets management building block. Time to use the secrets.
 
-1. Open a new command-shell window and go to the `Assignment05/src/GovernmentService` folder in this repo.
+## Step 2: Get the credentials for connecting to the SMTP server
 
-1. Add a reference to the Dapr ASP.NET Core integration library:
+As stated, you can reference secrets from other Dapr component configuration files. 
 
+1. Open the file `src/dapr/components/email.yaml` in VS Code.
+
+1. Inspect the content of the file. As you can see, it contains clear-text credentials (username and password). Replace the `user` and `password` fields of the `metadata` with secret references and add a reference to the secrets management building block named `trafficcontrol-secrets` you configured in step 1. The resulting file should look like this:
+
+   ```yaml
+   apiVersion: dapr.io/v1alpha1
+   kind: Component
+   metadata:
+     name: sendmail
+   spec:
+     type: bindings.smtp
+     version: v1
+     metadata:
+     - name: host
+       value: localhost
+     - name: port
+       value: 4025
+     - name: user
+       secretKeyRef:
+         name: smtp.user
+         key: smtp.user
+     - name: password
+       secretKeyRef:
+         name: smtp.password
+         key: smtp.password
+     - name: skipTLSVerify
+       value: true
+   auth:
+     secretStore: trafficcontrol-secrets
    ```
-   dotnet add package Dapr.AspNetCore -v 1.0.0-rc02
-   ```
 
-1. Restore all references:
+Now, the output binding will use the `smtp.username` and `smtp.password` secrets from the secrets file at runtime. 
 
-   ```
-   dotnet restore
-   ```
+## Step 3: Get the license-key for the FineCalculator component
 
-1. Open the file `Assignment05/src/GovernmentService/Controllers/RDWController.cs` in VS Code.
+The `CollectionController` of the FineCollectionService uses a `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license-key (also hard-coded, remember this is a sample application!).
 
-1. Add the following using statements to the file:
+You will now change the controller so it retrieves the license-key from using the Dapr secrets management building block:
+
+1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
+
+1. Add a parameter named `daprClient` of type `DaprClient` to the constructor.
+
+1. Replace the line where the `_fineCalculatorLicenseKey` is set to a hard-coded value with the following code:
 
    ```csharp
-   using Dapr.Client;
-   using System.Collections.Generic;
-   ```
-
-1. Add a private field to the RDWController class to hold the API key:
-
-   ```csharp
-   private string _expectedAPIKey;
-   ```
-
-1. Change the signature of the RDWController constructor so it receives the DaprClient from dependency injection:
-
-   ```csharp
-   public RDWController(ILogger<RDWController> logger, IVehicleInfoRepository vehicleInfoRepository, 
-      DaprClient daprClient)
-   ```
-
-1. Add code at the end of the constructor to get the API key from the secret:
-
-   ```csharp
-   // get API key
-   var apiKeySecret = daprClient.GetSecretAsync("local-secret-store", "rdw-api-key",
-         new Dictionary<string,string>{ { "namespace", "dapr-trafficcontrol" } }).Result;
-   _expectedAPIKey = apiKeySecret["rdw-api-key"];
-   ```
-
-1. Change the `GetVehicleDetails` method so it contains an API key part:
-
-   ```csharp
-   [HttpGet("rdw/{apikey}/vehicle/{licenseNumber}")]
-   public ActionResult<VehicleInfo> GetVehicleDetails(string apiKey, string licenseNumber)
-   ```
-
-1. Add a check at the start of the method to check the API key:
-
-   ```csharp
-   if (apiKey != _expectedAPIKey)
+   if (_fineCalculatorLicenseKey == null)
    {
-       return Unauthorized();
+     var secrets = daprClient.GetSecretAsync(
+       "trafficcontrol-secrets", "finecalculator.licensekey").Result;
+     _fineCalculatorLicenseKey = secrets["finecalculator.licensekey"];
    }
    ```
 
-   Obviously this is NOT the way you would implement security in a real-life system! But for now the focus is on the use of the Dapr secret-store component and not the security of the sample application.
-
-This concludes the work on the Government service.
-
-## Step 3: Get the API Key from the secret-store in the TrafficControl service
-
-1. Open the file `Assignment05/src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
-
-1. Change the code for retrieving vehicle information at the beginning of the `VehicleEntry` method in this file:
-
-   ```csharp
-   // get vehicle details
-   var apiKeySecret = await daprClient.GetSecretAsync("local-secret-store", "rdw-api-key");
-   var apiKey = apiKeySecret["rdw-api-key"];
-   var vehicleInfo = await daprClient.InvokeMethodAsync<VehicleInfo>(
-       "governmentservice",
-       $"rdw/{apiKey}/vehicle/{msg.LicenseNumber}",
-       new HttpInvocationOptions { Method = HttpMethod.Get });
-   ```
-
-   As you can see, you first use the Dapr client to get the secret with key `rdw-api-key` from the local secret-store. This returns a dictionary of values. Then you get the API key from the dictionary and pass it in the service-to-service invocation.
+Now you're ready to test the application.
 
 ## Step 4: Test the application
 
+You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
+
 1. Make sure no services from previous tests are running (close the command-shell windows).
 
-1. Open a new command-shell window and go to the `Assignment05/src/GovernmentService` folder in this repo.
+1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
 
-1. Start the Government service. Because the TrafficControl service needs to use the secret-store component, you have to specify the custom components folder you created earlier on the command-line:
-
-   ```
-   dapr run --app-id governmentservice --app-port 6000 --dapr-grpc-port 50002 --components-path ../components dotnet run
+   ```console
+   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
    ```
 
-1. Open a new command-shell window and go to the `Assignment05/src/TrafficControlService` folder in this repo.
+1. If the MailDev SMTP server container you started for assignment 5 is not yet running, start it by entering the following command:
 
-1. Start the TrafficControl service with a Dapr sidecar. The WebAPI is running on port 5000. Because the TrafficControl service needs to use the secret-store component, you have to specify the custom components folder you created earlier on the command-line:
-
-   ```
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-grpc-port 50001 --components-path ../components dotnet run
+   ```console
+   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
    ```
 
-   If you examine the Dapr logging, you should see a line in there similar to this:
+1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
-   ```
-   == DAPR == time="2020-09-23T12:08:50.7645912+02:00" level=info msg="found component local-secret-store (secretstores.local.localsecretstore)" app_id=trafficcontrolservice ...
-   ```
+1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
-1. Open a new command-shell window and go to the `Assignment05/src/Simulation` folder in this repo.
-
-1. Start the Simulation:
-
-   ```
-   dapr run --app-id simulation --dapr-grpc-port 50003 dotnet run
+   ```console
+   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
    ```
 
-You should see the same logs as before.
+1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
+
+1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   ```
+
+1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
+
+1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
+
+   ```console
+   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
+   ```
+
+1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.
+
+1. Start the simulation:
+
+   ```console
+   dotnet run
+   ```
+
+You should see the same logs as before. 
+
+If you examine the Dapr logging, you should see a line in there similar to this:
+
+```console
+time="2021-02-28T18:16:50.2936204+01:00" level=info msg="component loaded. name: trafficcontrol-secrets, type: secretstores.local.file/v1" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
+```
 
 ## Step 5: Validate secret-store operation
 
-To test whether the secret-store actually works, you will change the secret in the secret-store.
+To validate whether or not the secrets management building block is actually used: 
 
-1. Stop the Simulation (press Ctrl-C in the command-shell window in runs in).
+1. Stop the Camera Simulation and the FineCollectionService.
+1. Change the `finecalculator.licensekey` secret in the file `src/dapr/components/secrets.json` to something different.
+1. Stop the Camera Simulation and the FineCollectionService as described in step 4. 
 
-1. Stop the TrafficControl service (press Ctrl-C in the command-shell window in runs in).
+Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license-key in the call to the `FineCalculator` component:
 
-1. Change the value of the `rdw-api-key` secret in the `secrets.json` file in the components folder to some random string.
-
-1. Start the TrafficControl service with a Dapr sidecar.
-
-   ```
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-grpc-port 50001 --components-path ./components dotnet run
-   ```
-
-1. Start the Simulation again from the `Assignment05/src/Simulation` folder:
-
-   ```
-   dapr run --app-id simulation --dapr-grpc-port 50003 dotnet run
+   ```console
+== APP ==       System.InvalidOperationException: Invalid or no license-key specified.
+== APP ==          at FineCollectionService.DomainServices.HardCodedFineCalculator.CalculateFine(String licenseKey, Int32 violationInKmh) in D:\dev\Dapr\dapr-workshop\src\FineCollectionService\DomainServices\HardCodedFineCalculator.cs:line 13
+== APP ==          at FineCollectionService.Controllers.CollectionController.CollectFine(SpeedingViolation speedingViolation, DaprClient daprClient) in D:\dev\Dapr\dapr-workshop\src\FineCollectionService\Controllers\CollectionController.cs:line 45
    ```
 
-Now you should see some errors in the logging because the TrafficControl service is no longer passing the correct API key in the call to the Government service:
-
-   ```
-   == APP ==       An unhandled exception has occurred while executing the request.
-
-   == APP == Grpc.Core.RpcException: Status(StatusCode=Unauthenticated, Detail="Unauthorized")
-   ```
-
-Don't forget change the API key in the secrets file back to the correct API key.
+Don't forget change the license-key in the secrets file back to the correct one!
 
 ## Final solution
 
-You have reached the end of the hands-on assignments. If you look at the solution in the `Final` folder in this repo, you can see the code as it should be after finishing assignment 5.
+You have reached the end of the hands-on assignments. If you haven't been able to do all the assignments, go this [this repository](https://github.com/edwinvw/dapr-traffic-control) for the end-result.
 
-Thanks for participating in these hands-on assignments! Hopefully you've learned about Dapr and how to use it. Obviously, these assignment barely scratch te surface of what is possible with Dapr. We have not touched upon subjects like: *security*, *bindings*, integration with *Azure Functions* and *Azure Logic Apps* just to name a few. So if you're interested in learning more, I suggest you read the [Dapr documentation](https://github.com/dapr/docs).
+Thanks for participating in these hands-on assignments! Hopefully you've learned about Dapr and how to use it. Obviously, these assignment barely scratch te surface of what is possible with Dapr. We have not touched upon subjects like: security, actors, integration with Azure Functions, Azure API Management and Azure Logic Apps just to name a few. So if you're interested in learning more, I suggest you read the [Dapr documentation](https://docs.dapr.io).
