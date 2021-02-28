@@ -20,30 +20,30 @@ You will add code to the TrafficControlService so it uses the Dapr input MQTT bi
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 1. Inspect the `EntryCam` and `ExitCam` methods.
 
-And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed WebAPI operations based on the name of the binding you will specify in the component configuration in the next step. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings. 
+And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed WebAPI operations based on the name of the binding you will specify in the component configuration in the next step. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings.
 
-## Step 2: Run the Mosquitto MQTT broker 
+## Step 2: Run the Mosquitto MQTT broker
 
-As MQTT broker you will use [Mosquitto](https://mosquitto.org/). This is a lightweight MQTT broker. You will run this server as a Docker container. 
+As MQTT broker you will use [Mosquitto](https://mosquitto.org/). This is a lightweight MQTT broker. You will run this server as a Docker container.
 
 In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `src/Infrastructure/mosquitto` already contains a config file you can use.
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/Infrastructure/mosquitto`.
 
-1. Start a Mosquitto MQTT broker by entering the following command: 
+1. Start a Mosquitto MQTT broker by entering the following command:
 **When running on Windows**:
-   
+
    ```console
    docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
    ```
-   
+
    **When running on Mac or Linux**:
-   
+
    ```console
    docker run -d -p 1883:1883 -p 9001:9001 -v $(pwd)/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
    ```
 
-This will pull the docker image `eclipse-mosquitto` from Docker Hub and start it. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on port `1883` for MQTT traffic. 
+This will pull the docker image `eclipse-mosquitto` from Docker Hub and start it. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on port `1883` for MQTT traffic.
 
 The `-v` flag specifies a Docker volume mount. It mounts the current folder (containing the config file) as the ``/mosquitto/config/` folder in the container. Mosquitto reads its config file from that folder.  
 
@@ -109,7 +109,7 @@ If you have already executed assignment 3 or 5, you can skip the first 2 tasks:
 
 As you can see, you specify the binding type MQTT (`bindings.mqtt`) and you specify in the `metadata` how to connect to the Mosquitto server container you started in step 2 (running on localhost on port `1883`). Also the topic to use is configured in metadata: `trafficcontrol/entrycam`.
 
-Important to notice with bindings is the `name` of the binding. This name must be the same as the name of the WebAPI URL you want to be called on your service. In your case this is `/entrycam`. 
+Important to notice with bindings is the `name` of the binding. This name must be the same as the name of the WebAPI URL you want to be called on your service. In your case this is `/entrycam`.
 
 Now you need to also add an input binding voor the `/exitcam` operation:
 
@@ -159,11 +159,11 @@ In this step you change the Camera Simulation so it sends MQTT messages in stead
 
 1. Inspect the code in this file.
 
-As you can see, the simulation gets an `ITrafficControlService` instance injected in its constructor. This is the proxy that is used by the simulation to send entry- and exit-cam messages to the TrafficControlService. 
+As you can see, the simulation gets an `ITrafficControlService` instance injected in its constructor. This is the proxy that is used by the simulation to send entry- and exit-cam messages to the TrafficControlService.
 
 1. Open the file `src/Simulation/Proxies/HttpTrafficControlService.cs` in VS Code and inspect the code.
 
-1. Inspect the code in this file. 
+1. Inspect the code in this file.
 
 As you can see, this proxy uses HTTP to send the message to the TrafficControlService. You will replace this now with an implementation that uses MQTT:
 
@@ -209,8 +209,8 @@ As you can see, this proxy uses HTTP to send the message to the TrafficControlSe
      }
    }
    ```
-   
-1. Inspect the new code. 
+
+1. Inspect the new code.
 
 As you can see, it uses the `System.Net.Mqtt` library to connect to a MQTT broker and send message to it.
 
@@ -236,7 +236,7 @@ dotnet build
 
 If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
-Now you're ready to test the application. 
+Now you're ready to test the application.
 
 ## Step 5: Test the application
 
@@ -288,7 +288,7 @@ You're going to start all the services now. You specify the custom components fo
    dotnet run
    ```
 
-You should see the same logs as before. 
+You should see the same logs as before.
 
 If you want to know for sure that Mosquitto is used for communication, watch the logs of the Mosquitto server by executing the following command:
 

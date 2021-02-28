@@ -40,7 +40,7 @@ This assignment targets number **6** in the end-state setup:
 
 ## DIY instructions
 
-First open the `src` folder in this repo in VS Code. Then open the [Secrets management documentation](https://docs.dapr.io/developing-applications/building-blocks/secrets/) and start hacking away. 
+First open the `src` folder in this repo in VS Code. Then open the [Secrets management documentation](https://docs.dapr.io/developing-applications/building-blocks/secrets/) and start hacking away.
 
 ## Step by step instructions
 
@@ -51,4 +51,3 @@ To get step-by-step instructions to achieve the goals, open the [step-by-step in
 You have reached the end of the hands-on assignments. If you haven't been able to do all the assignments, go this [this repository](https://github.com/edwinvw/dapr-traffic-control) for the end-result.
 
 Thanks for participating in these hands-on assignments! Hopefully you've learned about Dapr and how to use it. Obviously, these assignment barely scratch te surface of what is possible with Dapr. We have not touched upon subjects like: security, actors, integration with Azure Functions, Azure API Management and Azure Logic Apps just to name a few. So if you're interested in learning more, I suggest you read the [Dapr documentation](https://docs.dapr.io).
-

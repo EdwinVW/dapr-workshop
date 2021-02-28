@@ -70,7 +70,7 @@ Now you've configured the secrets management building block. Time to use the sec
 
 ## Step 2: Get the credentials for connecting to the SMTP server
 
-As stated, you can reference secrets from other Dapr component configuration files. 
+As stated, you can reference secrets from other Dapr component configuration files.
 
 1. Open the file `src/dapr/components/email.yaml` in VS Code.
 
@@ -103,7 +103,7 @@ As stated, you can reference secrets from other Dapr component configuration fil
      secretStore: trafficcontrol-secrets
    ```
 
-Now, the output binding will use the `smtp.username` and `smtp.password` secrets from the secrets file at runtime. 
+Now, the output binding will use the `smtp.username` and `smtp.password` secrets from the secrets file at runtime.
 
 ## Step 3: Get the license-key for the FineCalculator component
 
@@ -180,7 +180,7 @@ You're going to start all the services now. You specify the custom components fo
    dotnet run
    ```
 
-You should see the same logs as before. 
+You should see the same logs as before.
 
 If you examine the Dapr logging, you should see a line in there similar to this:
 
@@ -190,11 +190,11 @@ time="2021-02-28T18:16:50.2936204+01:00" level=info msg="component loaded. name:
 
 ## Step 5: Validate secret-store operation
 
-To validate whether or not the secrets management building block is actually used: 
+To validate whether or not the secrets management building block is actually used:
 
 1. Stop the Camera Simulation and the FineCollectionService.
 1. Change the `finecalculator.licensekey` secret in the file `src/dapr/components/secrets.json` to something different.
-1. Start the Camera Simulation and the FineCollectionService again as described in step 4. 
+1. Start the Camera Simulation and the FineCollectionService again as described in step 4.
 
 Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license-key in the call to the `FineCalculator` component:
 

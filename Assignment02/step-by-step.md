@@ -80,9 +80,9 @@ First you're going to change the code so it calls the Dapr sidecar:
    		$"http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}");
    }
    ```
-   
+
 > It's important to really grasp this sidecar pattern. In this case, the FineCollectionService calls the VehicleRegistrationService by **calling its own dapr sidecar**! The FineCollectionService doesn't need to know anymore where the VehicleRegistrationService lives because its Dapr sidecar will take care of that. It will find it based on the `app-id` specified in the URL and call the target service's sidecar.
-   
+
 1. Open a **new** terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code:

@@ -184,8 +184,6 @@ Now you're ready to test the application.
    dotnet run
    ```
 
-
-
 You should see similar logging as before.
 
 ## Step 2b: Verify the state-store
@@ -226,36 +224,36 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 1. Open the `src` folder in this repo in VS Code.
 
-2. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 tasks.
+1. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 tasks.
 
-3. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
 
-4. Add a reference to the Dapr ASP.NET Core integration library:
+1. Add a reference to the Dapr ASP.NET Core integration library:
 
    ```console
    dotnet add package Dapr.AspNetCore
    ```
 
-5. Restore all references:
+1. Restore all references:
 
    ```console
    dotnet restore
    ```
 
-6. Open the file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
+1. Open the file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
-7. Add a using statement for `Dapr.Client`.
+1. Add a using statement for `Dapr.Client`.
 
-8. Change all occurrences of the `HttpClient` with `DaprClient` and rename the private field `_httpClient` to `_daprClient`.
+1. Change all occurrences of the `HttpClient` with `DaprClient` and rename the private field `_httpClient` to `_daprClient`.
 
-9. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
+1. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
 
    ```csharp
    await _daprClient.SaveStateAsync(
      DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
    ```
 
-10. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
+1. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
 
    ```csharp
    return await _daprClient.GetStateAsync<VehicleState>(
