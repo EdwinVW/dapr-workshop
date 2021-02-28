@@ -37,47 +37,11 @@ For both these tasks you will use the Dapr client for .NET.
 
 1. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
-1. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. You can use this snippet:
+1. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface.
 
-   ```csharp
-   using System.Net.Http;
-   using System.Net.Http.Json;
-   using System.Threading.Tasks;
-   using TrafficControlService.Models;
-
-   namespace TrafficControlService.Repositories
-   {
-     public class DaprVehicleStateRepository : IVehicleStateRepository
-     {
-       public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-       {
-         throw new NotImplementedException();
-       }
-   
-       public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-       {
-         throw new NotImplementedException();
-       }
-     }
-   }  
-   ```
-
-1. Add a private constant field in this file holding the name of the state-store:
-
-   ```csharp
-   private const string DAPR_STORE_NAME = "statestore";
-   ```
+1. Add a private constant field named `DAPR_STORE_NAME` in this class holding the name of the state management component to use. This is `statestore`.
 
 1. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
-
-    ```csharp
-    private readonly HttpClient _httpClient;
-    
-    public DaprVehicleStateRepository(HttpClient httpClient)
-    {
-      _httpClient = httpClient;
-    }
-    ```
 
 1. The URL for saving data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>`. You'll use this API to store the VehicleState. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
 
@@ -272,11 +236,7 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 6. Open the file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
-7. Add a using statement for the Dapr client:
-
-   ```csharp
-   using Dapr.Client;
-   ```
+7. Add a using statement for `Dapr.Client`.
 
 8. Change all occurrences of the `HttpClient` with `DaprClient` and rename the private field `_httpClient` to `_daprClient`.
 
