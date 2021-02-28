@@ -15,8 +15,9 @@ namespace Simulation
             CameraSimulation[] cameras = new CameraSimulation[lanes];
             for (var i = 0; i < lanes; i++)
             {
+                int camNumber = i + 1;
                 var trafficControlService = new HttpTrafficControlService(httpClient);
-                cameras[i] = new CameraSimulation(i + 1, trafficControlService);
+                cameras[i] = new CameraSimulation(camNumber, trafficControlService);
             }
             Parallel.ForEach(cameras, cam => cam.Start());
 
