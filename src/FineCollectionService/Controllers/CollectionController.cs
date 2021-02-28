@@ -14,6 +14,7 @@ namespace FineCollectionService.Controllers
     [Route("")]
     public class CollectionController : ControllerBase
     {
+        private readonly string _fineCalculatorLicenseKey;
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly ILogger<CollectionController> _logger;
         private readonly IFineCalculator _fineCalculator;
@@ -25,13 +26,16 @@ namespace FineCollectionService.Controllers
             _logger = logger;
             _fineCalculator = fineCalculator;
             _vehicleRegistrationService = vehicleRegistrationService;
+
+            // set finecalculator component license-key
+            _fineCalculatorLicenseKey = "HX783-K2L7V-CRJ4A-5PN1G";
         }
 
         [Route("collectfine")]
         [HttpPost()]
         public async Task<ActionResult> CollectFine(SpeedingViolation speedingViolation)
         {
-            decimal fine = _fineCalculator.CalculateFine(speedingViolation.ViolationInKmh);
+            decimal fine = _fineCalculator.CalculateFine(_fineCalculatorLicenseKey, speedingViolation.ViolationInKmh);
 
             // get owner info
             var vehicleInfo = await _vehicleRegistrationService.GetVehicleInfo(speedingViolation.VehicleId);
