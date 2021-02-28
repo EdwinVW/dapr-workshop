@@ -242,7 +242,7 @@ Now you're ready to test the application.
 
 You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
 
-1. Make sure no services from previous tests are running (close the command-shell windows).
+1. Make sure no services from previous tests are running (close the terminal windows).
 
 1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
 

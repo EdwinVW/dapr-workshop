@@ -107,7 +107,7 @@ Now, the output binding will use the `smtp.username` and `smtp.password` secrets
 
 ## Step 3: Get the license-key for the FineCalculator component
 
-The `CollectionController` of the FineCollectionService uses a `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license-key (also hard-coded, remember this is a sample application!).
+The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license-key (also hard-coded, remember this is a sample application!).
 
 You will now change the controller so it retrieves the license-key from using the Dapr secrets management building block:
 
@@ -126,13 +126,15 @@ You will now change the controller so it retrieves the license-key from using th
    }
    ```
 
+> Because the `_fineCalculatorLicenseKey` field is static, this code will execute only once. This is not a best practice, but fine for this sample app.
+
 Now you're ready to test the application.
 
 ## Step 4: Test the application
 
 You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
 
-1. Make sure no services from previous tests are running (close the command-shell windows).
+1. Make sure no services from previous tests are running (close the terminal windows).
 
 1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
 
@@ -192,7 +194,7 @@ To validate whether or not the secrets management building block is actually use
 
 1. Stop the Camera Simulation and the FineCollectionService.
 1. Change the `finecalculator.licensekey` secret in the file `src/dapr/components/secrets.json` to something different.
-1. Stop the Camera Simulation and the FineCollectionService as described in step 4. 
+1. Start the Camera Simulation and the FineCollectionService again as described in step 4. 
 
 Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license-key in the call to the `FineCalculator` component:
 
