@@ -290,6 +290,16 @@ You're going to start all the services now. You specify the custom components fo
 
 You should see the same logs as before. 
 
+If you want to know for sure that Mosquitto is used for communication, watch the logs of the Mosquitto server by executing the following command:
+
+```console
+docker logs dtc-mosquitto
+```
+
+You should see connections being made to the server:
+
+![](img/mosquitto-logging.png)
+
 ## Next assignment
 
 Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
