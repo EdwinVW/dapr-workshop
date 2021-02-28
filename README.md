@@ -86,6 +86,17 @@ Make sure you have the following prerequisites installed on your machine:
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - Dapr CLI and Dapr runtime ([instructions](https://docs.dapr.io/getting-started/install-dapr-selfhost/))
 
+### Versions
+
+The workshop has been tested with the following versions:
+
+| Attribute            | Details |
+| -------------------- | ------- |
+| Dapr runtime version | v1.0.0  |
+| Dapr.NET SDK version | v1.0.0  |
+| Dapr CLI version     | v1.0.0  |
+| Platform             | .NET 5  |
+
 ### Instructions
 
 Every assignment is contained in a separate folder in this repo. Each folder contains the description of the assignment that you can follow.
