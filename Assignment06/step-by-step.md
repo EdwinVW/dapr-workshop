@@ -73,6 +73,10 @@ docker rm dtc-mosquitto -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
+> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/mosquitto/start-mosquitto.ps1` script to start the Mosquitto container. 
+>
+> If you don't mind starting all the infrastructural containers at once, you can also use the `src/infrastructure/start-all.ps1` script.
+
 ## Step 3: Configure the input binding
 
 In this step you will add a Dapr binding component configuration file to the custom components folder you created in Assignment 3.
@@ -230,17 +234,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. If the RabbitMQ container you added in Assignment 3 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
-
-   ```console
-   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
-   ```
-
-1. If the MailDev container you added in Assignment 5 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
-
-   ```console
-   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
-   ```
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 

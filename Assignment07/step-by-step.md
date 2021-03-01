@@ -131,31 +131,8 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. If the RabbitMQ container you added in Assignment 3 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
 
-   ```console
-   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
-   ```
-
-1. If the MailDev container you added in Assignment 5 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
-
-   ```console
-   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
-   ```
-
-1. If the Mosquitto container you added in Assignment 6 is not yet running, start it by opening the terminal window in VS Code, making sure the current folder is `src/Infrastructure/mosquitto` and enetring the following command:
-
-   **When running on Windows**:
-
-   ```console
-   docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
-   ```
-
-   **When running on Mac or Linux**:
-
-   ```console
-   docker run -d -p 1883:1883 -p 9001:9001 -v $(pwd)/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
-   ```
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:

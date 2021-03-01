@@ -187,6 +187,10 @@ docker rm dtc-rabbitmq -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
+> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container. 
+>
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/infrastructure/start-all.ps1` script.
+
 ## Step 5: Configure the pub/sub component
 
 Until now, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components` on Windows and `$HOME/.dapr/components` on Linux or Mac.

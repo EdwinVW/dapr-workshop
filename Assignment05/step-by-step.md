@@ -103,6 +103,10 @@ docker rm dtc-maildev -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
+> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/maildev/start-maildev.ps1` script to start the MailDev container. 
+>
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/infrastructure/start-all.ps1` script.
+
 ## Step 3: Configure the output binding
 
 In this step you will add a Dapr binding component configuration file to the custom components folder you created in Assignment 3.
@@ -146,13 +150,9 @@ daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
 
 You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
 
-1. Make sure no services from previous tests are running (close the terminal windows).
+1. Make sure no services from previous tests are running (close the terminal windows)
 
-1. If the RabbitMQ container you added in Assignment 3 is not yet running, start a RabbitMQ message-broker by opening the terminal window in VS Code and entering the following command:
-
-   ```console
-   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
-   ```
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
