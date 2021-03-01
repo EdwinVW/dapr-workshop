@@ -1,14 +1,14 @@
 # Assignment 5 - Add a Dapr output binding
 
-In this assignment, you're going to add a Dapr **output binding** in the FineCollectionService to send an email.
+In this assignment, you're going to use a Dapr **output binding** in the FineCollectionService to send an email.
 
 ## Dapr bindings
 
-Dapr offers the bindings building block to easily interface with external systems. Bindings are divided into input bindings and output bindings. Input bindings can trigger your services by picking events coming in from external systems. Output bindings are an easy way to invoke functionality of some external system. Both input and output bindings do this without you as a developer having to learn the API or SDK of the external system. You only need to know the Dapr bindings API. See below for a diagram of how output bindings work:
+Dapr offers the bindings building block to easily interface with external systems. Bindings are divided into input bindings and output bindings. Input bindings can trigger your services by picking up events from external systems. Output bindings are an easy way to invoke functionality of some external system. Both input and output bindings do this without you as a developer having to learn the API or SDK of the external system. You only need to know the Dapr bindings API. See below for a diagram of how output bindings work:
 
 <img src="img/output-binding.png" style="zoom: 50%;" />
 
-For this hands-on assignment, this is all you need to know about output bindings. If you want to get more detailed information, read the [introduction to this building block](https://docs.dapr.io/developing-applications/building-blocks/bindings/) in the Dapr documentation.
+For this hands-on assignment, this is all you need to know about output bindings. If you want to get more detailed information, read the [introduction to this building block](https://docs.dapr.io/developing-applications/building-blocks/bindings/) in the Dapr documentation. In the next assignment, you will also use a Dapr input binding.
 
 ## Assignment goals
 

@@ -21,35 +21,19 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
 1. Inspect the code of the `CollectFine` method. You see a TODO at the end of the class. You will solve this TODO.
 
-1. If you have already executed Assignment 3, you have already added a reference to the `Dapr.AspNetCore` package and you can skip the next 3 tasks.
-
-1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
-
-1. Add a reference to the Dapr ASP.NET Core integration library:
-
-    ```console
-    dotnet add package Dapr.AspNetCore
-    ```
-
-1. Restore all references:
-
-    ```console
-    dotnet restore
-    ```
-
 1. Add a using statement in the `CollectionController` file so you can use the Dapr client:
 
-    ```csharp
-    using Dapr.Client;
-    ```
+     ```csharp
+     using Dapr.Client;
+     ```
 
-1. Add an argument named `daprClient` of type `DaprClient` to the `CollectFine` method that is decorated with the `[FromServices]` attribute:
+1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `CollectFine` method :
 
     ```csharp
     public Task<ActionResult> CollectFine(SpeedingViolation speedingViolation, [FromServices] DaprClient daprClient)
     ```
 
-1. In order to send an email, you first need to create some body to send as email. This email must contain the details of the speeding violation and the fine. The service already has a helper method to create a body. Replace the `// TODO` in the `CollectFine` method with this code:
+1. In order to send an email, you first need to create some body to send as email. This email must contain the details of the speeding violation and the fine. The service already has a helper method to create an HTML email body. Replace the `// TODO` in the `CollectFine` method with this code:
 
     ```csharp
     var body = EmailUtils.CreateEmailBody(speedingViolation, vehicleInfo, fineString);
@@ -74,13 +58,6 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
      > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
 
-1. Open the file `src/FineCollectionService/Startup.cs`.
-
-1. The service uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. The `Dapr.AspNetCore` has all kinds of convenience methods for these kinds of things. If you haven't executed Assignment 3 yet, add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
-
-     ```csharp
-     services.AddDaprClient();
-     ```
 
 That's it, that's all the code you need to ask to send an email over SMTP.  
 
@@ -128,15 +105,7 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 ## Step 3: Configure the output binding
 
-If you haven't executed assignment 3 yet, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac.
-
-Because you need to add configuration for an output binding, you will use a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
-
-If you have already executed assignment 3, you can skip the first 2 tasks:
-
-1. Create a new folder `src/dapr/components`.
-
-1. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac to the `src/dapr/components` folder.
+In this step you will add a Dapr binding component configuration file to the custom components folder you created in Assignment 3.
 
 1. Add a new file in the `src/dapr/components` folder named `email.yaml`.
 
@@ -167,7 +136,7 @@ If you have already executed assignment 3, you can skip the first 2 tasks:
 
 As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 2 (running on localhost on port `4025`). The other metadata can be ignored for now.
 
-Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in step 1:
+Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in the code in step 1:
 
 ```csharp
 daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
