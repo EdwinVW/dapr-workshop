@@ -1,10 +1,10 @@
 # Assignment 3 - Add pub/sub messaging
 
-In this assignment, you're going to add Dapr **publish/subscribe** messaging to send messages from the simulation to the TrafficControl service and from the TrafficControl service to the Government service.
+In this assignment, you're going to add Dapr **publish/subscribe** messaging to send messages from the TrafficControlService to the FineCollectionService.
 
 ## Dapr pub/sub building block
 
-The publish/subscribe pattern allows your microservices to communicate with each other purely by sending messages. In this system, the producer of a message sends it to a topic, with no knowledge of what service will receive the message. A messages can even be sent if there's no consumer for it.
+The publish/subscribe pattern allows your microservices to communicate asynchronously with each other purely by sending messages. In this system, the producer of a message sends it to a topic, with no knowledge of what service(s) will consume the message. A messages can even be sent if there's no consumer for it.
 
 Similarly, a consumer will receive messages from a topic without knowledge of what producer sent it. This pattern is especially useful when you need to decouple microservices from one another. See the diagram below for an overview of how this pattern works with Dapr:
 

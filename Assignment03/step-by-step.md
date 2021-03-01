@@ -20,9 +20,11 @@ This assignment targets number **2** in the end-state setup:
 
 First you are going to prepare the FineCollectionService so it can receive messages using Dapr pub/sub.
 
-With the Dapr pub/sub building-block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. The Dapr ASP.NET integration library offers an elegant way of linking an ASP.NET Core WebAPI method to a pub/sub topic. For every message sent to that topic, the WebAPI method is invoked and the payload of the message is delivered as request body.
+With the Dapr pub/sub building-block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. The Dapr ASP.NET Core integration library offers an elegant way of linking an ASP.NET Core WebAPI method to a pub/sub topic. For every message sent to that topic, the WebAPI method is invoked and the payload of the message is delivered as request body. You don't have to poll for messages on the message-broker.
 
 1. Open the `src` folder in this repo in VS Code.
+
+1. If you have executed assignment 2, you can skip the next two tasks.
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
@@ -30,12 +32,6 @@ With the Dapr pub/sub building-block, you use a *topic* to send and receive mess
 
    ```console
    dotnet add package Dapr.AspNetCore
-   ```
-
-1. Restore all references:
-
-   ```console
-   dotnet restore
    ```
 
 1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
@@ -58,7 +54,7 @@ Now you need to make sure that Dapr knows this controller and also knows which p
 
 1. Open the file `src/FineCollectionService/Startup.cs` in VS Code.
 
-1. Change the `AddControllers` line in the `ConfigureServices` method in this file to:
+1. Add `AddDapr` to the `AddControllers` line in the `ConfigureServices` method:
 
    ```csharp
    services.AddControllers().AddDapr();
@@ -70,7 +66,7 @@ Now you need to make sure that Dapr knows this controller and also knows which p
    app.UseCloudEvents();
    ```
 
-1. To register every controller that uses pub/sub as a subscriber, change the call to `UseEndpoints` in the `Configure` method so it looks like this:
+1. To register every controller that uses pub/sub as a subscriber, add a call to `endpoints.MapSubscribeHandler()` to the lambda passed into `app.UseEndpoints` in the `Configure` method. It should look like this:
 
    ```csharp
    app.UseEndpoints(endpoints =>
@@ -90,7 +86,7 @@ Now you need to make sure that Dapr knows this controller and also knows which p
 
    If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
-This is the receiving part done. Now you need to update the simulation so that it uses Dapr pub/sub to send messages to the TrafficControl service.
+This is the receiving part done. Now you need to update the TrafficControlService so that it uses Dapr pub/sub to send messages to the FineCollectionService.
 
 ## Step 2: Publish messages from the TrafficControl service
 
@@ -102,12 +98,6 @@ This is the receiving part done. Now you need to update the simulation so that i
    dotnet add package Dapr.AspNetCore
    ```
 
-1. Restore all references:
-
-   ```console
-   dotnet restore
-   ```
-
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
 1. In this file, add a using statement for the Dapr client:
@@ -116,7 +106,7 @@ This is the receiving part done. Now you need to update the simulation so that i
    using Dapr.Client;
    ```
 
-1. Add an argument named `daprClient` of type `DaprClient` to the `ExitCam` method that is decorated with the `[FromServices]` attribute:
+1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `ExitCam` method :
 
    ```csharp
    public async Task<ActionResult> VehicleExit(VehicleRegistered msg, [FromServices] DaprClient daprClient)
@@ -141,7 +131,7 @@ This is the receiving part done. Now you need to update the simulation so that i
 
 1. Open the file `src/TrafficControlService/Startup.cs`.
 
-1. The service now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. The `Dapr.AspNetCore` has all kinds of convenience methods for these kinds of things. Add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
+1. The service now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. Add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
 
     ```csharp
     services.AddDaprClient();
@@ -199,7 +189,7 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 ## Step 5: Configure the pub/sub component
 
-Until now, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac.
+Until now, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components` on Windows and `$HOME/.dapr/components` on Linux or Mac.
 
 Because you need to change the message-broker from Redis to RabbitMQ, you will create a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
 
@@ -252,6 +242,8 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
    ```
 
+   > Notice that you specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use RabbitMQ for pub/sub.
+
 1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
@@ -259,8 +251,6 @@ You're going to start all the services now. You specify the custom components fo
    ```console
    dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
    ```
-
-   > Notice that you specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use RabbitMQ for pub/sub.
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
 
@@ -278,13 +268,13 @@ You're going to start all the services now. You specify the custom components fo
    dotnet run
    ```
 
-You should see the same logs as before. Obviously, the behavior of the application is exactly the same as before. But if you look closely at the Dapr logs of the TrafficControlService, you should see something like this in there:
+You should see the same logs as before. Obviously, the behavior of the application is exactly the same as before. But if you look closely at the Dapr logs of the FineCollectionService, you should see something like this in there:
 
 ```console
 time="2021-02-27T16:46:02.5989612+01:00" level=info msg="app is subscribed to the following topics: [collectfine] through pubsub=pubsub" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
 ```
 
-So you can see that Dapr has asked the service which topics it subscribes on and created the subscriptions.
+So you can see that Dapr has asked the service which topics it want to subscribes to and created the necessary subscription to the `collectfine` topic.
 
 ## Next assignment
 
