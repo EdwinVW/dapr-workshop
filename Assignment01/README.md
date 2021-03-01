@@ -6,6 +6,8 @@ In this assignment, you're going to run the application to make sure everything 
 
 1. Open the `src` folder in VS Code.
 
+   > Throughout the assignment you need to execute all steps in the same instance of VS Code.
+
 2. Open the terminal window in VS Code.
 
    > You can do this by using the hotkey ``Ctrl-` ``.
@@ -42,7 +44,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
      "ownerEmail": "angelena.fairbairn@outlook.com"
    }
    ```
-   
+
 1. Check the logging in the terminal window. It should look like this:
 
    ![VehicleRegistrationService logging](img/logging-vehicleregistrationservice.png)
@@ -62,7 +64,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open the file `src/FineCollectionService/test.http` in VS Code. The request in this file simulates sending a detected speeding-violation to the FineCollectionService.
 
-1. Click on `Execute request` in the file to send a request to the API. 
+1. Click on `Execute request` in the file to send a request to the API.
 
 1. The response of the request will be shown in a separate window on the right. It should be a response with HTTP status code `200 OK` and no body.
 
@@ -80,7 +82,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open the `test.http` file in the project folder in VS Code.
 
-1. Click on `Execute request` for both requests in the file to send two requests to the API. 
+1. Click on `Execute request` for both requests in the file to send two requests to the API.
 
 1. The response of the requests will be shown in a separate window on the right. Both requests should yield a response with HTTP status code `200 OK` and no body.
 
@@ -88,13 +90,13 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
    ![TrafficControlService logging](img/logging-trafficcontrolservice.png)
 
-1. Also inspect the logging of the FineCollectionService. 
+1. Also inspect the logging of the FineCollectionService.
 
    > You can do this by selecting another terminal window using the dropdown in the title-bar of the terminal window:
    ![](img/terminal-dropdown.png)
 
    You should see the speeding-violation being handled by the FineCollectionService:
-   
+
    ![FineCollectionService logging](img/logging-finecollectionservice2.png)
 
 ## Step 3. Run the simulation
@@ -103,19 +105,19 @@ You've tested the APIs directly by using a REST client. Now you're going to run 
 
 1. Open a new terminal window in VS Code and make sure the current folder is `src/Simulation`.
 
-3. Start the service using `dotnet run`.
+1. Start the service using `dotnet run`.
 
-4. In the simulation window you should see something like this:
+1. In the simulation window you should see something like this:
 
    ![](img/logging-simulation.png)
 
-5. Also check the logging in all the other Terminal windows. You should see all entry- and exit events and any speeding-violations that were detected in the logging.
+1. Also check the logging in all the other Terminal windows. You should see all entry- and exit events and any speeding-violations that were detected in the logging.
 
 Now we know the application runs correctly. It's time to start adding Dapr to the application.
 
 ## Next assignment
 
-Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment. Stopping a service or the simulation is done by pressing `Ctrl-C` in the terminal window. To close the terminal window, enter the `exit` command.
 
 > You can quickly close a terminal window by clicking on the trashcan icon in its title bar:
 > ![](img/terminal-trashcan.png)
