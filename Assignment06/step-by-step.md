@@ -75,21 +75,13 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 ## Step 3: Configure the input binding
 
-If you haven't executed assignment 3 or 5 yet, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac.
-
-Because you need to add configuration for an output binding, you will use a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
-
-If you have already executed assignment 3 or 5, you can skip the first 2 tasks:
-
-1. Create a new folder `src/dapr/components`.
-
-1. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac to the `src/dapr/components` folder.
+In this step you will add a Dapr binding component configuration file to the custom components folder you created in Assignment 3.
 
 1. Add a new file in the `src/dapr/components` folder named `entrycam.yaml`.
 
 1. Open the file `src/dapr/components/entrycam.yaml` in VS Code.
 
-1. Change the content of this file to:
+1. Paste this snippet into the file:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
@@ -117,7 +109,7 @@ Now you need to also add an input binding voor the `/exitcam` operation:
 
 1. Open the file `src/dapr/components/exitcam.yaml` in VS Code.
 
-1. Change the content of this file to:
+1. Paste this snippet into the file:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
@@ -147,12 +139,6 @@ In this step you change the Camera Simulation so it sends MQTT messages in stead
 
    ```console
    dotnet add package System.Net.Mqtt --prerelease
-   ```
-
-1. Restore all references:
-
-   ```console
-   dotnet restore
    ```
 
 1. Open the file `src/Simulation/CameraSimulation.cs` file in VS Code.
@@ -218,7 +204,7 @@ Now you need to make sure this implementation is used in stead of the HTTP one:
 
 1. Open the file `src/Simulation/Program.cs` in VS Code.
 
-1. Remove the first line where an instance of the `HttpClient` instance is created.
+1. Remove the first line of the `Main` method where an instance of the `HttpClient` instance is created.
 
 1. Replace the creation of a `HttpTrafficControlService` instance with the creation of a `MqttTrafficControlService` instance:
 
@@ -244,13 +230,13 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
+1. If the RabbitMQ container you added in Assignment 3 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
 
    ```console
    docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
    ```
 
-1. If you have executed assignment 5 and the MailDev SMTP server container is not yet running, start it by entering the following command:
+1. If the MailDev container you added in Assignment 5 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
 
    ```console
    docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest

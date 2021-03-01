@@ -95,7 +95,9 @@ The workshop has been tested with the following versions:
 
 ### Instructions
 
-Every assignment is contained in a separate folder in this repo. Each folder contains the description of the assignment that you can follow.
+Every assignment is contained in a separate folder in this repo. Each folder contains the description of the assignment that you can follow. 
+
+**It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.** 
 
 The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and stores state in memory. With each assignment of the workshop, you will add a Dapr building-block to this solution. 
 

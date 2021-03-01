@@ -111,7 +111,7 @@ In this step you will add a Dapr binding component configuration file to the cus
 
 1. Open the file `src/dapr/components/email.yaml` in VS Code.
 
-1. Change the content of this file to:
+1. Paste this snippet into the file:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
@@ -148,7 +148,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
+1. If the RabbitMQ container you added in Assignment 3 is not yet running, start a RabbitMQ message-broker by opening the terminal window in VS Code and entering the following command:
 
    ```console
    docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
