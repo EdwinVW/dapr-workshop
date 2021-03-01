@@ -1,6 +1,6 @@
 # Assignment 7 - Add secrets management
 
-In this assignment, you're going to add Dapr **secrets management** to retrieve an API key for calling the RDW Government service.
+In this assignment, you're going to add the Dapr **secrets management** building block.
 
 ## Dapr secrets management building block
 
@@ -31,8 +31,6 @@ In order to complete this assignment, the following goals must be met:
 
 - The credentials used by the SMTP output binding to connect to the SMTP server are retrieved using the Dapr secrets management building block.
 - The FineCollectionService retrieves the license-key for the `FineCalculator` component it uses from the Dapr secrets management building block.
-
-**This assignment can only be executed if you have executed assignment 5!**
 
 This assignment targets number **6** in the end-state setup:
 

@@ -7,8 +7,6 @@ In order to complete this assignment, the following goals must be met:
 - The credentials used by the SMTP output binding to connect to the SMTP server are retrieved using the Dapr secrets management building block.
 - The FineCollectionService retrieves the license-key for the `FineCalculator` component it uses from the Dapr secrets management building block.
 
-**This assignment can only be executed if you have executed assignment 5!**
-
 This assignment targets number **6** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
@@ -21,7 +19,7 @@ First, you will add a secrets management component configuration to the solution
 
 1. Open the file `src/dapr/components/secrets.json` in VS Code. This file will hold the secrets used in the application.
 
-1. Add the following content to the file:
+1. Paste the following snippet into the file:
 
    ```json
    {
@@ -39,7 +37,7 @@ First, you will add a secrets management component configuration to the solution
 
 1. Open the file `src/dapr/components/secrets-file.yaml` in VS Code.
 
-1. Add the following content to the file:
+1. Paste the following snippet into the file:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
@@ -48,7 +46,7 @@ First, you will add a secrets management component configuration to the solution
      name: trafficcontrol-secrets
    spec:
      type: secretstores.local.file
-     version: v1  
+     version: v1
      metadata:
      - name: secretsFile
        value: ../dapr/components/secrets.json
@@ -118,12 +116,9 @@ You will now change the controller so it retrieves the license-key from using th
 1. Replace the line where the `_fineCalculatorLicenseKey` is set to a hard-coded value with the following code:
 
    ```csharp
-   if (_fineCalculatorLicenseKey == null)
-   {
-     var secrets = daprClient.GetSecretAsync(
-       "trafficcontrol-secrets", "finecalculator.licensekey").Result;
-     _fineCalculatorLicenseKey = secrets["finecalculator.licensekey"];
-   }
+   var secrets = daprClient.GetSecretAsync(
+     "trafficcontrol-secrets", "finecalculator.licensekey").Result;
+   _fineCalculatorLicenseKey = secrets["finecalculator.licensekey"];
    ```
 
 > Because the `_fineCalculatorLicenseKey` field is static, this code will execute only once. This is not a best practice, but fine for this sample app.
@@ -136,18 +131,31 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. If you have executed assignment 3 and the RabbitMQ container is not yet running, start it by entering the following command:
+1. If the RabbitMQ container you added in Assignment 3 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
 
    ```console
    docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
    ```
 
-1. If the MailDev SMTP server container you started for assignment 5 is not yet running, start it by entering the following command:
+1. If the MailDev container you added in Assignment 5 is not yet running, start it by opening the terminal window in VS Code and entering the following command:
 
    ```console
    docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
    ```
 
+1. If the Mosquitto container you added in Assignment 6 is not yet running, start it by opening the terminal window in VS Code, making sure the current folder is `src/Infrastructure/mosquitto` and enetring the following command:
+
+   **When running on Windows**:
+
+   ```console
+   docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   ```
+
+   **When running on Mac or Linux**:
+
+   ```console
+   docker run -d -p 1883:1883 -p 9001:9001 -v $(pwd)/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   ```
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
