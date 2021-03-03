@@ -73,7 +73,7 @@ export let TrafficScene = new Phaser.Class({
             if (car) {
                 const carTypes = this.getCarTypesForLane(lane);
                 const carTypeIndex = Utils.getRandomInteger(0, carTypes.length - 1);
-                car.drive(this.generateRandomLicenseNumber(), lane, carTypes[carTypeIndex]);
+                car.drive(this.generateRandomLicensePlate(), lane, carTypes[carTypeIndex]);
             }
         }
     },
@@ -100,8 +100,8 @@ export let TrafficScene = new Phaser.Class({
         return carTypes;
     },
 
-    generateRandomLicenseNumber: function() {
-        const type = Utils.getRandomInteger(1, 9);
+    generateRandomLicensePlate: function() {
+        const type = Utils.getRandomInteger(1, 8);
         let result;
         switch (type)
         {
