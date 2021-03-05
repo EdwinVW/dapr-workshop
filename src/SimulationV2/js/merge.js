@@ -16,7 +16,7 @@ export class Merge {
         // Don't want to cut off the car in the other lane.
         var previousCar = this.to.getPreviousCarFromPosition(this.car.body.x);
         if (previousCar
-            && (previousCar.distanceTo(this.car) < this.car.getSafeDistance())) {
+            && (previousCar.getDistanceTo(this.car) < this.car.getSafeDistance())) {
               //  || previousCar.body.acceleration.x > this.car.body.acceleration.x)) {
             return false;
         }
@@ -38,7 +38,7 @@ export class Merge {
 
 
             // Don't want to crash into the car in front of us in the other lane.
-            if (this.car.distanceTo(nextCar) < this.car.getSafeDistance()) {
+            if (this.car.getDistanceTo(nextCar) < this.car.getSafeDistance()) {
                 return false;
             }
 
@@ -54,18 +54,6 @@ export class Merge {
 
         }
         
-        if (nextCar)
-        {
-            text += ' next: ' + nextCar.distanceTo(this.car); 
-        }
-
-        var mergeStatus = 'merging right';
-        if (previousCar) {
-            mergeStatus += ' | merging in front of ' + previousCar.id + ' with distance of ' + this.car.distanceTo(previousCar);
-        }
-        if (nextCar) {
-            mergeStatus += ' | merging behind ' + nextCar.id + ' with distance of ' + this.car.distanceTo(nextCar);
-        }
 
         // this.breakForDebug(text);
 

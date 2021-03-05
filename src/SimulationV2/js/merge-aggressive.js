@@ -10,14 +10,14 @@ export class AggressiveMergeBehavior {
         let furthestCar = car.getCarInFront();
         if (furthestCar) {
 
-            if (furthestCar.persona.mergeBehavior === this) {
+            if (furthestCar.settings.mergeBehavior === this) {
                 return null;
             }
 
             const leftLane = car.lane.getLeftLane();
             if (leftLane) {
                 const nextCarOnLeft = leftLane.getNextCarFromPosition(car.body.x);
-                if (nextCarOnLeft && nextCarOnLeft.inFrontOf(furthestCar)) {
+                if (nextCarOnLeft && nextCarOnLeft.isInFrontOf(furthestCar)) {
                     furthestCar = nextCarOnLeft;
                 }
             }
@@ -25,7 +25,7 @@ export class AggressiveMergeBehavior {
             const rightLane = car.lane.getRightLane();
             if (rightLane) {
                 const nextCarOnRight = rightLane.getNextCarFromPosition(car.body.x);
-                if (nextCarOnRight && nextCarOnRight.inFrontOf(furthestCar)) {
+                if (nextCarOnRight && nextCarOnRight.isInFrontOf(furthestCar)) {
                     furthestCar = nextCarOnRight;
                 }
             }

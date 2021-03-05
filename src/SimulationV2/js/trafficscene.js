@@ -1,6 +1,6 @@
 import { Car } from './car.js';
 import { CarPainter } from './car-painter.js'
-import { Lane } from './lane.js';
+import { Lane, laneHeight, laneMarginTop } from './lane.js';
 import { Settings } from './settings.js';
 import { Utils } from './utils.js';
 
@@ -19,8 +19,10 @@ export let TrafficScene = new Phaser.Class({
         this.load.image('background', 'assets/background.png');
         this.load.image('road-middle', 'assets/road-middle.png');
         this.load.image('road-bottom', 'assets/road-bottom.png');
+        this.load.image('structure-overhead', 'assets/structure-overhead.png');
+        this.load.image('structure-pole', 'assets/structure-pole.png');
 
-        for (let carSettings of Settings.defaultCars) {
+        for (let carSettings of Settings.carTypes) {
             for (let sourceImage of carSettings.sourceImages) {
                 this.load.image(sourceImage.key, 'assets/' + sourceImage.key + '.png');
 
@@ -33,8 +35,10 @@ export let TrafficScene = new Phaser.Class({
     },
 
     create: function () {
-//        this.physics.world.setBounds(0, 0, 1500, 600);
+        this.physics.world.setBounds(0, 0, 2000, 600);
         this.physics.world.timeScale = Settings.timeScale;
+
+        this.cameras.main.setBounds(0, 0, 2000, 600);
 
         this.add.image(600, 200, 'background');
 
@@ -42,14 +46,21 @@ export let TrafficScene = new Phaser.Class({
             this.lanes.push(new Lane(this, i, this.lanes));
         }
 
+        this.drawCameraStructure(150);
+        this.drawCameraStructure(600);
+
+        this.drawCameraStructure(1050);
+
+        
         const tileSprite2 = this.add.tileSprite(600, 400, 1200, 7, 'road-bottom');
         tileSprite2.setDepth(0);
-
-        const tileSprite = this.add.tileSprite(600, 565, 1200, 7, 'road-bottom');
+        
+        const y = laneMarginTop + (this.lanes.length * laneHeight);
+        const tileSprite = this.add.tileSprite(600, y - 20, 1200, 7, 'road-bottom');
         tileSprite.setDepth(600);
         
         const carPainter = new CarPainter(this);
-        for (let carSettings of Settings.defaultCars) {
+        for (let carSettings of Settings.carTypes) {
             carSettings.imageKeys = carPainter.paintCar(carSettings);
         }
 
@@ -64,18 +75,63 @@ export let TrafficScene = new Phaser.Class({
             this.scene.launch('debugScene');
         }, this);
 
+        const cursors = this.input.keyboard.createCursorKeys();
+
+        const controlConfig = {
+            camera: this.cameras.main,
+            left: cursors.left,
+            right: cursors.right,
+            up: cursors.up,
+            down: cursors.down,
+            zoomIn: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
+            zoomOut: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+            zoomSpeed: 0.02,
+            acceleration: 1,
+            drag: 0.0005,
+            maxSpeed: 10
+        };
+
+        this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+    },
+
+    drawCameraStructure: function (x) {
+
+        const y = laneMarginTop + (this.lanes.length * laneHeight) - 45;
+        console.log(y);
+
+        var poleNear = this.add.image(x, y, 'structure-pole');
+        poleNear.setDepth(1000);
+
+        let structureImage;
+        for (let i = 0; i < this.lanes.length; i++) {
+
+            structureImage = this.add.image(x + 16 + (i * 33), y - 37 - (i * 33), 'structure-overhead');
+            structureImage.setDepth(1000);
+        }
+
+        var poleFar = this.add.image(x + (this.lanes.length * 33), laneMarginTop - 44, 'structure-pole');
+        poleFar.setDepth(999);
     },
 
     update: function () {
+
         const lane = this.findLaneForNewCar();
         if (lane) {
             var car = this.cars.get();
             if (car) {
                 const carTypes = this.getCarTypesForLane(lane);
                 const carTypeIndex = Utils.getRandomInteger(0, carTypes.length - 1);
-                car.drive(this.generateRandomLicensePlate(), lane, carTypes[carTypeIndex]);
+                car.onEntry(this.generateRandomLicensePlate(), lane, carTypes[carTypeIndex]);
             }
         }
+
+        this.controls.update();
+
+        // if (this.cameras.main.zoom < 0.64) {
+        //     this.cameras.main.zoom = 0.64;
+        // } else if (this.cameras.main.zoom > 1) {
+        //     this.cameras.main.zoom = 1;
+        // }
     },
 
     findLaneForNewCar: function () {
@@ -90,12 +146,11 @@ export let TrafficScene = new Phaser.Class({
 
     getCarTypesForLane: function (lane) {
         const carTypes = [];
-        for (let carType of Settings.defaultCars) {
+        for (let carType of Settings.carTypes) {
             if (!carType.lanes || carType.lanes.includes(lane.number)) {
                 carTypes.push(carType);
             }
         }
-
 
         return carTypes;
     },

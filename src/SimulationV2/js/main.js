@@ -1,6 +1,5 @@
 import { DebugScene } from './debugscene.js';
 import { TrafficScene } from './trafficscene.js';
-import { TestScene } from './testscene.js';
 
 var phaserConfig = {
     type: Phaser.WEBGL,
