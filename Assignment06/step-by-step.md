@@ -83,7 +83,7 @@ In this step you will add a Dapr binding component configuration file to the cus
 
 1. Add a new file in the `src/dapr/components` folder named `entrycam.yaml`.
 
-1. Open the file `src/dapr/components/entrycam.yaml` in VS Code.
+1. Open the file this file in VS Code.
 
 1. Paste this snippet into the file:
 
@@ -111,7 +111,7 @@ Now you need to also add an input binding voor the `/exitcam` operation:
 
 1. Add a new file in the `src/dapr/components` folder named `exitcam.yaml`.
 
-1. Open the file `src/dapr/components/exitcam.yaml` in VS Code.
+1. Open this file in VS Code.
 
 1. Paste this snippet into the file:
 

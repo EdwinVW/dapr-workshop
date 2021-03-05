@@ -17,7 +17,7 @@ First, you will add a secrets management component configuration to the solution
 
 1. Add a new file in the `src/dapr/components` folder named `secrets.json`.
 
-1. Open the file `src/dapr/components/secrets.json` in VS Code. This file will hold the secrets used in the application.
+1. Open this file in VS Code. This file will hold the secrets used in the application.
 
 1. Paste the following snippet into the file:
 
@@ -35,7 +35,7 @@ First, you will add a secrets management component configuration to the solution
 
 1. Add a new file in the `src/dapr/components` folder named `secrets-file.yaml`.
 
-1. Open the file `src/dapr/components/secrets-file.yaml` in VS Code.
+1. Open this file in VS Code.
 
 1. Paste the following snippet into the file:
 

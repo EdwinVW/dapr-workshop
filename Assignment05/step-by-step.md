@@ -113,7 +113,7 @@ In this step you will add a Dapr binding component configuration file to the cus
 
 1. Add a new file in the `src/dapr/components` folder named `email.yaml`.
 
-1. Open the file `src/dapr/components/email.yaml` in VS Code.
+1. Open this file in VS Code.
 
 1. Paste this snippet into the file:
 
