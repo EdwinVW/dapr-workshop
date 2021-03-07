@@ -87,8 +87,8 @@ First you're going to change the code so it calls the Dapr sidecar:
    ```csharp
    public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
    {
-     return await _httpClient.GetFromJsonAsync<VehicleInfo>(
-       $"http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}");
+       return await _httpClient.GetFromJsonAsync<VehicleInfo>(
+           $"http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}");
    }
    ```
 
@@ -196,8 +196,8 @@ Now you'll change the code to use the Dapr SDK `HttpClient` integration to call 
    ```csharp
    public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
    {
-     return await _httpClient.GetFromJsonAsync<VehicleInfo>(
-       $"/vehicleinfo/{licenseNumber}");
+       return await _httpClient.GetFromJsonAsync<VehicleInfo>(
+           $"/vehicleinfo/{licenseNumber}");
    }
    ```
 

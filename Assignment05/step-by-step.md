@@ -42,9 +42,9 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
      ```csharp
      var metadata = new Dictionary<string, string>
      {
-       ["emailFrom"] = "noreply@cfca.gov",
-       ["emailTo"] = vehicleInfo.OwnerEmail,
-       ["subject"] = $"Speeding violation on the {speedingViolation.RoadId}"
+         ["emailFrom"] = "noreply@cfca.gov",
+         ["emailTo"] = vehicleInfo.OwnerEmail,
+         ["subject"] = $"Speeding violation on the {speedingViolation.RoadId}"
      };
      ```
 

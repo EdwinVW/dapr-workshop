@@ -23,13 +23,13 @@ First, you will add a secrets management component configuration to the solution
 
    ```json
    {
-     "smtp":{
-       "user": "_username",
-       "password": "_password"
-     },
-     "finecalculator":{
-       "licensekey": "HX783-K2L7V-CRJ4A-5PN1G"
-     }
+       "smtp":{
+           "user": "_username",
+           "password": "_password"
+       },
+       "finecalculator":{
+           "licensekey": "HX783-K2L7V-CRJ4A-5PN1G"
+       }
    }
    ```
 
@@ -117,7 +117,7 @@ You will now change the controller so it retrieves the license key from the Dapr
 
    ```csharp
    var secrets = daprClient.GetSecretAsync(
-     "trafficcontrol-secrets", "finecalculator.licensekey").Result;
+       "trafficcontrol-secrets", "finecalculator.licensekey").Result;
    _fineCalculatorLicenseKey = secrets["finecalculator.licensekey"];
    ```
 

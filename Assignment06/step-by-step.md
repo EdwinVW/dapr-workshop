@@ -168,33 +168,33 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
    
    namespace Simulation.Proxies
    {
-     public class MqttTrafficControlService : ITrafficControlService
-     {
-       private readonly IMqttClient _client;
-   
-       public MqttTrafficControlService(int camNumber)
+       public class MqttTrafficControlService : ITrafficControlService
        {
-         // connect to mqtt broker
-         var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
-         _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
-         var sessionState = _client.ConnectAsync(
-           new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
-       }
+           private readonly IMqttClient _client;
    
-       public void SendVehicleEntry(VehicleRegistered vehicleRegistered)
-       {
-         var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-         var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
-         _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
-       }
+           public MqttTrafficControlService(int camNumber)
+           {
+               // connect to mqtt broker
+               var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
+               _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
+               var sessionState = _client.ConnectAsync(
+                   new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
+           }
    
-       public void SendVehicleExit(VehicleRegistered vehicleRegistered)
-       {
-         var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-         var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
-         _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+           public void SendVehicleEntry(VehicleRegistered vehicleRegistered)
+           {
+               var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+               var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
+               _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+           }
+   
+           public void SendVehicleExit(VehicleRegistered vehicleRegistered)
+           {
+               var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+               var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
+               _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+           }
        }
-     }
    }
    ```
 

@@ -37,11 +37,11 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
    Transfer-Encoding: chunked
    
    {
-     "vehicleId": "KZ-49-VX",
-     "brand": "Toyota",
-     "model": "Rav 4",
-     "ownerName": "Angelena Fairbairn",
-     "ownerEmail": "angelena.fairbairn@outlook.com"
+       "vehicleId": "KZ-49-VX",
+       "brand": "Toyota",
+       "model": "Rav 4",
+       "ownerName": "Angelena Fairbairn",
+       "ownerEmail": "angelena.fairbairn@outlook.com"
    }
    ```
 

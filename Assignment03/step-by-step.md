@@ -56,7 +56,7 @@ docker rm dtc-rabbitmq -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container. 
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container.
 >
 > If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.ps1` script.
 
@@ -103,7 +103,7 @@ As you can see, you specify a different type of pub/sub component (`pubsub.rabbi
 
 ## Step 3: Send messages from the TrafficControlService
 
-With the Dapr pub/sub building block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub. 
+With the Dapr pub/sub building block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub.
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
@@ -166,14 +166,14 @@ Now your FineCollectionService is ready to receive messages through Dapr pub/sub
    var data = cloudevent.RootElement.GetProperty("data");
    var speedingViolation = new SpeedingViolation
    {
-     VehicleId = data.GetProperty("vehicleId").GetString(),
-     RoadId = data.GetProperty("roadId").GetString(),
-     Timestamp = data.GetProperty("timestamp").GetDateTime(),
-     ViolationInKmh = data.GetProperty("violationInKmh").GetInt32()
+       VehicleId = data.GetProperty("vehicleId").GetString(),
+       RoadId = data.GetProperty("roadId").GetString(),
+       Timestamp = data.GetProperty("timestamp").GetDateTime(),
+       ViolationInKmh = data.GetProperty("violationInKmh").GetInt32()
    };
    ```
-   
-1.  Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
+
+1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -246,15 +246,15 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
    [HttpGet()]
    public object Subscribe()
    {
-     return new object[]
-     {
-       new
+       return new object[]
        {
-         pubsubname = "pubsub",
-         topic = "collectfine",
-         route = "/collectfine"
-       }
-     };
+           new
+           {
+               pubsubname = "pubsub",
+               topic = "collectfine",
+               route = "/collectfine"
+           }
+       };
    }
    ```
 
@@ -351,10 +351,10 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
    var data = cloudevent.RootElement.GetProperty("data");
    var speedingViolation = new SpeedingViolation
    {
-     VehicleId = data.GetProperty("vehicleId").GetString(),
-     RoadId = data.GetProperty("roadId").GetString(),
-     Timestamp = data.GetProperty("timestamp").GetDateTime(),
-     ViolationInKmh = data.GetProperty("violationInKmh").GetInt32()
+       VehicleId = data.GetProperty("vehicleId").GetString(),
+       RoadId = data.GetProperty("roadId").GetString(),
+       Timestamp = data.GetProperty("timestamp").GetDateTime(),
+       ViolationInKmh = data.GetProperty("violationInKmh").GetInt32()
    };
    ```
 
@@ -395,8 +395,8 @@ Now you need to make sure that Dapr knows this controller and also knows which p
    ```csharp
    app.UseEndpoints(endpoints =>
    {
-         endpoints.MapSubscribeHandler();
-         endpoints.MapControllers();
+       endpoints.MapSubscribeHandler();
+       endpoints.MapControllers();
    });
    ```
 
