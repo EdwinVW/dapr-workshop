@@ -60,7 +60,7 @@ After completing all the assignments, the architecture has been changed to work 
 1. For storing the state of a vehicle, the **state management** building block is used. Redis is used as state store.
 1. Fines are sent to the owner of a speeding vehicle by email. For sending the email, the Dapr SMTP **output binding** is used.
 1. The Dapr **input binding** for MQTT is used to send simulated car info to the TrafficControlService. Mosquitto is used as MQTT broker.
-1. The FineCollectionService needs credentials for connecting to the smtp server and a license-key for a fine calculator component. It uses the **secrets management** building block with the local file component to get the credentials and the license-key.
+1. The FineCollectionService needs credentials for connecting to the smtp server and a license key for a fine calculator component. It uses the **secrets management** building block with the local file component to get the credentials and the license key.
 
 The sequence diagram below shows how the solution will work with Dapr:
 

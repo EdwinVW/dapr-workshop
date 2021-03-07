@@ -2,22 +2,22 @@
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The credentials used by the SMTP output binding to connect to the SMTP server are retrieved using the Dapr secrets management building block.
-- The FineCollectionService retrieves the license-key for the `FineCalculator` component it uses from the Dapr secrets management building block.
+- The FineCollectionService retrieves the license key for the `FineCalculator` component it uses from the Dapr secrets management building block.
 
 This assignment targets number **6** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-## Step 1: Add a secret-store component
+## Step 1: Add a secret store component
 
 First, you will add a secrets management component configuration to the solution:
 
 1. Add a new file in the `src/dapr/components` folder named `secrets.json`.
 
-1. Open this file in VS Code. This file will hold the secrets used in the application.
+1. Open this file in VS Code. The file will hold the secrets used in the application.
 
 1. Paste the following snippet into the file:
 
@@ -54,11 +54,11 @@ First, you will add a secrets management component configuration to the solution
        value: "."
    ```
 
-As you can see, the `local.file` secret-store is used. Important to note here, is that If you specify the path to the `secretsFile` using a relative path (as is the case here), you need to specify this path relative to the folder where you start your service using the Dapr CLI. Because you start the services from their project folders, the relative path to the components folder is always `../dapr/components`.
+As you can see, the `local.file` secret store is used. Important to note here, is that if you specify the path to the `secretsFile` using a relative path (as is the case here), you need to specify this path relative to the folder where you start your service from using the Dapr CLI. Because you start the services from their project folders, the relative path to the components folder is always `../dapr/components`.
 
-> As stated, the file-based local secret-store component is only for development or testing purposes and is not suitable for production!
+> As stated, the file-based local secret store component is only for development or testing purposes and is not suitable for production!
 
-The `nestedSeparator` in the `metadata` section specifies the character that Dapr will use when it flattens the secret file's hierarchy. Eventually, each secret will be uniquely identifiable by 1 key. In this case, you're using the period (`.`) as character. That means that the secrets from the `secrets.json` file will be identified by the following keys:
+The `nestedSeparator` in the `metadata` section specifies the character that Dapr will use when it flattens the secret file's hierarchy. Eventually, each secret will be uniquely identifiable by one key. In this case, you're using the period (`.`) as character. That means that the secrets from the `secrets.json` file will be identified by the following keys:
 
 - `smtp.user`
 - `smtp.password`
@@ -72,7 +72,7 @@ As stated, you can reference secrets from other Dapr component configuration fil
 
 1. Open the file `src/dapr/components/email.yaml` in VS Code.
 
-1. Inspect the content of the file. As you can see, it contains clear-text credentials (username and password). Replace the `user` and `password` fields of the `metadata` with secret references and add a reference to the secrets management building block named `trafficcontrol-secrets` you configured in step 1. The resulting file should look like this:
+1. Inspect the contents of the file. As you can see, it contains clear-text credentials (username and password). Replace the `user` and `password` fields of the `metadata` with secret references and add a reference to the secrets management building block named `trafficcontrol-secrets` you configured in step 1. The resulting file should look like this:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
@@ -103,11 +103,11 @@ As stated, you can reference secrets from other Dapr component configuration fil
 
 Now, the output binding will use the `smtp.username` and `smtp.password` secrets from the secrets file at runtime.
 
-## Step 3: Get the license-key for the FineCalculator component
+## Step 3: Get the license key for the FineCalculator component
 
-The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license-key (also hard-coded, remember this is a sample application!).
+The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license key (also hard-coded, remember this is a sample application!).
 
-You will now change the controller so it retrieves the license-key from using the Dapr secrets management building block:
+You will now change the controller so it retrieves the license key from the Dapr secrets management building block:
 
 1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
@@ -131,7 +131,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/Infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
@@ -173,26 +173,26 @@ If you examine the Dapr logging, you should see a line in there similar to this:
 time="2021-02-28T18:16:50.2936204+01:00" level=info msg="component loaded. name: trafficcontrol-secrets, type: secretstores.local.file/v1" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
 ```
 
-## Step 5: Validate secret-store operation
+## Step 5: Validate secret store operation
 
-To validate whether or not the secrets management building block is actually used:
+To validate that the secrets management building block is actually used:
 
 1. Stop the Camera Simulation and the FineCollectionService.
 1. Change the `finecalculator.licensekey` secret in the file `src/dapr/components/secrets.json` to something different.
 1. Start the Camera Simulation and the FineCollectionService again as described in step 4.
 
-Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license-key in the call to the `FineCalculator` component:
+Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license key in the call to the `FineCalculator` component:
 
    ```console
-== APP ==       System.InvalidOperationException: Invalid or no license-key specified.
+== APP ==       System.InvalidOperationException: Invalid or no license key specified.
 == APP ==          at FineCollectionService.DomainServices.HardCodedFineCalculator.CalculateFine(String licenseKey, Int32 violationInKmh) in D:\dev\Dapr\dapr-workshop\src\FineCollectionService\DomainServices\HardCodedFineCalculator.cs:line 13
 == APP ==          at FineCollectionService.Controllers.CollectionController.CollectFine(SpeedingViolation speedingViolation, DaprClient daprClient) in D:\dev\Dapr\dapr-workshop\src\FineCollectionService\Controllers\CollectionController.cs:line 45
    ```
 
-Don't forget change the license-key in the secrets file back to the correct one!
+Don't forget to change the license key in the secrets file back to the correct one!
 
 ## Final solution
 
-You have reached the end of the hands-on assignments. If you haven't been able to do all the assignments, go this [this repository](https://github.com/edwinvw/dapr-traffic-control) for the end-result.
+You have reached the end of the hands-on assignments. If you haven't been able to do all the assignments, go to this [this repository](https://github.com/edwinvw/dapr-traffic-control) for the end result.
 
-Thanks for participating in these hands-on assignments! Hopefully you've learned about Dapr and how to use it. Obviously, these assignment barely scratch te surface of what is possible with Dapr. We have not touched upon subjects like: security, actors, integration with Azure Functions, Azure API Management and Azure Logic Apps just to name a few. So if you're interested in learning more, I suggest you read the [Dapr documentation](https://docs.dapr.io).
+Thanks for participating in these hands-on assignments! Hopefully you've learned about Dapr and how to use it. Obviously, these assignment barely scratch te surface of what is possible with Dapr. We have not touched upon subjects like: hardening production environments, actors, integration with Azure Functions, Azure API Management and Azure Logic Apps just to name a few. So if you're interested in learning more, I suggest you read the [Dapr documentation](https://docs.dapr.io).
