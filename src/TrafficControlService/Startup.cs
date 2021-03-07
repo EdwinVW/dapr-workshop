@@ -27,6 +27,16 @@ namespace TrafficControlService
 
             services.AddSingleton<IVehicleStateRepository, InMemoryVehicleStateRepository>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "Simulation", builder =>
+                    {
+                        builder
+                            .WithOrigins("http://localhost:5500", "http://127.0.0.1:5500")
+                            .WithHeaders("content-type");
+                    });
+            });
+
             services.AddControllers();
         }
 
@@ -39,6 +49,8 @@ namespace TrafficControlService
             }
 
             app.UseRouting();
+
+            app.UseCors("Simulation");
 
             app.UseEndpoints(endpoints =>
             {

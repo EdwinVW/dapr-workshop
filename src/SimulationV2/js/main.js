@@ -3,7 +3,7 @@ import { TrafficScene } from './trafficscene.js';
 
 var phaserConfig = {
     type: Phaser.WEBGL,
-    width: 1200,
+    width: 1280,
     height: 600,
     backgroundColor: '#336023',
     parent: 'phaser',
@@ -11,6 +11,10 @@ var phaserConfig = {
     physics: {
         default: 'arcade',
         arcade: { debug: false }
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     scene: [ TrafficScene, DebugScene ]
 };

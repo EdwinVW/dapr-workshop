@@ -1,4 +1,5 @@
 import { AggressiveMergeBehavior } from './merge-aggressive.js';
+import { HttpTrafficControlService } from './trafficcontrolsvc-http.js';
 
 export const Settings =
 {
@@ -22,7 +23,8 @@ export const Settings =
                 overtakeOnRightSide: true,
                 sourceImages: [
                     { key: 'hummer', paintKey: 'paint-general' }
-                ]
+                ],
+                selectionWeight: 1
             },
             // Regular cars
             {
@@ -43,7 +45,8 @@ export const Settings =
                     { key: 'pickup', paintKey: 'paint-general' },
                     { key: 'sedan', paintKey: 'paint-general' },
                     { key: 'semitruck' },
-                ]
+                ],
+                selectionWeight: 20
             },
             // Trucks & buses
             {
@@ -60,9 +63,10 @@ export const Settings =
                     { key: 'garbage' },
                     { key: 'schoolbus' },
                     { key: 'truck' }
-                ]
+                ],
+                selectionWeight: 10
             }
         ],
     maximumSpeedIncrementForLeftLanes: 5,
-    timeScale: 1
+    trafficControlService: new HttpTrafficControlService('http://127.0.0.1:5000')
 }

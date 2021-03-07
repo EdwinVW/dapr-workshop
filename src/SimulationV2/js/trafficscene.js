@@ -36,8 +36,6 @@ export let TrafficScene = new Phaser.Class({
 
     create: function () {
         this.physics.world.setBounds(0, 0, 2000, 600);
-        this.physics.world.timeScale = Settings.timeScale;
-
         this.cameras.main.setBounds(0, 0, 2000, 600);
 
         this.add.image(600, 200, 'background');
@@ -48,7 +46,6 @@ export let TrafficScene = new Phaser.Class({
 
         this.drawCameraStructure(150);
         this.drawCameraStructure(600);
-
         this.drawCameraStructure(1050);
 
         
@@ -63,6 +60,9 @@ export let TrafficScene = new Phaser.Class({
         for (let carSettings of Settings.carTypes) {
             carSettings.imageKeys = carPainter.paintCar(carSettings);
         }
+
+        this.carTypeLookup = this.createCarTypeLookup();
+        console.log(this.carTypeLookup);
 
         this.cars = this.physics.add.group({
             classType: Car,
@@ -115,44 +115,40 @@ export let TrafficScene = new Phaser.Class({
 
     update: function () {
 
-        const lane = this.findLaneForNewCar();
-        if (lane) {
+        const lane = this.lanes[Utils.getRandomInteger(0, this.lanes.length - 1)];
+        if (lane && lane.hasRoomForNewCar()) {
             var car = this.cars.get();
             if (car) {
-                const carTypes = this.getCarTypesForLane(lane);
+                const carTypes = this.carTypeLookup[lane.number];
                 const carTypeIndex = Utils.getRandomInteger(0, carTypes.length - 1);
-                car.onEntry(this.generateRandomLicensePlate(), lane, carTypes[carTypeIndex]);
+                car.onEntry(this.generateRandomLicensePlate(), lane, carTypes[carTypeIndex], Settings.trafficControlService);
             }
         }
 
         this.controls.update();
 
-        // if (this.cameras.main.zoom < 0.64) {
-        //     this.cameras.main.zoom = 0.64;
-        // } else if (this.cameras.main.zoom > 1) {
-        //     this.cameras.main.zoom = 1;
-        // }
-    },
-
-    findLaneForNewCar: function () {
-        for (let lane of this.lanes) {
-            if (lane.hasRoomForNewCar()) {
-                return lane;
-            }
+        if (this.cameras.main.zoom < 0.64) {
+            this.cameras.main.zoom = 0.64;
+        } else if (this.cameras.main.zoom > 1) {
+            this.cameras.main.zoom = 1;
         }
-
-        return null;
     },
 
-    getCarTypesForLane: function (lane) {
-        const carTypes = [];
+    createCarTypeLookup: function () {
+        const carTypeLookup = [];
+        for (let i = 0; i < this.lanes.length; i++) {
+            carTypeLookup.push([]);
+        }
         for (let carType of Settings.carTypes) {
-            if (!carType.lanes || carType.lanes.includes(lane.number)) {
-                carTypes.push(carType);
+            let lanes = carType.lanes ? carType.lanes : this.lanes.map(lane => lane.number);
+            console.log(lanes);
+            for (let laneNumber of lanes) {
+                for (let i = 0; i < carType.selectionWeight; i++) {
+                    carTypeLookup[laneNumber].push(carType);
+                }
             }
         }
-
-        return carTypes;
+        return carTypeLookup;
     },
 
     generateRandomLicensePlate: function() {

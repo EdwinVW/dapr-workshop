@@ -30,16 +30,15 @@ export let Car = new Phaser.Class({
         }
     },
 
-    onEntry: function (licensePlate, lane, settings) {
+    onEntry: function (licensePlate, lane, settings, trafficControlService) {
         this.id = licensePlate;
         this.lane = lane;
         this.lane.addNewCar(this);
         this.settings = settings;
+        this.trafficControlService = trafficControlService;
         this.merge = null;
-
-        console.log(`entry cam: ${this.id}`);
         
-        this.startTime = Date.now();
+        this.trafficControlService.registerVehicleEntry(this);
 
         this.setTexture(settings.imageKeys[Utils.getRandomInteger(0, settings.imageKeys.length - 1)]);
         this.setBodySize(this.displayWidth, this.displayHeight);
@@ -55,8 +54,6 @@ export let Car = new Phaser.Class({
     },
 
     onExit: function () {
-        console.log(`exit cam: ${this.id} (${(Date.now() - this.startTime) / 1000} seconds)`);
-
         this.lane.removeCar(this);
         if (this.merge) {
             this.merge.to.removeCar(this);
@@ -66,6 +63,8 @@ export let Car = new Phaser.Class({
         this.setActive(false);
         this.setVisible(false);
         this.body.stop();
+
+        this.trafficControlService.registerVehicleExit(this);
     },
 
     adjustSpeed: function () {
