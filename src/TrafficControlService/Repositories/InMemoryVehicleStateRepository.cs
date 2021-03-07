@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using TrafficControlService.Models;
 
@@ -6,31 +6,26 @@ namespace TrafficControlService.Repositories
 {
     public class InMemoryVehicleStateRepository : IVehicleStateRepository
     {
-        private readonly Dictionary<string, VehicleState> _state;
+        private readonly ConcurrentDictionary<string, VehicleState> _state;
 
         public InMemoryVehicleStateRepository()
         {
-            _state = new Dictionary<string, VehicleState>();
+            _state = new ConcurrentDictionary<string, VehicleState>();
         }
         public Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
         {
-            if (!_state.ContainsKey(licenseNumber))
+            VehicleState result = null;
+            if (_state.TryGetValue(licenseNumber, out VehicleState state))
             {
-                return null;
+                result = state;
             }
-            return Task.FromResult(_state[licenseNumber]);
+            return Task.FromResult(result);
         }
 
         public Task SaveVehicleStateAsync(VehicleState vehicleState)
         {
-            if (_state.ContainsKey(vehicleState.LicenseNumber))
-            {
-                _state[vehicleState.LicenseNumber] = vehicleState;
-            }
-            else
-            {
-                _state.Add(vehicleState.LicenseNumber, vehicleState);
-            }
+            _state.AddOrUpdate(vehicleState.LicenseNumber,
+                newKey => vehicleState, (currentKey, currentState) => vehicleState);
 
             return Task.CompletedTask;
         }
