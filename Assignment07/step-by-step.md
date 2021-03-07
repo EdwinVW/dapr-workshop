@@ -52,6 +52,8 @@ First, you will add a secrets management component configuration to the solution
        value: ../dapr/components/secrets.json
      - name: nestedSeparator
        value: "."
+   scopes:
+     - finecollectionservice   
    ```
 
 As you can see, the `local.file` secret store is used. Important to note here, is that if you specify the path to the `secretsFile` using a relative path (as is the case here), you need to specify this path relative to the folder where you start your service from using the Dapr CLI. Because you start the services from their project folders, the relative path to the components folder is always `../dapr/components`.
