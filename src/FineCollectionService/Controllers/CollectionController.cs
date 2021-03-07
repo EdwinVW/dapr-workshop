@@ -15,7 +15,6 @@ namespace FineCollectionService.Controllers
     public class CollectionController : ControllerBase
     {
         private static string _fineCalculatorLicenseKey;
-        private static readonly HttpClient _httpClient = new HttpClient();
         private readonly ILogger<CollectionController> _logger;
         private readonly IFineCalculator _fineCalculator;
         private readonly VehicleRegistrationService _vehicleRegistrationService;
