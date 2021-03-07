@@ -13,7 +13,31 @@ This assignment targets number **3** in the end-state setup:
 
 ## Step 1: Use the Dapr state management building block
 
-You will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
+First, you need to add something to the state management configuration file:
+
+1. Open the file `src/dapr/components/statestore.yaml` in VS Code.
+
+1. Add a `scopes` section to the configuration file that specifies that only the TrafficControlService should use the state management building block:
+
+   ```yaml
+   apiVersion: dapr.io/v1alpha1
+   kind: Component
+   metadata:
+     name: statestore
+   spec:
+     type: state.redis
+     metadata:
+     - name: redisHost
+       value: localhost:6379
+     - name: redisPassword
+       value: ""
+     - name: actorStateStore
+       value: "true"
+   scopes:
+     - trafficcontrolservice
+   ```
+
+Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
 
 1. Open the `src` folder in this repo in VS Code.
 

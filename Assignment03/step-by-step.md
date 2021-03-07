@@ -97,9 +97,12 @@ Because you need to change the message broker from Redis to RabbitMQ, you will c
        value: "0"
      - name: concurrency
        value: parallel
+   scopes:
+     - trafficcontrolservice
+     - finecollectionservice    
    ```
 
-As you can see, you specify a different type of pub/sub component (`pubsub.rabbitmq`) and you specify in the `metadata` how to connect to the RabbitMQ container you started in step 1 (running on localhost on port `5672`). The other metadata can be ignored for now.
+As you can see, you specify a different type of pub/sub component (`pubsub.rabbitmq`) and you specify in the `metadata` how to connect to the RabbitMQ container you started in step 1 (running on localhost on port `5672`). The other metadata can be ignored for now. In the `scopes` section, you specify that only the TrafficControlService and FineCollectionService should use the pub/sub building block.
 
 ## Step 3: Send messages from the TrafficControlService
 

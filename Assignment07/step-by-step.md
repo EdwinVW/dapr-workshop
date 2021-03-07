@@ -99,6 +99,8 @@ As stated, you can reference secrets from other Dapr component configuration fil
        value: true
    auth:
      secretStore: trafficcontrol-secrets
+   scopes:
+     - finecollectionservice  
    ```
 
 Now, the output binding will use the `smtp.username` and `smtp.password` secrets from the secrets file at runtime.
