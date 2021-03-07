@@ -1,6 +1,6 @@
 # Assignment 1 - Run the application
 
-In this assignment, you're going to run the application to make sure everything works correctly.
+In this assignment, you'll run the application to make sure everything works correctly.
 
 ## Step 1. Run the VehicleRegistration service
 
