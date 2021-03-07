@@ -2,7 +2,7 @@
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The FineCollectionService uses the Dapr SMTP output binding to send an email.
 - The SMTP binding calls a development SMTP server that runs as part of the solution in a Docker container.
@@ -15,11 +15,9 @@ This assignment targets number **4** in the end-state setup:
 
 You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
 
-1. Open the `src` folder in this repo in VS Code.
-
 1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
-1. Inspect the code of the `CollectFine` method. You see a TODO at the end of the class. You will solve this TODO.
+1. Inspect the code of the `CollectFine` method. There's a TODO comment at the end of the class. You'll add code to complete this TODO.
 
 1. Add a using statement in the `CollectionController` file so you can use the Dapr client:
 
@@ -30,10 +28,10 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `CollectFine` method :
 
     ```csharp
-    public Task<ActionResult> CollectFine(SpeedingViolation speedingViolation, [FromServices] DaprClient daprClient)
+    public async Task<ActionResult> CollectFine(SpeedingViolation speedingViolation, [FromServices] DaprClient daprClient)
     ```
 
-1. In order to send an email, you first need to create some body to send as email. This email must contain the details of the speeding violation and the fine. The service already has a helper method to create an HTML email body. Replace the `// TODO` in the `CollectFine` method with this code:
+1. In order to send an email, you first need to create a message body to send as email. The email body must contain the details of the speeding violation and the fine. The service already has a helper method to create an HTML email body. Replace the `// TODO` in the `CollectFine` method with this code:
 
     ```csharp
     var body = EmailUtils.CreateEmailBody(speedingViolation, vehicleInfo, fineString);
@@ -58,6 +56,11 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
      > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
 
+1. Now that this method uses the `[FromServices]` attribute to inject the `DaprClient` class, you need to make sure `DaprClient` is registered with the dependency injection system. Open the file `src/FineCollectionService/Startup.cs` and add the following line to the `ConfigureServices` method:
+
+   ```csharp
+   services.AddDaprClient();
+   ```
 
 That's it, that's all the code you need to ask to send an email over SMTP.  
 
@@ -103,9 +106,9 @@ docker rm dtc-maildev -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/maildev/start-maildev.ps1` script to start the MailDev container. 
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/maildev/start-maildev.ps1` script to start the MailDev container.
 >
-> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/infrastructure/start-all.ps1` script.
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.ps1` script.
 
 ## Step 3: Configure the output binding
 
@@ -152,7 +155,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows)
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/Infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
@@ -188,8 +191,8 @@ You're going to start all the services now. You specify the custom components fo
 
 You should see the same logs as before. But now you should also be able to see the fine emails being sent by the FineCollectionService:
 
-1. Open a browser and browse to [http://localhost:4000](http://localhost:4000). 
-1. Wait for the first emails to come in. 
+1. Open a browser and browse to [http://localhost:4000](http://localhost:4000).
+1. Wait for the first emails to come in.
 1. Click on an email in the inbox to see its content:
    <img src="img/inbox.png" style="zoom:67%;" />
 

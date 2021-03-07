@@ -26,7 +26,7 @@ In order to simulate this in code, the following services are defined:
 
 ![Services](img/services.png)
 
-The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building-block to the solution. 
+The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution. 
 
 - The **Camera Simulation** is a .NET Core console application that will simulate passing cars.
 - The **Traffic Control Service** is an ASP.NET Core WebAPI application that offers 2 endpoints: `/entrycam` and `/exitcam`.
@@ -55,12 +55,12 @@ After completing all the assignments, the architecture has been changed to work 
 
 <img src="img/dapr-setup.png" alt="Dapr setup" style="zoom:67%;" />
 
-1. For doing request/response type communication between the FineCollectionService and the VehicleRegistrationService, the **service invocation** building-block is used.
-1. For sending speeding violations to the FineCollectionService, the **publish and subscribe** building-block is used. RabbitMQ is used as message broker.
-1. For storing the state of a vehicle, the **state management** building-block is used. Redis is used as state store.
+1. For doing request/response type communication between the FineCollectionService and the VehicleRegistrationService, the **service invocation** building block is used.
+1. For sending speeding violations to the FineCollectionService, the **publish and subscribe** building block is used. RabbitMQ is used as message broker.
+1. For storing the state of a vehicle, the **state management** building block is used. Redis is used as state store.
 1. Fines are sent to the owner of a speeding vehicle by email. For sending the email, the Dapr SMTP **output binding** is used.
 1. The Dapr **input binding** for MQTT is used to send simulated car info to the TrafficControlService. Mosquitto is used as MQTT broker.
-1. The FineCollectionService needs credentials for connecting to the smtp server and a license-key for a fine calculator component. It uses the **secrets management** building block with the local file component to get the credentials and the license-key.
+1. The FineCollectionService needs credentials for connecting to the smtp server and a license key for a fine calculator component. It uses the **secrets management** building block with the local file component to get the credentials and the license key.
 
 The sequence diagram below shows how the solution will work with Dapr:
 
@@ -99,7 +99,7 @@ Every assignment is contained in a separate folder in this repo. Each folder con
 
 **It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.** 
 
-The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and stores state in memory. With each assignment of the workshop, you will add a Dapr building-block to this solution. 
+The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and stores state in memory. With each assignment of the workshop, you will add a Dapr building block to this solution. 
 
 Every description of an assignment (accept the first one) contains two parts with each a certain approach to executing the assignment: a **DIY** part and a **step-by-step** part. The DIY part just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step part describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step approach for some help.
 

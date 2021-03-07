@@ -2,7 +2,7 @@
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 1. The TrafficControlService sends `SpeedingViolation` messages using the Dapr pub/sub building block.
 
@@ -22,7 +22,7 @@ In the example, you will use RabbitMQ as the message broker with the Dapr pub/su
 
 1. Open the terminal window in VS Code.
 
-1. Start a RabbitMQ message-broker by entering the following command:
+1. Start a RabbitMQ message broker by entering the following command:
 
    ```console
    docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-alpine
@@ -56,15 +56,15 @@ docker rm dtc-rabbitmq -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container. 
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container. 
 >
-> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/infrastructure/start-all.ps1` script.
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.ps1` script.
 
 ## Step 2: Configure the pub/sub component
 
-Until now, you have been using the Dapr components that are installed by default when you install Dapr on a machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. These components are installed in the folder `%USERPROFILE%\.dapr\components` on Windows and `$HOME/.dapr/components` on Linux or Mac.
+Until now, you have been using the Dapr components that are installed by default when you install Dapr on your machine. These are a state management component and a pub/sub component. They both use the Redis server that is also installed by default. The components are installed in the folder `%USERPROFILE%\.dapr\components` on Windows and `$HOME/.dapr/components` on Linux or Mac.
 
-Because you need to change the message-broker from Redis to RabbitMQ, you will create a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
+Because you need to change the message broker from Redis to RabbitMQ, you will create a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
 
 1. Create a new folder `src/dapr/components`.
 
@@ -72,7 +72,7 @@ Because you need to change the message-broker from Redis to RabbitMQ, you will c
 
 1. Open the file `src/dapr/components/pubsub.yaml` in VS Code.
 
-1. Inspect this file. As you can see, it specifies the type of the message-broker to use (`pubsub.redis`) and specifies information on how to connect to the Redis server in the `metadata` section.
+1. Inspect this file. As you can see, it specifies the type of the message broker to use (`pubsub.redis`) and specifies information on how to connect to the Redis server in the `metadata` section.
 
 1. Change the content of this file to:
 
@@ -103,7 +103,7 @@ As you can see, you specify a different type of pub/sub component (`pubsub.rabbi
 
 ## Step 3: Send messages from the TrafficControlService
 
-With the Dapr pub/sub building-block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub. 
+With the Dapr pub/sub building block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub. 
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
@@ -115,10 +115,10 @@ With the Dapr pub/sub building-block, you use a *topic* to send and receive mess
    await _httpClient.PostAsync("http://localhost:5001/collectfine", message);
    ```
 
-1. The URL for publishing a message using the Dapr pub/sub API is: `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the `collectfine` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService runs on HTTP port `3501`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
+1. The URL for publishing a message using the Dapr pub/sub API is: `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the `collectfine` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService runs on HTTP port `3500`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
 
    ```csharp
-   await _httpClient.PostAsync("http://localhost:3501/v1.0/publish/pubsub/collectfine", message);
+   await _httpClient.PostAsync("http://localhost:3500/v1.0/publish/pubsub/collectfine", message);
    ```
 
 That's it. You now use Dapr pub/sub to publish a message to a message broker.
@@ -131,7 +131,7 @@ Now you are going to prepare the FineCollectionService so it can receive message
 
 1. Open this file in VS Code.
 
-1. You're going to define a subscription on a topic and link that to a WebAPI operation on the FineCollectionService. Paste this snippet into the file:
+1. You're going to define a subscription on a topic and link that to a web API operation on the FineCollectionService. Paste this snippet into the file:
 
    ```yaml
    apiVersion: dapr.io/v1alpha1
@@ -146,13 +146,13 @@ Now you are going to prepare the FineCollectionService so it can receive message
    - finecollectionservice
    ```
 
-   The `route` field tells Dapr to send all messages send to the `collectfine` topic to the `/collectfine` endpoint in the app. The `scopes` field enables this subscription for services with app-id `finecollectionservice`.
+   The `route` field tells Dapr to forward all messages send to the `collectfine` topic to the `/collectfine` endpoint in the app. The `scopes` field restricts this subscription to the service with app-id `finecollectionservice` only.
 
-Now your FineCollectionService is ready to receive messages through Dapr pub/sub. But there is a catch! Dapr uses the [CloudEvents](https://cloudevents.io/) message format for pub/sub. So when we send a message through pub/sub, the receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to change the code slightly. For now, you will parse the incoming JSON by hand (in stead of the ASP.NET Core Model Binding doing that for you). You will change this later when you will use the Dapr SDK for .NET. 
+Now your FineCollectionService is ready to receive messages through Dapr pub/sub. But there is a catch! Dapr uses the [CloudEvents](https://cloudevents.io/) message format for pub/sub. So when we send a message through pub/sub, the receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to change the code slightly. For now, you will parse the incoming JSON by hand (instead of ASP.NET Core model binding doing that for you). You will change this later when you will use the Dapr SDK for .NET.
 
-1.  Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
+1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
-1. Remove the `SpeedingViolation` parameter from the method and replace this with a `cloudevent` parameter of type `System.Text.Json.JsonDocument` that is decorated with the `[FromBody]` attribute:
+1. Remove the `SpeedingViolation` parameter from the `CollectFine` method and replace this with a `cloudevent` parameter of type `System.Text.Json.JsonDocument` that is decorated with the `[FromBody]` attribute:
 
    ```csharp
    public async Task<ActionResult> CollectFine([FromBody] System.Text.Json.JsonDocument cloudevent)
@@ -235,6 +235,8 @@ So you can see that Dapr has asked the service which topics it want to subscribe
 
 The other way of subscribing to pub/sub events is the programmatic way. Dapr will call your service on the well known endpoint `/dapr/subscribe` to retrieve the subscriptions for that service. You will implement this endpoint and return the subscription for the `collectfine` topic.
 
+1. Stop the FineCollectionService by navigating to its terminal window and pressing `Ctrl-C`. You can keep the other services running for now.
+
 1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
 1. Add a new operation named `Subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
@@ -258,7 +260,7 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
 
 1. Remove the file `src/dapr/components/subscription.yaml`. This file is not needed anymore because you implemented the `/dapr/subscribe` method.
 
-1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
+1. Go back to the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -268,7 +270,13 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
 
    If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
-Now you can test the application again. Execute the activities in step 5 again.
+1. Start the updated FineCollectionService:
+
+   ```console
+   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   ```
+
+1. After you've looked at the log output and confirmed that everything works, you can stop all the services.
 
 ## Step 7: Use Dapr publish / subscribe with the Dapr SDK for .NET
 
@@ -290,15 +298,15 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
    using Dapr.Client;
    ```
 
-1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `ExitCam` method :
+1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `VehicleExit` method :
 
    ```csharp
    public async Task<ActionResult> VehicleExit(VehicleRegistered msg, [FromServices] DaprClient daprClient)
    ```
 
-   > The `[FromServices]` attribute This makes sure that the `DaprClient` is automatically injected by the ASP.NET Core dependency injection system.
+   > The `[FromServices]` attribute injects the `DaprClient` into the method using the ASP.NET Core dependency injection system.
 
-1. Near the end of the method, you find the code that sends a `SpeedingViolation` message to the FineCollectionService.
+1. Near the end of the method, you'll find the code that publishes the `SpeedingViolation` message using `_httpClient`.
 
 1. Replace this code with a call to the Dapr pub/sub building block using the DaprClient:
 
@@ -325,15 +333,13 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
 
    If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
-Now you will change the FineCollectionService that receives messages. The Dapr ASP.NET Core integration library offers an elegant way of linking an ASP.NET Core WebAPI method to a pub/sub topic. For every message sent to that topic, the WebAPI method is invoked and the payload of the message is delivered as request body. You don't have to poll for messages on the message-broker.
-
-1. Open the `src` folder in this repo in VS Code.
+Now you will change the FineCollectionService that receives messages. The Dapr ASP.NET Core integration library offers an elegant way of linking an ASP.NET Core WebAPI method to a pub/sub topic. For every message sent to that topic, the WebAPI method is invoked and the payload of the message is delivered as request body. You don't have to poll for messages on the message broker.
 
 1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
 1. Remove the `Subscribe` method from the controller.
 
-1. Replace the `cloudevent` parameter of the `CollectiFine` method with a parameter of type `SpeedingViolation` named `speedingViolaton`:
+1. Replace the `cloudevent` parameter of the `CollectFine` method with a parameter of type `SpeedingViolation` named `speedingViolaton`:
 
    ```csharp
    public async Task<ActionResult> CollectFine(SpeedingViolation speedingViolation)
@@ -364,7 +370,7 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
    [Topic("pubsub", "collectfine")]
    ```
 
-   > The *"pubsub"* argument passed to this attribute specifies the name of the pub/sub component to use. You will configure a pub/sub component that uses the RabbitMQ message-broker later in this assignment.
+   > The *"pubsub"* argument passed to this attribute refers to the name of the Dapr pub/sub component to use.
 
 Now you need to make sure that Dapr knows this controller and also knows which pub/sub topics the controller subscribes to. To determine this, Dapr will call your service on a default endpoint to retrieve the subscriptions. To make sure your service handles this request and returns the correct information, you need to add some statements to the `Startup` class:
 
@@ -375,6 +381,8 @@ Now you need to make sure that Dapr knows this controller and also knows which p
    ```csharp
    services.AddControllers().AddDapr();
    ```
+
+   > The `AddDapr` method adds Dapr integration for ASP.NET MVC. That includes registering the `DaprClient`, so you can remove the `services.AddDaprClient();` line you added earlier.
 
 1. As you saw earlier, Dapr uses the cloud event message-format standard when sending messages over pub/sub. To make sure cloud events are automatically unwrapped, add the following line just after the call to `app.UseRouting()` in the `Configure` method:
 
@@ -392,7 +400,7 @@ Now you need to make sure that Dapr knows this controller and also knows which p
    });
    ```
 
-   > By adding this, the `/dapr/subscribe` endpoint as you implemented in step 6 is automatically implemented by Dapr. It will collect all the controller methods that are decorated with the Dapr `Topic` attribute and return the corresponding subscriptions.
+   > By adding this, the `/dapr/subscribe` endpoint that you implemented in step 6 is automatically implemented by Dapr. It will collect all the controller methods that are decorated with the Dapr `Topic` attribute and return the corresponding subscriptions.
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
 

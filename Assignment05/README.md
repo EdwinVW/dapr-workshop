@@ -12,7 +12,7 @@ For this hands-on assignment, this is all you need to know about output bindings
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The FineCollectionService uses the Dapr SMTP output binding to send an email.
 - The SMTP binding calls a development SMTP server that runs as part of the solution in a Docker container.
@@ -23,7 +23,7 @@ This assignment targets number **4** in the end-state setup:
 
 ## DIY instructions
 
-First open the `src` folder in this repo in VS Code. Then open the [Bindings documentation](https://docs.dapr.io/developing-applications/building-blocks/bindings/) and start hacking away. As SMTP server, you can use the development SMTP server [MailDev](https://github.com/maildev/maildev).
+First open the `src` folder in this repo in VS Code. Then open the [Bindings documentation](https://docs.dapr.io/developing-applications/building-blocks/bindings/) and start hacking away. You can use [MailDev](https://github.com/maildev/maildev) for the development SMTP server.
 
 ## Step by step instructions
 

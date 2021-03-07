@@ -12,10 +12,10 @@ For this hands-on assignment, this is all you need to know about output bindings
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The TrafficControlService uses the Dapr MQTT input binding to receive entry- and exit-cam messages over the MQTT protocol.
-- The MQTT binding uses the lightweight MQTT message-broker Mosquitto that runs as part of the solution in a Docker container.
+- The MQTT binding uses the lightweight MQTT message broker Mosquitto that runs as part of the solution in a Docker container.
 - The Camera Simulation publishes entry- and exit-cam messages to the MQTT broker.
 
 This assignment targets number **5** in the end-state setup:
@@ -24,7 +24,7 @@ This assignment targets number **5** in the end-state setup:
 
 ## DIY instructions
 
-First open the `src` folder in this repo in VS Code. Then open the [Bindings documentation](https://docs.dapr.io/developing-applications/building-blocks/bindings/) and start hacking away. As MQTT broker, you can use the lightweight MQQT broker [Mosquitto](https://mosquitto.org/).
+First open the `src` folder in this repo in VS Code. Then open the [Bindings documentation](https://docs.dapr.io/developing-applications/building-blocks/bindings/) and start hacking away. As MQTT broker, you can use the lightweight MQTT broker [Mosquitto](https://mosquitto.org/).
 
 ## Step by step instructions
 
