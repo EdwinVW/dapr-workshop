@@ -151,7 +151,7 @@ In this step you will add a Dapr binding component configuration file to the cus
      - finecollectionservice
    ```
 
-As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 2 (running on localhost on port `4025`). The other metadata can be ignored for now.
+As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 1 (running on localhost on port `4025`). The other metadata can be ignored for now.
 
 Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in the code in step 2:
 
