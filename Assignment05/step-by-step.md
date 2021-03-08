@@ -11,7 +11,53 @@ This assignment targets number **4** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-## Step 1: Use the Dapr output binding in the FineCollectionService
+## Step 1: Run the SMTP server
+
+In this assignment, you will use [MailDev](https://github.com/maildev/maildev) as your SMTP server. This is a development SMTP server that doesn't actually send out emails (by default), but collects them and shows them in an inbox type web application it has built-in. This is extremely handy in test or demo scenarios.
+
+You will run this server as a Docker container:
+
+1. Open the terminal window in VS Code.
+
+1. Start a MailDev SMTP server by entering the following command:
+
+   ```console
+   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
+   ```
+
+This will pull the docker image `maildev/maildev:latest` from Docker Hub and start it. The name of the container will be `dtc-maildev`. The server will be listening for connections on port `4025` for SMTP traffic and port `4000` for HTTP traffic. This last port is where the inbox web app will run for inspecting the emails.
+
+If everything goes well, you should see some output like this:
+
+![](img/docker-maildev-output.png)
+
+> If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
+
+The container will keep running in the background. If you want to stop it, enter the following command:
+
+```console
+docker stop dtc-maildev
+```
+
+You can then start the container later by entering the following command:
+
+```console
+docker start dtc-maildev
+```
+
+If you are done using the container, you can also remove it by entering the following command:
+
+```console
+docker rm dtc-maildev -f
+```
+
+Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
+
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/maildev/start-maildev.ps1` script to start the MailDev container.
+>
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.ps1` script.
+
+## Step 2: Use the Dapr output binding in the FineCollectionService
 
 You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
 
@@ -56,59 +102,21 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
      > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
 
-1. Now that this method uses the `[FromServices]` attribute to inject the `DaprClient` class, you need to make sure `DaprClient` is registered with the dependency injection system. Open the file `src/FineCollectionService/Startup.cs` and add the following line to the `ConfigureServices` method:
+1. Now that this method uses the `[FromServices]` attribute to inject the `DaprClient` class, you need to make sure `DaprClient` is registered with the dependency injection system. Open the file `src/FineCollectionService/Startup.cs`. Add the following using statement to the file:
 
    ```csharp
-   services.AddDaprClient();
+   using System;
+   ```
+
+1. Make sure the `DaprClient` is registered with DI. Add the following code to the `ConfigureServices` method (just above the code to register the `VehicleRegistrationService` proxy):
+
+   ```csharp
+   services.AddDaprClient(builder => builder
+       .UseHttpEndpoint($"http://localhost:3501")
+       .UseGrpcEndpoint($"http://localhost:50001"));
    ```
 
 That's it, that's all the code you need to ask to send an email over SMTP.  
-
-## Step 2: Run the SMTP server
-
-As SMTP server you will use [MailDev](https://github.com/maildev/maildev). This is a development SMTP server that doesn't actually send out emails (by default), but collects them and shows them in an inbox type web application it has built-in. This is extremely handy in test or demo scenarios.
-
-You will run this server as a Docker container:
-
-1. Open the terminal window in VS Code.
-
-1. Start a MailDev SMTP server by entering the following command:
-
-   ```console
-   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
-   ```
-
-This will pull the docker image `maildev/maildev:latest` from Docker Hub and start it. The name of the container will be `dtc-maildev`. The server will be listening for connections on port `4025` for SMTP traffic and port `4000` for HTTP traffic. This last port is where the inbox web app will run for inspecting the emails.
-
-If everything goes well, you should see some output like this:
-
-![](img/docker-maildev-output.png)
-
-> If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
-
-The container will keep running in the background. If you want to stop it, enter the following command:
-
-```console
-docker stop dtc-maildev
-```
-
-You can then start the container later by entering the following command:
-
-```console
-docker start dtc-maildev
-```
-
-If you are done using the container, you can also remove it by entering the following command:
-
-```console
-docker rm dtc-maildev -f
-```
-
-Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
-
-> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/maildev/start-maildev.ps1` script to start the MailDev container.
->
-> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.ps1` script.
 
 ## Step 3: Configure the output binding
 
@@ -145,7 +153,7 @@ In this step you will add a Dapr binding component configuration file to the cus
 
 As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 2 (running on localhost on port `4025`). The other metadata can be ignored for now.
 
-Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in the code in step 1:
+Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in the code in step 2:
 
 ```csharp
 daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);

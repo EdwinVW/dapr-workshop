@@ -99,7 +99,7 @@ Because you need to change the message broker from Redis to RabbitMQ, you will c
        value: parallel
    scopes:
      - trafficcontrolservice
-     - finecollectionservice    
+     - finecollectionservice
    ```
 
 As you can see, you specify a different type of pub/sub component (`pubsub.rabbitmq`) and you specify in the `metadata` how to connect to the RabbitMQ container you started in step 1 (running on localhost on port `5672`). The other metadata can be ignored for now. In the `scopes` section, you specify that only the TrafficControlService and FineCollectionService should use the pub/sub building block.
@@ -149,7 +149,7 @@ Now you are going to prepare the FineCollectionService so it can receive message
    - finecollectionservice
    ```
 
-   The `route` field tells Dapr to forward all messages send to the `collectfine` topic to the `/collectfine` endpoint in the app. The `scopes` field restricts this subscription to the service with app-id `finecollectionservice` only.
+   The `route` field tells Dapr to forward all messages send to the `collectfine` topic to the `/collectfine` endpoint in the app. The `scopes` field restricts this subscription to only the service with app-id `finecollectionservice` only.
 
 Now your FineCollectionService is ready to receive messages through Dapr pub/sub. But there is a catch! Dapr uses the [CloudEvents](https://cloudevents.io/) message format for pub/sub. So when we send a message through pub/sub, the receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to change the code slightly. For now, you will parse the incoming JSON by hand (instead of ASP.NET Core model binding doing that for you). You will change this later when you will use the Dapr SDK for .NET.
 
@@ -309,7 +309,13 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
 
    > The `[FromServices]` attribute injects the `DaprClient` into the method using the ASP.NET Core dependency injection system.
 
-1. Near the end of the method, you'll find the code that publishes the `SpeedingViolation` message using `_httpClient`.
+1. Near the end of the method, you'll find the code that publishes the `SpeedingViolation` message using `_httpClient`:
+
+   ```csharp
+   // publish speedingviolation
+   var message = JsonContent.Create<SpeedingViolation>(speedingViolation);
+   await _httpClient.PostAsync("http://localhost:3500/v1.0/publish/pubsub/collectfine", message);
+   ```
 
 1. Replace this code with a call to the Dapr pub/sub building block using the DaprClient:
 
@@ -323,7 +329,9 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
 1. The service now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. Add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
 
    ```csharp
-   services.AddDaprClient();
+   services.AddDaprClient(builder => builder
+       .UseHttpEndpoint($"http://localhost:3500")
+       .UseGrpcEndpoint($"http://localhost:50000"));
    ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
@@ -385,7 +393,7 @@ Now you need to make sure that Dapr knows this controller and also knows which p
    services.AddControllers().AddDapr();
    ```
 
-   > The `AddDapr` method adds Dapr integration for ASP.NET MVC. That includes registering the `DaprClient`, so you can remove the `services.AddDaprClient();` line you added earlier.
+   > The `AddDapr` method adds Dapr integration for ASP.NET MVC.
 
 1. As you saw earlier, Dapr uses the cloud event message-format standard when sending messages over pub/sub. To make sure cloud events are automatically unwrapped, add the following line just after the call to `app.UseRouting()` in the `Configure` method:
 

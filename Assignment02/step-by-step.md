@@ -182,7 +182,7 @@ Now you'll change the code to use the Dapr SDK `HttpClient` integration to call 
    // add service proxies
    services.AddSingleton<VehicleRegistrationService>(_ => 
        new VehicleRegistrationService(DaprClient.CreateInvokeHttpClient(
-           "vehicleregistrationservice", "http://127.0.0.1:3501")));
+           "vehicleregistrationservice", "http://localhost:3501")));
    ```
 
    As you can see in this snippet, you use the `DaprClient` to create an `HttpClient` instance for doing service invocation. You specify the `app-id` of the service you want to communicate with. You also specify the address of the Dapr sidecar, because the FineCollectionService's sidecar does not use the default Dapr HTTP port (3500). The resulting `HttpClient` instance is explicitly passed into the constructor of the `VehicleRegistrationService` proxy.

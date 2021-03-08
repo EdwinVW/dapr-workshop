@@ -57,7 +57,7 @@ Now you will add code to the TrafficControlService so it uses the Dapr state man
 
 1. Open the file `src/TrafficControlService/Repositories/InMemoryVehicleStateRepository.cs` in VS Code.
 
-1. This is the repository used by the TrafficControlService. Inspect the code in this class. As you can see, this repository uses a very simple in-memory dictionary to store the state. The license number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
+1. This is the repository used by the TrafficControlService. Inspect the code in this class. Inspect the code of this repository. As you can see, this repository uses a very simple in-memory dictionary to store the state. The license number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
 
 1. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
