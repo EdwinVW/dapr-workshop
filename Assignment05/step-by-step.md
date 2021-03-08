@@ -112,8 +112,8 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
    ```csharp
    services.AddDaprClient(builder => builder
-       .UseHttpEndpoint($"http://localhost:3501")
-       .UseGrpcEndpoint($"http://localhost:50001"));
+       .UseHttpEndpoint($"http://localhost:3601")
+       .UseGrpcEndpoint($"http://localhost:60001"));
    ```
 
 That's it, that's all the code you need to ask to send an email over SMTP.  
@@ -172,7 +172,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
@@ -180,7 +180,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
@@ -188,7 +188,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
+   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.

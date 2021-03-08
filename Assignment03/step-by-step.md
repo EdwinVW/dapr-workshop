@@ -115,13 +115,13 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
    ```csharp
    // publish speedingviolation
    var message = JsonContent.Create<SpeedingViolation>(speedingViolation);
-   await _httpClient.PostAsync("http://localhost:5001/collectfine", message);
+   await _httpClient.PostAsync("http://localhost:6001/collectfine", message);
    ```
 
-1. The URL for publishing a message using the Dapr pub/sub API is: `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the `collectfine` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService runs on HTTP port `3500`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
+1. The URL for publishing a message using the Dapr pub/sub API is: `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the `collectfine` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService runs on HTTP port `3600`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
 
    ```csharp
-   await _httpClient.PostAsync("http://localhost:3500/v1.0/publish/pubsub/collectfine", message);
+   await _httpClient.PostAsync("http://localhost:3600/v1.0/publish/pubsub/collectfine", message);
    ```
 
 That's it. You now use Dapr pub/sub to publish a message to a message broker.
@@ -197,7 +197,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
    ```
 
    > Notice that you specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use RabbitMQ for pub/sub.
@@ -207,7 +207,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
@@ -215,7 +215,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
+   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.
@@ -276,7 +276,7 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
 1. Start the updated FineCollectionService:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
 1. After you've looked at the log output and confirmed that everything works, you can stop all the services.
@@ -314,7 +314,7 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
    ```csharp
    // publish speedingviolation
    var message = JsonContent.Create<SpeedingViolation>(speedingViolation);
-   await _httpClient.PostAsync("http://localhost:3500/v1.0/publish/pubsub/collectfine", message);
+   await _httpClient.PostAsync("http://localhost:3600/v1.0/publish/pubsub/collectfine", message);
    ```
 
 1. Replace this code with a call to the Dapr pub/sub building block using the DaprClient:
@@ -330,8 +330,8 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
 
    ```csharp
    services.AddDaprClient(builder => builder
-       .UseHttpEndpoint($"http://localhost:3500")
-       .UseGrpcEndpoint($"http://localhost:50000"));
+       .UseHttpEndpoint($"http://localhost:3600")
+       .UseGrpcEndpoint($"http://localhost:60000"));
    ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.

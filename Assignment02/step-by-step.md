@@ -17,15 +17,15 @@ In assignment 1, you started all the services using `dotnet run`. When you want 
 
 - The service needs a unique id which Dapr can use to find it. This is called the *app-id* (or application Id). You specify this with the `--app-id` flag on the command-line.
 
-- Each of the services listens on a different HTTP port for requests (to prevent port collisions on localhost). The VehicleRegistrationService runs on port `5002` for instance. You need to tell Dapr this port so the Dapr sidecar can communicate with the service. You specify this with the `--app-port` flag on the command-line.
+- Each of the services listens on a different HTTP port for requests (to prevent port collisions on localhost). The VehicleRegistrationService runs on port `6002` for instance. You need to tell Dapr this port so the Dapr sidecar can communicate with the service. You specify this with the `--app-port` flag on the command-line.
 
-- The service can use HTTP or gRPC to communicate with the Dapr sidecar. The default ports used for this communication are `3500` for HTTP and `50001` for gRPC. To prevent port collisions on the local machine when running multiple services, you have to specify a unique HTTP and gRPC port per service. You specify this with the `--dapr-http-port` and `--dapr-grpc-port` flags on the command-line. Throughout the workshop, you will use the following ports:
+- The service can use HTTP or gRPC to communicate with the Dapr sidecar. By default these ports are `3500` and `50001`. But to prevent confusion, you'll use totally different port numbers in the assignments. To prevent port collisions on the local machine when running multiple services, you have to specify a unique HTTP and gRPC port per service. You specify this with the `--dapr-http-port` and `--dapr-grpc-port` flags on the command-line. Throughout the workshop, you will use the following ports:
 
   | Service                    | Application Port | Dapr sidecar HTTP port | Dapr sidecar gRPC port |
   | -------------------------- | ---------------- | ---------------------- | ---------------------- |
-  | TrafficControlService      | 5000             | 3500                   | 50000                  |
-  | FineCollectionService      | 5001             | 3501                   | 50001                  |
-  | VehicleRegistrationService | 5002             | 3502                   | 50002                  |
+  | TrafficControlService      | 6000             | 3600                   | 60000                  |
+  | FineCollectionService      | 6001             | 3601                   | 60001                  |
+  | VehicleRegistrationService | 6002             | 3602                   | 60002                  |
 
 - Finally you need to tell Dapr how to start the service. The services are .NET services which can be started with the command `dotnet run`.
 
@@ -40,7 +40,7 @@ You will use the `run` command of the Dapr CLI and specify all the options above
 4. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 dotnet run
    ```
 
 5. Check the logs for any errors. As you can see, both Dapr as well as application logging is shown as output.
@@ -66,7 +66,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
 1. Open the file `src/FineCollectionService/Proxies/VehicleRegistrationService.cs` in VS Code.
 
-1. Inspect the `GetVehicleInfo` method. You can see that in the HTTP call, the URL of the VehicleRegistrationService (running on port 5002) is used.
+1. Inspect the `GetVehicleInfo` method. You can see that in the HTTP call, the URL of the VehicleRegistrationService (running on port 6002) is used.
 
 1. The API for calling the Dapr service invocation building block on a Dapr sidecar is:
 
@@ -77,10 +77,10 @@ First you're going to change the code so it calls the Dapr sidecar:
    You can substitute the placeholders in this URL with values for the FineCollectionService, this yields the following URL:
 
    ```http
-   http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}
+   http://localhost:3601/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}
    ```
 
-   As you can see in this URL, the FineCollectionService's Dapr sidecar will run on HTTP port `3501`.
+   As you can see in this URL, the FineCollectionService's Dapr sidecar will run on HTTP port `3601`.
 
 1. Replace the URL in the code with the new Dapr service invocation URL. The code should now look like this:
 
@@ -88,7 +88,7 @@ First you're going to change the code so it calls the Dapr sidecar:
    public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
    {
        return await _httpClient.GetFromJsonAsync<VehicleInfo>(
-           $"http://localhost:3501/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}");
+           $"http://localhost:3601/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}");
    }
    ```
 
@@ -107,7 +107,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 dotnet run
    ```
 
 1. Check the logs for any errors. As you can see, both Dapr as well as application logging is shown as output.
@@ -182,7 +182,7 @@ Now you'll change the code to use the Dapr SDK `HttpClient` integration to call 
    // add service proxies
    services.AddSingleton<VehicleRegistrationService>(_ => 
        new VehicleRegistrationService(DaprClient.CreateInvokeHttpClient(
-           "vehicleregistrationservice", "http://localhost:3501")));
+           "vehicleregistrationservice", "http://localhost:3601")));
    ```
 
    As you can see in this snippet, you use the `DaprClient` to create an `HttpClient` instance for doing service invocation. You specify the `app-id` of the service you want to communicate with. You also specify the address of the Dapr sidecar, because the FineCollectionService's sidecar does not use the default Dapr HTTP port (3500). The resulting `HttpClient` instance is explicitly passed into the constructor of the `VehicleRegistrationService` proxy.
@@ -210,7 +210,7 @@ Now the FineCollectionService is changed to use the Dapr SDK for service invocat
 1. Enter the following command to start the changed FineCollectionService again:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 dotnet run
    ```
 
 The services are up & running. Now you're going to test this using the simulation.

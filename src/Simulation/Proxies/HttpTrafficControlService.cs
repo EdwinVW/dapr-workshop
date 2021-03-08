@@ -18,14 +18,14 @@ namespace Simulation.Proxies
         {
             var eventJson = JsonSerializer.Serialize(vehicleRegistered);
             var message = JsonContent.Create<VehicleRegistered>(vehicleRegistered);
-            _httpClient.PostAsync("http://localhost:5000/entrycam", message).Wait();
+            _httpClient.PostAsync("http://localhost:6000/entrycam", message).Wait();
         }
 
         public void SendVehicleExit(VehicleRegistered vehicleRegistered)
         {
             var eventJson = JsonSerializer.Serialize(vehicleRegistered);
             var message = JsonContent.Create<VehicleRegistered>(vehicleRegistered);
-            _httpClient.PostAsync("http://localhost:5000/exitcam", message).Wait();
+            _httpClient.PostAsync("http://localhost:6000/exitcam", message).Wait();
         }
     }
 }

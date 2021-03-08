@@ -112,7 +112,7 @@ Now you will add code to the TrafficControlService so it uses the Dapr state man
     };
     
     await _httpClient.PostAsJsonAsync(
-        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
+        $"http://localhost:3600/v1.0/state/{DAPR_STORE_NAME}",
         state);
    ```
 
@@ -122,7 +122,7 @@ Now you will add code to the TrafficControlService so it uses the Dapr state man
 
     ```csharp
     var state = await _httpClient.GetFromJsonAsync<VehicleState>(
-        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
+        $"http://localhost:3600/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
     return state;
     ```
 
@@ -149,7 +149,7 @@ namespace TrafficControlService.Repositories
         public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
         {
             var state = await _httpClient.GetFromJsonAsync<VehicleState>(
-                $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
+                $"http://localhost:3600/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
             return state;
         }
 
@@ -164,7 +164,7 @@ namespace TrafficControlService.Repositories
             };
 
             await _httpClient.PostAsJsonAsync(
-                $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
+                $"http://localhost:3600/v1.0/state/{DAPR_STORE_NAME}",
                 state);
         }
     }
@@ -210,7 +210,7 @@ Now you're ready to test the application.
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
@@ -218,7 +218,7 @@ Now you're ready to test the application.
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
@@ -226,7 +226,7 @@ Now you're ready to test the application.
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
+   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.

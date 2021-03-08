@@ -73,7 +73,7 @@ docker rm dtc-mosquitto -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/mosquitto/start-mosquitto.ps1` script to start the Mosquitto container. 
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/mosquitto/start-mosquitto.ps1` script to start the Mosquitto container.
 >
 > If you don't mind starting all the infrastructural containers at once, you can also use the `src/Infrastructure/start-all.ps1` script.
 
@@ -104,7 +104,7 @@ In this step you will add a Dapr binding component configuration file to the cus
    scopes:
      - trafficcontrolservice
    ```
-   
+
    As you can see, you specify the binding type MQTT (`bindings.mqtt`) and you specify in the `metadata` how to connect to the Mosquitto server container you started in step 2 (running on localhost on port `1883`). Also the topic to use is configured in metadata: `trafficcontrol/entrycam`. In the `scopes` section, you specify that only the TrafficControlService should subscribe to the MQTT topic.
 
 Important to note with bindings is the `name` of the binding. This name must be the same as the name of the web API URL you want to be called on your service. In your case this is `/entrycam`.
@@ -243,7 +243,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 5002 --dapr-http-port 3502 --dapr-grpc-port 50002 --components-path ../dapr/components dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/FineCollectionService`.
@@ -251,7 +251,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 5001 --dapr-http-port 3501 --dapr-grpc-port 50001 --components-path ../dapr/components dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
@@ -259,7 +259,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 5000 --dapr-http-port 3500 --dapr-grpc-port 50000 --components-path ../dapr/components dotnet run
+   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/Simulation`.

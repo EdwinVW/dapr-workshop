@@ -8,7 +8,7 @@ This repository contains several hands-on assignments that will introduce you to
 - Bindings
 - Secrets management
 
-You will be using Dapr in self-hosted mode. 
+You will be using Dapr in self-hosted mode.
 
 ## The domain
 
@@ -26,7 +26,7 @@ In order to simulate this in code, the following services are defined:
 
 ![Services](img/services.png)
 
-The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution. 
+The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
 - The **Camera Simulation** is a .NET Core console application that will simulate passing cars.
 - The **Traffic Control Service** is an ASP.NET Core WebAPI application that offers 2 endpoints: `/entrycam` and `/exitcam`.
@@ -82,6 +82,10 @@ Make sure you have the following prerequisites installed on your machine:
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - Dapr CLI and Dapr runtime ([instructions](https://docs.dapr.io/getting-started/install-dapr-selfhost/))
 
+All scripts in the instructions are Powershell scripts. If you're working on a Mac, it is recommended to install Powershell for Mac:
+
+- Powershell for Mac ([instructions](https://docs.microsoft.com/nl-nl/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
+
 ### Versions
 
 The workshop has been tested with the following versions:
@@ -95,11 +99,11 @@ The workshop has been tested with the following versions:
 
 ### Instructions
 
-Every assignment is contained in a separate folder in this repo. Each folder contains the description of the assignment that you can follow. 
+Every assignment is contained in a separate folder in this repo. Each folder contains the description of the assignment that you can follow.
 
-**It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.** 
+**It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.**
 
-The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and stores state in memory. With each assignment of the workshop, you will add a Dapr building block to this solution. 
+The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and stores state in memory. With each assignment of the workshop, you will add a Dapr building block to this solution.
 
 Every description of an assignment (accept the first one) contains two parts with each a certain approach to executing the assignment: a **DIY** part and a **step-by-step** part. The DIY part just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step part describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step approach for some help.
 
@@ -109,15 +113,15 @@ During the workshop, you should be working in 1 instance of VS Code. You will us
 
 #### Prevent port collisions
 
-During the workshop you will run the services in the solution on your local machine. To prevent port-collisions, all services listen on a different HTTP port. When running the services with Dapr, you need additional ports voor HTTP and gRPC communication with the sidecars. If you follow the instructions, the services will use the following ports for their Dapr sidecars to prevent port collisions:
+During the workshop you will run the services in the solution on your local machine. To prevent port-collisions, all services listen on a different HTTP port. When running the services with Dapr, you need additional ports voor HTTP and gRPC communication with the sidecars. By default these ports are `3500` and `50001`. But to prevent confusion, you'll use totally different port numbers in the assignments. If you follow the instructions, the services will use the following ports for their Dapr sidecars to prevent port collisions:
 
 | Service                    | Application Port | Dapr sidecar HTTP port | Dapr sidecar gRPC port |
 | -------------------------- | ---------------- | ---------------------- | ---------------------- |
-| TrafficControlService      | 5000             | 3500                   | 50000                  |
-| FineCollectionService      | 5001             | 3501                   | 50001                  |
-| VehicleRegistrationService | 5002             | 3502                   | 50002                  |
+| TrafficControlService      | 6000             | 3600                   | 60000                  |
+| FineCollectionService      | 6001             | 3601                   | 60001                  |
+| VehicleRegistrationService | 6002             | 3602                   | 60002                  |
 
-If you're doing the DIY approach, make sure you use the ports specified in the table above. 
+If you're doing the DIY approach, make sure you use the ports specified in the table above.
 
 The ports can be specified on the command-line when starting a service with the Dapr CLI. The following command-line flags can be used:
 
@@ -131,11 +135,10 @@ Now it's time for you to get your hands dirty and start with the first assignmen
 
 1. Clone the Github repository to a local folder on your machine:
 
-   ```
+   ```console
    git clone https://github.com/EdwinVW/dapr-workshop.git
    ```
 
 2. Before starting with the assignments, I suggest you check-out the code of the different services. You can open the `src` folder in this repo in VS Code. All folders used in the assignments are specified relative to the root of the folder where you have cloned the dapr-workshop repository.
 
 3. Go to [assignment 1](Assignment01/README.md).
-
