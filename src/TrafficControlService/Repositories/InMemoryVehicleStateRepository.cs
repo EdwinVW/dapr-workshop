@@ -14,19 +14,18 @@ namespace TrafficControlService.Repositories
         }
         public Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
         {
-            VehicleState result = null;
-            if (_state.TryGetValue(licenseNumber, out VehicleState state))
+            VehicleState state;
+            if (!_state.TryGetValue(licenseNumber, out state))
             {
-                result = state;
+                return null;
             }
-            return Task.FromResult(result);
+            return Task.FromResult(state);
         }
 
         public Task SaveVehicleStateAsync(VehicleState vehicleState)
         {
-            _state.AddOrUpdate(vehicleState.LicenseNumber,
-                newKey => vehicleState, (currentKey, currentState) => vehicleState);
-
+            _state.AddOrUpdate(vehicleState.LicenseNumber, vehicleState,
+                (k,s) => vehicleState);
             return Task.CompletedTask;
         }
     }

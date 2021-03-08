@@ -1,6 +1,6 @@
 # Assignment 1 - Run the application
 
-In this assignment, you're going to run the application to make sure everything works correctly.
+In this assignment, you'll run the application to make sure everything works correctly.
 
 ## Step 1. Run the VehicleRegistration service
 
@@ -10,7 +10,7 @@ In this assignment, you're going to run the application to make sure everything 
 
 2. Open the terminal window in VS Code.
 
-   > You can do this by using the hotkey ``Ctrl-` ``.
+   > You can do this by using the hotkey ``Ctrl-` `` (Windows) or ``Shift-Ctrl-` `` (macOS).
 
 3. Make sure the current folder is `src/VehicleRegistrationService`.
 
@@ -37,11 +37,11 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
    Transfer-Encoding: chunked
    
    {
-     "vehicleId": "KZ-49-VX",
-     "brand": "Toyota",
-     "model": "Rav 4",
-     "ownerName": "Angelena Fairbairn",
-     "ownerEmail": "angelena.fairbairn@outlook.com"
+       "vehicleId": "KZ-49-VX",
+       "brand": "Toyota",
+       "model": "Rav 4",
+       "ownerName": "Angelena Fairbairn",
+       "ownerEmail": "angelena.fairbairn@outlook.com"
    }
    ```
 
@@ -55,7 +55,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open a **new** terminal window in VS Code.
 
-   > You can do this by using the hotkey ``Ctrl-Shift-` `` or clicking on the `+` button in the terminal window title bar:
+   > You can do this by using the hotkey (``Ctrl-` `` on Windows, ``Shift-Ctrl-` `` on macOS) or clicking on the `+` button in the terminal window title bar:
    > ![](img/terminal-new.png)
 
 1. Make sure the current folder is `src/FineCollectionService`.

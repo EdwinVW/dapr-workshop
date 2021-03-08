@@ -2,10 +2,10 @@
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The TrafficControl service saves the state of a vehicle (`VehicleState` class) using the state management building block after vehicle entry.
-- The TrafficControl service reads, updates and saves the state of a vehicle using the state management building block after vehicle exit.
+- The TrafficControl service reads and updates the state of a vehicle using the state management building block after vehicle exit.
 
 This assignment targets number **3** in the end-state setup:
 
@@ -13,7 +13,31 @@ This assignment targets number **3** in the end-state setup:
 
 ## Step 1: Use the Dapr state management building block
 
-You will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
+First, you need to add something to the state management configuration file:
+
+1. Open the file `src/dapr/components/statestore.yaml` in VS Code.
+
+1. Add a `scopes` section to the configuration file that specifies that only the TrafficControlService should use the state management building block:
+
+   ```yaml
+   apiVersion: dapr.io/v1alpha1
+   kind: Component
+   metadata:
+     name: statestore
+   spec:
+     type: state.redis
+     metadata:
+     - name: redisHost
+       value: localhost:6379
+     - name: redisPassword
+       value: ""
+     - name: actorStateStore
+       value: "true"
+   scopes:
+     - trafficcontrolservice
+   ```
+
+Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
 
 1. Open the `src` folder in this repo in VS Code.
 
@@ -25,15 +49,15 @@ You will add code to the TrafficControlService so it uses the Dapr state managem
    // store vehicle state
    var vehicleState = new VehicleState
    {
-     LicenseNumber = msg.LicenseNumber,
-     EntryTimestamp = msg.Timestamp
+       LicenseNumber = msg.LicenseNumber,
+       EntryTimestamp = msg.Timestamp
    };
    await _vehicleStateRepository.SaveVehicleStateAsync(vehicleState);
    ```
 
 1. Open the file `src/TrafficControlService/Repositories/InMemoryVehicleStateRepository.cs` in VS Code.
 
-1. This is the repository used by the TrafficControlService. Inspect the code in this class. As you can see, this repository uses a very simple in-memory dictionary to store the state. The license-number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
+1. This is the repository used by the TrafficControlService. Inspect the code in this class. Inspect the code of this repository. As you can see, this repository uses a very simple in-memory dictionary to store the state. The license number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
 
 1. Create a new file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
@@ -48,31 +72,31 @@ You will add code to the TrafficControlService so it uses the Dapr state managem
     
     namespace TrafficControlService.Repositories
     {
-      public class DaprVehicleStateRepository : IVehicleStateRepository
-      {
-        public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+        public class DaprVehicleStateRepository : IVehicleStateRepository
         {
-          throw new NotImplementedException();
-        }
+            private const string DAPR_STORE_NAME = "statestore";
+
+            public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+            {
+                throw new NotImplementedException();
+            }
     
-        public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-        {
-          throw new NotImplementedException();
+            public async Task SaveVehicleStateAsync(VehicleState vehicleState)
+            {
+                throw new NotImplementedException();
+            }
         }
-      }
     }
     ```
 
-1. Add a private constant field named `DAPR_STORE_NAME` of type string in this class, holding the name of the state management component to use. This is `statestore`.
-
-1. Expand the class with a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
+1. Add a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
 
     ```csharp
     private readonly HttpClient _httpClient;
     
     public DaprVehicleStateRepository(HttpClient httpClient)
     {
-      _httpClient = httpClient;
+        _httpClient = httpClient;
     }
     ```
 
@@ -81,24 +105,24 @@ You will add code to the TrafficControlService so it uses the Dapr state managem
     ```csharp
     var state = new[]
     {
-      new { 
-        key = vehicleState.LicenseNumber,
-        value = vehicleState
-      }
+        new { 
+            key = vehicleState.LicenseNumber,
+            value = vehicleState
+        }
     };
     
     await _httpClient.PostAsJsonAsync(
-      $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
-      state);
+        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
+        state);
    ```
 
-    > As you can see here, the structure of the data when saving state is an array of key / value pairs. In this example you use an anonymous type as payload.
+    > As you can see here, the structure of the data when saving state is an array of key/value pairs. In this example you use an anonymous type as payload.
 
 1. The URL for getting data using the Dapr state API is: `http://localhost:<daprPort>/v1.0/state/<statestore-name>/<key>`. You'll use this API to retrieve the VehicleState. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
 
     ```csharp
     var state = await _httpClient.GetFromJsonAsync<VehicleState>(
-      $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
+        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
     return state;
     ```
 
@@ -112,38 +136,38 @@ using TrafficControlService.Models;
 
 namespace TrafficControlService.Repositories
 {
-  public class DaprVehicleStateRepository : IVehicleStateRepository
-  {
-    private const string DAPR_STORE_NAME = "statestore";
-    private readonly HttpClient _httpClient;
-
-    public DaprVehicleStateRepository(HttpClient httpClient)
+    public class DaprVehicleStateRepository : IVehicleStateRepository
     {
-      _httpClient = httpClient;
-    }
+        private const string DAPR_STORE_NAME = "statestore";
+        private readonly HttpClient _httpClient;
 
-    public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-    {
-      var state = await _httpClient.GetFromJsonAsync<VehicleState>(
-        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
-      return state;
-    }
-
-    public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-    {
-      var state = new[]
-      {
-        new {
-          key = vehicleState.LicenseNumber,
-          value = vehicleState
+        public DaprVehicleStateRepository(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
         }
-      };
 
-      await _httpClient.PostAsJsonAsync(
-        $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
-        state);
+        public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+        {
+            var state = await _httpClient.GetFromJsonAsync<VehicleState>(
+                $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}/{licenseNumber}");
+            return state;
+        }
+
+        public async Task SaveVehicleStateAsync(VehicleState vehicleState)
+        {
+            var state = new[]
+            {
+                new {
+                    key = vehicleState.LicenseNumber,
+                    value = vehicleState
+                }
+            };
+
+            await _httpClient.PostAsJsonAsync(
+                $"http://localhost:3500/v1.0/state/{DAPR_STORE_NAME}",
+                state);
+        }
     }
-  }
 }
 ```
 
@@ -160,7 +184,7 @@ Now you need to make sure your new repository is registered with dependency-inje
 1. Replace the `InMemoryVehicleStateRepository` with your new new `DaprVehicleStateRepository`:
 
    ```csharp
-   services.AddSingleton<IVehicleStateRepository, DaprVehicleRepository>();
+   services.AddSingleton<IVehicleStateRepository, DaprVehicleStateRepository>();
    ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
@@ -179,7 +203,7 @@ Now you're ready to test the application.
 
 1. Make sure no services from previous tests are running (close the terminal windows)
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/Infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
@@ -245,15 +269,13 @@ Obviously, the behavior of the application is exactly the same as before. But ar
 
    <img src="img/redis-cli.png" />
 
-As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management building-block supports different state-stores through its component model. So without changing any code but only specifying a different Dapr component configuration, you could use an entirely different storage mechanism.
+As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management building block supports different state-stores through its component model. So without changing any code but only specifying a different Dapr component configuration, you could use an entirely different storage mechanism.
 
->  If you're up for it, try to swap-out Redis with another state provider. See the [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)). To configure a different state-store, you need to change the file `src/dapr/components/statestore.yaml`.
+> If you're up for it, try to swap-out Redis with another state provider. See the [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)). To configure a different state-store, you need to change the file `src/dapr/components/statestore.yaml`.
 
 ## Step 3: Use Dapr state management with the Dapr SDK for .NET
 
-In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP by using the `DaprClient` from the Dapr SDK for .NET.
-
-1. Open the `src` folder in this repo in VS Code.
+In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP with using the `DaprClient` from the Dapr SDK for .NET.
 
 1. Open the file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
@@ -261,21 +283,21 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 1. Change all occurrences of the `HttpClient` with `DaprClient` and rename the private field `_httpClient` to `_daprClient`.
 
-1. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
-
-   ```csharp
-   await _daprClient.SaveStateAsync(
-     DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
-   ```
-
 1. Replace the implementation of the `GetVehicleStateAsync` method with the following code:
 
    ```csharp
    return await _daprClient.GetStateAsync<VehicleState>(
-     DAPR_STORE_NAME, licenseNumber);
+       DAPR_STORE_NAME, licenseNumber);
    ```
-   
-   The repository code should now look like this:
+
+1. Replace the implementation of the `SaveVehicleStateAsync` method with the following code:
+
+   ```csharp
+   await _daprClient.SaveStateAsync(
+       DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
+   ```
+
+1. The repository code should now look like this:
 
    ```csharp
    using System.Threading.Tasks;
@@ -284,28 +306,28 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
    namespace TrafficControlService.Repositories
    {
-     public class DaprVehicleStateRepository : IVehicleStateRepository
-     {
-       private const string DAPR_STORE_NAME = "statestore";
-       private readonly DaprClient _daprClient;
-
-       public DaprVehicleStateRepository(DaprClient daprClient)
+       public class DaprVehicleStateRepository : IVehicleStateRepository
        {
-         _daprClient = daprClient;
-       }
+           private const string DAPR_STORE_NAME = "statestore";
+           private readonly DaprClient _daprClient;
 
-       public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
-       {
-         return await _daprClient.GetStateAsync<VehicleState>(
-           DAPR_STORE_NAME, licenseNumber);
-       }
+           public DaprVehicleStateRepository(DaprClient daprClient)
+           {
+               _daprClient = daprClient;
+           }
 
-       public async Task SaveVehicleStateAsync(VehicleState vehicleState)
-       {
-         await _daprClient.SaveStateAsync(
-           DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
+           public async Task<VehicleState> GetVehicleStateAsync(string licenseNumber)
+           {
+               return await _daprClient.GetStateAsync<VehicleState>(
+                   DAPR_STORE_NAME, licenseNumber);
+           }
+
+           public async Task SaveVehicleStateAsync(VehicleState vehicleState)
+           {
+               await _daprClient.SaveStateAsync(
+                   DAPR_STORE_NAME, vehicleState.LicenseNumber, vehicleState);
+           }
        }
-     }
    }
    ```
 

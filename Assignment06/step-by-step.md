@@ -2,10 +2,10 @@
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The TrafficControlService uses the Dapr MQTT input binding to receive entry- and exit-cam messages over the MQTT protocol.
-- The MQTT binding uses the lightweight MQTT message-broker Mosquitto that runs as part of the solution in a Docker container.
+- The MQTT binding uses the lightweight MQTT message broker Mosquitto that runs as part of the solution in a Docker container.
 - The Camera Simulation publishes entry- and exit-cam messages to the MQTT broker.
 
 This assignment targets number **5** in the end-state setup:
@@ -14,17 +14,17 @@ This assignment targets number **5** in the end-state setup:
 
 ## Step 1: Use the Dapr input binding in the TrafficControlService
 
-You will add code to the TrafficControlService so it uses the Dapr input MQTT binding to receive entry- and exit-cam messages:
+You will add code to the TrafficControlService to use the Dapr input MQTT binding to receive entry- and exit-cam messages:
 
-1. Open the `src` folder in this repo in VS Code.
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
-1. Inspect the `EntryCam` and `ExitCam` methods.
 
-And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed WebAPI operations based on the name of the binding you will specify in the component configuration in the next step. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings.
+1. Inspect the `VehicleEntry` and `VehicleExit` methods.
+
+And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed web API operations based on the name of the binding you specify in the component configuration in the next step. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings.
 
 ## Step 2: Run the Mosquitto MQTT broker
 
-As MQTT broker you will use [Mosquitto](https://mosquitto.org/). This is a lightweight MQTT broker. You will run this server as a Docker container.
+You will use [Mosquitto](https://mosquitto.org/), a lightweight MQTT broker, as the MQTT broker between the simulation and the TrafficControlService. You will run Mosquitto in a Docker container.
 
 In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `src/Infrastructure/mosquitto` already contains a config file you can use.
 
@@ -73,9 +73,9 @@ docker rm dtc-mosquitto -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/mosquitto/start-mosquitto.ps1` script to start the Mosquitto container. 
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/mosquitto/start-mosquitto.ps1` script to start the Mosquitto container. 
 >
-> If you don't mind starting all the infrastructural containers at once, you can also use the `src/infrastructure/start-all.ps1` script.
+> If you don't mind starting all the infrastructural containers at once, you can also use the `src/Infrastructure/start-all.ps1` script.
 
 ## Step 3: Configure the input binding
 
@@ -83,7 +83,7 @@ In this step you will add a Dapr binding component configuration file to the cus
 
 1. Add a new file in the `src/dapr/components` folder named `entrycam.yaml`.
 
-1. Open the file `src/dapr/components/entrycam.yaml` in VS Code.
+1. Open the file in VS Code.
 
 1. Paste this snippet into the file:
 
@@ -101,17 +101,19 @@ In this step you will add a Dapr binding component configuration file to the cus
        value: mqtt://localhost:1883
      - name: topic
        value: trafficcontrol/entrycam
+   scopes:
+     - trafficcontrolservice
    ```
+   
+   As you can see, you specify the binding type MQTT (`bindings.mqtt`) and you specify in the `metadata` how to connect to the Mosquitto server container you started in step 2 (running on localhost on port `1883`). Also the topic to use is configured in metadata: `trafficcontrol/entrycam`. In the `scopes` section, you specify that only the TrafficControlService should subscribe to the MQTT topic.
 
-As you can see, you specify the binding type MQTT (`bindings.mqtt`) and you specify in the `metadata` how to connect to the Mosquitto server container you started in step 2 (running on localhost on port `1883`). Also the topic to use is configured in metadata: `trafficcontrol/entrycam`.
+Important to note with bindings is the `name` of the binding. This name must be the same as the name of the web API URL you want to be called on your service. In your case this is `/entrycam`.
 
-Important to notice with bindings is the `name` of the binding. This name must be the same as the name of the WebAPI URL you want to be called on your service. In your case this is `/entrycam`.
-
-Now you need to also add an input binding voor the `/exitcam` operation:
+Now you need to also add an input binding for the `/exitcam` operation:
 
 1. Add a new file in the `src/dapr/components` folder named `exitcam.yaml`.
 
-1. Open the file `src/dapr/components/exitcam.yaml` in VS Code.
+1. Open this file in VS Code.
 
 1. Paste this snippet into the file:
 
@@ -129,13 +131,15 @@ Now you need to also add an input binding voor the `/exitcam` operation:
        value: mqtt://localhost:1883
      - name: topic
        value: trafficcontrol/exitcam
+   scopes:
+     - trafficcontrolservice    
    ```
 
 Now your input bindings are configured and it's time to change the Camera Simulation so it will send MQTT messages to Mosquitto.
 
 ## Step 4: Send MQTT messages from the Camera Simulation
 
-In this step you change the Camera Simulation so it sends MQTT messages in stead of doing HTTP requests:
+In this step you change the Camera Simulation so it sends MQTT messages instead of doing HTTP requests:
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/Simulation`.
 
@@ -153,9 +157,7 @@ As you can see, the simulation gets an `ITrafficControlService` instance injecte
 
 1. Open the file `src/Simulation/Proxies/HttpTrafficControlService.cs` in VS Code and inspect the code.
 
-1. Inspect the code in this file.
-
-As you can see, this proxy uses HTTP to send the message to the TrafficControlService. You will replace this now with an implementation that uses MQTT:
+The proxy uses HTTP to send the message to the TrafficControlService. You will replace this now with an implementation that uses MQTT:
 
 1. Add a new file in the `src/Simulation/Proxies` folder named `MqttTrafficControlService.cs`.
 
@@ -170,41 +172,41 @@ As you can see, this proxy uses HTTP to send the message to the TrafficControlSe
    
    namespace Simulation.Proxies
    {
-     public class MqttTrafficControlService : ITrafficControlService
-     {
-       private readonly IMqttClient _client;
-   
-       public MqttTrafficControlService(int camNumber)
+       public class MqttTrafficControlService : ITrafficControlService
        {
-         // connect to mqtt broker
-         var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
-         _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
-         var sessionState = _client.ConnectAsync(
-           new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
-       }
+           private readonly IMqttClient _client;
    
-       public void SendVehicleEntry(VehicleRegistered vehicleRegistered)
-       {
-         var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-         var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
-         _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
-       }
+           public MqttTrafficControlService(int camNumber)
+           {
+               // connect to mqtt broker
+               var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
+               _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
+               var sessionState = _client.ConnectAsync(
+                   new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
+           }
    
-       public void SendVehicleExit(VehicleRegistered vehicleRegistered)
-       {
-         var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-         var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
-         _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+           public void SendVehicleEntry(VehicleRegistered vehicleRegistered)
+           {
+               var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+               var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
+               _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+           }
+   
+           public void SendVehicleExit(VehicleRegistered vehicleRegistered)
+           {
+               var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+               var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
+               _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+           }
        }
-     }
    }
    ```
 
 1. Inspect the new code.
 
-As you can see, it uses the `System.Net.Mqtt` library to connect to a MQTT broker and send message to it.
+As you can see, it uses the `System.Net.Mqtt` library to connect to a MQTT broker and send messages to it.
 
-Now you need to make sure this implementation is used in stead of the HTTP one:
+Now you need to make sure this implementation is used instead of the HTTP one:
 
 1. Open the file `src/Simulation/Program.cs` in VS Code.
 
@@ -218,7 +220,7 @@ Now you need to make sure this implementation is used in stead of the HTTP one:
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/Simulation`.
 
-1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
+1. Check all your code changes are correct by building the code. Execute the following command in the terminal window:
 
 ```console
 dotnet build
@@ -234,7 +236,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/Infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 

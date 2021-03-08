@@ -2,7 +2,7 @@
 
 ## Assignment goals
 
-In order to complete this assignment, the following goals must be met:
+To complete this assignment, you must reach the following goals:
 
 - The FineCollectionService uses the Dapr SMTP output binding to send an email.
 - The SMTP binding calls a development SMTP server that runs as part of the solution in a Docker container.
@@ -11,59 +11,9 @@ This assignment targets number **4** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-## Step 1: Use the Dapr output binding in the FineCollectionService
+## Step 1: Run the SMTP server
 
-You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
-
-1. Open the `src` folder in this repo in VS Code.
-
-1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
-
-1. Inspect the code of the `CollectFine` method. You see a TODO at the end of the class. You will solve this TODO.
-
-1. Add a using statement in the `CollectionController` file so you can use the Dapr client:
-
-     ```csharp
-     using Dapr.Client;
-     ```
-
-1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `CollectFine` method :
-
-    ```csharp
-    public Task<ActionResult> CollectFine(SpeedingViolation speedingViolation, [FromServices] DaprClient daprClient)
-    ```
-
-1. In order to send an email, you first need to create some body to send as email. This email must contain the details of the speeding violation and the fine. The service already has a helper method to create an HTML email body. Replace the `// TODO` in the `CollectFine` method with this code:
-
-    ```csharp
-    var body = EmailUtils.CreateEmailBody(speedingViolation, vehicleInfo, fineString);
-    ```
-
-1. Next to the body, you need to specify the sender, recipient and subject of the email. With bindings, you specify this using a dictionary containing `metadata`. Add the following code right after the creation of the body:
-
-     ```csharp
-     var metadata = new Dictionary<string, string>
-     {
-       ["emailFrom"] = "noreply@cfca.gov",
-       ["emailTo"] = vehicleInfo.OwnerEmail,
-       ["subject"] = $"Speeding violation on the {speedingViolation.RoadId}"
-     };
-     ```
-
-1. Now you have everything you need to call the SMTP server using the Dapr output binding. Add the following code right after the creation of the metadata:
-
-     ```csharp
-     await daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
-     ```
-
-     > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
-
-
-That's it, that's all the code you need to ask to send an email over SMTP.  
-
-## Step 2: Run the SMTP server
-
-As SMTP server you will use [MailDev](https://github.com/maildev/maildev). This is a development SMTP server that doesn't actually send out emails (by default), but collects them and shows them in an inbox type web application it has built-in. This is extremely handy in test or demo scenarios.
+In this assignment, you will use [MailDev](https://github.com/maildev/maildev) as your SMTP server. This is a development SMTP server that doesn't actually send out emails (by default), but collects them and shows them in an inbox type web application it has built-in. This is extremely handy in test or demo scenarios.
 
 You will run this server as a Docker container:
 
@@ -103,9 +53,70 @@ docker rm dtc-maildev -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src/infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/infrastructure/maildev/start-maildev.ps1` script to start the MailDev container. 
+> For your convenience, the `src/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/maildev/start-maildev.ps1` script to start the MailDev container.
 >
-> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/infrastructure/start-all.ps1` script.
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.ps1` script.
+
+## Step 2: Use the Dapr output binding in the FineCollectionService
+
+You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
+
+1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
+
+1. Inspect the code of the `CollectFine` method. There's a TODO comment at the end of the class. You'll add code to complete this TODO.
+
+1. Add a using statement in the `CollectionController` file so you can use the Dapr client:
+
+     ```csharp
+     using Dapr.Client;
+     ```
+
+1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `CollectFine` method :
+
+    ```csharp
+    public async Task<ActionResult> CollectFine(SpeedingViolation speedingViolation, [FromServices] DaprClient daprClient)
+    ```
+
+1. In order to send an email, you first need to create a message body to send as email. The email body must contain the details of the speeding violation and the fine. The service already has a helper method to create an HTML email body. Replace the `// TODO` in the `CollectFine` method with this code:
+
+    ```csharp
+    var body = EmailUtils.CreateEmailBody(speedingViolation, vehicleInfo, fineString);
+    ```
+
+1. Next to the body, you need to specify the sender, recipient and subject of the email. With bindings, you specify this using a dictionary containing `metadata`. Add the following code right after the creation of the body:
+
+     ```csharp
+     var metadata = new Dictionary<string, string>
+     {
+         ["emailFrom"] = "noreply@cfca.gov",
+         ["emailTo"] = vehicleInfo.OwnerEmail,
+         ["subject"] = $"Speeding violation on the {speedingViolation.RoadId}"
+     };
+     ```
+
+1. Now you have everything you need to call the SMTP server using the Dapr output binding. Add the following code right after the creation of the metadata:
+
+     ```csharp
+     await daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
+     ```
+
+     > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
+
+1. Now that this method uses the `[FromServices]` attribute to inject the `DaprClient` class, you need to make sure `DaprClient` is registered with the dependency injection system. Open the file `src/FineCollectionService/Startup.cs`. Add the following using statement to the file:
+
+   ```csharp
+   using System;
+   ```
+
+1. Make sure the `DaprClient` is registered with DI. Add the following code to the `ConfigureServices` method (just above the code to register the `VehicleRegistrationService` proxy):
+
+   ```csharp
+   services.AddDaprClient(builder => builder
+       .UseHttpEndpoint($"http://localhost:3501")
+       .UseGrpcEndpoint($"http://localhost:50001"));
+   ```
+
+That's it, that's all the code you need to ask to send an email over SMTP.  
 
 ## Step 3: Configure the output binding
 
@@ -113,7 +124,7 @@ In this step you will add a Dapr binding component configuration file to the cus
 
 1. Add a new file in the `src/dapr/components` folder named `email.yaml`.
 
-1. Open the file `src/dapr/components/email.yaml` in VS Code.
+1. Open this file in VS Code.
 
 1. Paste this snippet into the file:
 
@@ -136,11 +147,13 @@ In this step you will add a Dapr binding component configuration file to the cus
        value: "_password"
      - name: skipTLSVerify
        value: true
+   scopes:
+     - finecollectionservice
    ```
 
-As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 2 (running on localhost on port `4025`). The other metadata can be ignored for now.
+As you can see, you specify the binding type SMTP (`bindings.smtp`) and you specify in the `metadata` how to connect to the SMTP server container you started in step 1 (running on localhost on port `4025`). The other metadata can be ignored for now.
 
-Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in the code in step 1:
+Important to notice with bindings is the `name` of the binding. This name must be the same as the name used in the call to the bindings API as you did in the code in step 2:
 
 ```csharp
 daprClient.InvokeBindingAsync("sendmail", "create", body, metadata);
@@ -152,7 +165,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows)
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/infrastructure/start-all.ps1` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src/Infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
 
@@ -188,8 +201,8 @@ You're going to start all the services now. You specify the custom components fo
 
 You should see the same logs as before. But now you should also be able to see the fine emails being sent by the FineCollectionService:
 
-1. Open a browser and browse to [http://localhost:4000](http://localhost:4000). 
-1. Wait for the first emails to come in. 
+1. Open a browser and browse to [http://localhost:4000](http://localhost:4000).
+1. Wait for the first emails to come in.
 1. Click on an email in the inbox to see its content:
    <img src="img/inbox.png" style="zoom:67%;" />
 
