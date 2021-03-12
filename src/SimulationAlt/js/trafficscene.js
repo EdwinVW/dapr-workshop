@@ -17,6 +17,9 @@ export let TrafficScene = new Phaser.Class({
     preload: function () {
 
         this.load.image('background', 'assets/background.png');
+        this.load.image('brushes', 'assets/brushes.png');
+        this.load.image('camera', 'assets/camera.png');
+        this.load.image('clouds', 'assets/clouds.png');
         this.load.image('road-middle', 'assets/road-middle.png');
         this.load.image('road-bottom', 'assets/road-bottom.png');
         this.load.image('structure-overhead', 'assets/structure-overhead.png');
@@ -30,7 +33,6 @@ export let TrafficScene = new Phaser.Class({
                     this.load.image(sourceImage.paintKey, 'assets/' + sourceImage.paintKey + '.png');
                 }
             }
-//            carSettings.imageKeys = carPainter.paintCar(carSettings);
         }
     },
 
@@ -38,31 +40,39 @@ export let TrafficScene = new Phaser.Class({
         this.physics.world.setBounds(0, 0, 2000, 600);
         this.cameras.main.setBounds(0, 0, 2000, 600);
 
-        this.add.image(600, 200, 'background');
+        this.add.image(-500, 0, 'background')
+            .setOrigin(0, 0)
+            .setScrollFactor(0.1, 1);
+
+        this.add.image(0, 125, 'clouds')
+            .setOrigin(0, 0)
+            .setScrollFactor(0.2, 1);
+
+        this.add.tileSprite(-200, laneMarginTop, 2400, 55, 'brushes')
+            .setOrigin(0, 1)
+            .setScrollFactor(0.7, 1);
+
+        this.add.tileSprite(0, laneMarginTop, 2000, 7, 'road-bottom')
+            .setOrigin(0, 1)
+            .setDepth(1);
 
         for (let i = 0; i < Settings.laneCount; i++) {
             this.lanes.push(new Lane(this, i, this.lanes));
         }
 
-        this.drawCameraStructure(150);
-        this.drawCameraStructure(600);
-        this.drawCameraStructure(1050);
+        this.drawCameraStructure(100);
+        this.drawCameraStructure(1750);
 
-        
-        const tileSprite2 = this.add.tileSprite(600, 400, 1200, 7, 'road-bottom');
-        tileSprite2.setDepth(0);
-        
-        const y = laneMarginTop + (this.lanes.length * laneHeight);
-        const tileSprite = this.add.tileSprite(600, y - 20, 1200, 7, 'road-bottom');
-        tileSprite.setDepth(600);
-        
+        this.add.tileSprite(0, laneMarginTop + (Settings.laneCount * laneHeight) + 1, 2000, 7, 'road-bottom')
+            .setOrigin(0, 1)
+            .setDepth(600);
+
         const carPainter = new CarPainter(this);
         for (let carSettings of Settings.carTypes) {
             carSettings.imageKeys = carPainter.paintCar(carSettings);
         }
 
         this.carTypeLookup = this.createCarTypeLookup();
-        console.log(this.carTypeLookup);
 
         this.cars = this.physics.add.group({
             classType: Car,
@@ -81,13 +91,11 @@ export let TrafficScene = new Phaser.Class({
             camera: this.cameras.main,
             left: cursors.left,
             right: cursors.right,
-            up: cursors.up,
-            down: cursors.down,
-            zoomIn: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-            zoomOut: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+            zoomIn: cursors.down, 
+            zoomOut: cursors.up, 
             zoomSpeed: 0.02,
             acceleration: 1,
-            drag: 0.0005,
+            drag: 0.2,
             maxSpeed: 10
         };
 
@@ -96,21 +104,27 @@ export let TrafficScene = new Phaser.Class({
 
     drawCameraStructure: function (x) {
 
-        const y = laneMarginTop + (this.lanes.length * laneHeight) - 45;
-        console.log(y);
+        const y = laneMarginTop + (Settings.laneCount * laneHeight) + 3;
 
-        var poleNear = this.add.image(x, y, 'structure-pole');
-        poleNear.setDepth(1000);
+        this.add.image(x, y, 'structure-pole')
+            .setOrigin(0, 1)
+            .setDepth(1000);
 
         let structureImage;
         for (let i = 0; i < this.lanes.length; i++) {
 
-            structureImage = this.add.image(x + 16 + (i * 33), y - 37 - (i * 33), 'structure-overhead');
-            structureImage.setDepth(1000);
+            this.add.image(x + (i * laneHeight) + 16, y - (i * laneHeight) - 56, 'camera')
+                .setOrigin(0, 1)
+                .setDepth(999);
+
+            this.add.image(x + (i * laneHeight), y - (i * laneHeight) - 42, 'structure-overhead')
+                .setOrigin(0, 1)
+                .setDepth(1000);
         }
 
-        var poleFar = this.add.image(x + (this.lanes.length * 33), laneMarginTop - 44, 'structure-pole');
-        poleFar.setDepth(999);
+        this.add.image(x + (this.lanes.length * laneHeight), laneMarginTop + 2, 'structure-pole')
+            .setOrigin(0, 1)
+            .setDepth(0);
     },
 
     update: function () {
@@ -141,7 +155,6 @@ export let TrafficScene = new Phaser.Class({
         }
         for (let carType of Settings.carTypes) {
             let lanes = carType.lanes ? carType.lanes : this.lanes.map(lane => lane.number);
-            console.log(lanes);
             for (let laneNumber of lanes) {
                 for (let i = 0; i < carType.selectionWeight; i++) {
                     carTypeLookup[laneNumber].push(carType);

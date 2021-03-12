@@ -1,21 +1,25 @@
 import { Merge } from './merge.js';
 import { Settings } from './settings.js';
-import { Utils } from './utils.js';
 
-export const laneMarginTop = 420;
+export const laneMarginTop = 400;
 export const laneHeight = 33;
 
 export class Lane extends Phaser.GameObjects.TileSprite {
 
     constructor(scene, number, lanes) {
-        super(scene, scene.physics.world.bounds.width / 2, (number * 33) + laneMarginTop, scene.physics.world.bounds.width, 33, 'road-middle'); // TODO add a little x offset
+        super(scene,
+            0,//(scene.physics.world.bounds.width / 2) - (number * 20),
+            laneMarginTop + (number * laneHeight),
+            scene.physics.world.bounds.width + (number * 40),
+            laneHeight,
+            'road-middle');
 
         this.number = number;
         this.lanes = lanes;
-        this.middleOfLane = this.y + Math.floor(this.height / 2) - 5;
         this.cars = [];
+        this.setOrigin(0, 0);
+        this.setDepth(1);
 
-        // ...
         scene.add.existing(this);
     }
 
@@ -60,41 +64,10 @@ export class Lane extends Phaser.GameObjects.TileSprite {
         return null;
     }
 
-    tryMerge2(car, to) {
+    tryMerge(car, to) {
 
         var merge = new Merge(car, this, to);
 
-        return this.tryMerge(merge);
-    }
-
-    tryMergeLeft(car) {
-        if (this.number === 0) {
-            return null;
-        }
-
-        var merge = new Merge(car, this, this.lanes[this.number - 1]);
-
-        return this.tryMerge(merge);
-    }
-
-    tryMergeRight(car) {
-        if (this.number === this.lanes.length - 1) {
-            return null;
-        }
-
-        var merge = new Merge(car, this, this.lanes[this.number + 1]);
-
-        if (merge.isSafe()) {
-
-            // Add car to merge lane so that other vehicles won't crash into it.
-            merge.to.insertCar(car);
-            return merge;
-        }
-
-        return null;
-    }
-
-    tryMerge(merge) {
         if (merge.isSafe()) {
 
             // Add car to merge lane so that other vehicles won't crash into it.
@@ -165,10 +138,6 @@ export class Lane extends Phaser.GameObjects.TileSprite {
     }
 
     getMiddleOfLanePosition() {
-        return this.middleOfLane;// ((this.number + 1) * 30) + 100;
-    }
-
-    removeFrontCar() {
-        this.cars.pop();
+        return this.y + Math.floor(this.height / 2) + 8;
     }
 }

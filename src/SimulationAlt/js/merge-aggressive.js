@@ -31,7 +31,7 @@ export class AggressiveMergeBehavior {
             }
 
             if (furthestCar.lane !== car.lane) {
-                return car.lane.tryMerge2(car, furthestCar.lane);
+                return car.lane.tryMerge(car, furthestCar.lane);
             }
         }
 

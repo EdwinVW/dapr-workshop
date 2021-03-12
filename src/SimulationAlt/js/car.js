@@ -12,7 +12,7 @@ export let Car = new Phaser.Class({
     },
 
     update: function () {
-        this.setDepth(this.lane.number);
+        this.setDepth(this.lane.number + 10);
 
         this.adjustSpeed();
 
@@ -38,7 +38,9 @@ export let Car = new Phaser.Class({
         this.trafficControlService = trafficControlService;
         this.merge = null;
         
-        this.trafficControlService.registerVehicleEntry(this);
+        if (this.trafficControlService) {
+            this.trafficControlService.registerVehicleEntry(this);
+        }
 
         this.setTexture(settings.imageKeys[Utils.getRandomInteger(0, settings.imageKeys.length - 1)]);
         this.setBodySize(this.displayWidth, this.displayHeight);
@@ -64,7 +66,9 @@ export let Car = new Phaser.Class({
         this.setVisible(false);
         this.body.stop();
 
-        this.trafficControlService.registerVehicleExit(this);
+        if (this.trafficControlService) {
+            this.trafficControlService.registerVehicleExit(this);
+        }
     },
 
     adjustSpeed: function () {

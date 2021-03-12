@@ -40,8 +40,6 @@ export class CarPainter {
                 }
             }
 
-            console.log(sourceImage.key + ': ' + colorLookup.length);
-
             // Iterate over each palette.
             for (y = 1; y < colorLookup.length; y++) {
 

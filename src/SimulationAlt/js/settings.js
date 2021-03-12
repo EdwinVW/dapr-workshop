@@ -1,5 +1,6 @@
 import { AggressiveMergeBehavior } from './merge-aggressive.js';
 import { HttpTrafficControlService } from './trafficcontrolsvc-http.js';
+import { MqttTrafficControlService } from './trafficcontrolsvc-mqtt.js';
 
 export const Settings =
 {
@@ -68,5 +69,6 @@ export const Settings =
             }
         ],
     maximumSpeedIncrementForLeftLanes: 5,
-    trafficControlService: new HttpTrafficControlService('http://127.0.0.1:5000')
+    //trafficControlService: new HttpTrafficControlService('http://127.0.0.1:5000'),
+    //trafficControlService: new MqttTrafficControlService('127.0.0.1', 9001)
 }
