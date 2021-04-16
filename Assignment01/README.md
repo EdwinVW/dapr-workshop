@@ -22,7 +22,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open the file `src/VehicleRegistrationService/test.http` in VS Code. The request in this file simulates retrieving the vehicle- and owner information for a certain license-number.
 
-1. Click on `Execute request` in the file to send a request to the API:
+1. Click on `Send request` in the file to send a request to the API:
 
    ![REST client](img/rest-client.png)
 
