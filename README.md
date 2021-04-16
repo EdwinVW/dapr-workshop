@@ -80,7 +80,7 @@ Make sure you have the following prerequisites installed on your machine:
   - [C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
   - [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
-- Dapr CLI and Dapr runtime ([instructions](https://docs.dapr.io/getting-started/install-dapr-selfhost/))
+- [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
 
 All scripts in the instructions are Powershell scripts. If you're working on a Mac, it is recommended to install Powershell for Mac:
 
