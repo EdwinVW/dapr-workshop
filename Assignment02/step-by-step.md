@@ -116,7 +116,7 @@ Now you're going to test the application:
 
 1. Open a **new** terminal window in VS Code and change the current folder to `src/TrafficControlService`.
 
-1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
+1. Enter the following command to run the TrafficControlService:
 
 1. ```console
    dotnet run
