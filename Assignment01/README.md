@@ -16,7 +16,7 @@ In this assignment, you'll run the application to make sure everything works cor
 
 4. Start the service using `dotnet run`.
 
-> If you receive an error here, please double-check whether or not you have installed all the [prerequisites](..\README.md#Prerequisites) for the workshop!
+> If you receive an error here, please double-check whether or not you have installed all the [prerequisites](../README.md#Prerequisites) for the workshop!
 
 Now you can test whether you can call the VehicleRegistrationService. You can do this using a browser, CURL or some other HTTP client. But there is a convenient way of testing RESTful APIs directly from VS Code (this uses the REST Client extension VS Code):
 
