@@ -97,9 +97,9 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
    You should see the speeding-violation being handled by the FineCollectionService:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice2.png)
+   ![FineCollectionService logging](img/logging-finecollectionservice.png)
 
-## Step 3. Run the simulation
+## Step 4. Run the simulation
 
 You've tested the APIs directly by using a REST client. Now you're going to run the simulation that actually simulates cars driving on the highway. The simulation will simulate 3 entry- and exit-cameras (one for each lane).
 
