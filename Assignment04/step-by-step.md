@@ -279,7 +279,11 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 1. Open the file `src/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
-1. Add a using statement for `Dapr.Client`.
+1. Add a using statement for the Dapr client:
+
+   ```csharp
+   using Dapr.Client;
+   ```
 
 1. Change all occurrences of the `HttpClient` with `DaprClient` and rename the private field `_httpClient` to `_daprClient`.
 
