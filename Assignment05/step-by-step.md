@@ -63,7 +63,7 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
 1. Open the file `src/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
-1. Inspect the code of the `CollectFine` method. There's a TODO comment at the end of the class. You'll add code to complete this TODO.
+1. Inspect the code of the `CollectFine` method. There's a TODO comment at the end of the class. You'll add code to complete this TODO and actually send an email.
 
 1. Add a using statement in the `CollectionController` file so you can use the Dapr client:
 
