@@ -110,7 +110,7 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
-1. Near the end of the method, you find the code that sends a `SpeedingViolation` message to the FineCollectionService over HTTP:
+1. Near the end of the `VehicleExit` method, you find the code that sends a `SpeedingViolation` message to the FineCollectionService over HTTP:
 
    ```csharp
    // publish speedingviolation
