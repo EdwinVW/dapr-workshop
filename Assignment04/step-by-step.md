@@ -89,7 +89,7 @@ Now you will add code to the TrafficControlService so it uses the Dapr state man
     }
     ```
 
-1. Add a private field named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
+1. Add a private field to the class named `_httpClient` that holds an instance of a `HttpClient` and a constructor that accepts a `HttpClient` instance as argument and initializes this field:
 
     ```csharp
     private readonly HttpClient _httpClient;
