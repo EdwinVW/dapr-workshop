@@ -187,7 +187,7 @@ Now you need to make sure your new repository is registered with dependency-inje
    services.AddSingleton<IVehicleStateRepository, DaprVehicleStateRepository>();
    ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `src/FineCollectionService`.
+1. Open the terminal window in VS Code and make sure the current folder is `src/TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
