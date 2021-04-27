@@ -110,7 +110,7 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
-1. Near the end of the `VehicleExit` method, you find the code that sends a `SpeedingViolation` message to the FineCollectionService over HTTP:
+1. Near the end of the `VehicleExit` method, you find the code that sends a `SpeedingViolation` message to the `collectfine` endpoint of the FineCollectionService over HTTP:
 
    ```csharp
    // publish speedingviolation
@@ -118,10 +118,10 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
    await _httpClient.PostAsync("http://localhost:6001/collectfine", message);
    ```
 
-1. The URL for publishing a message using the Dapr pub/sub API is: `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the `collectfine` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService runs on HTTP port `3600`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
+1. The URL for publishing a message using the Dapr pub/sub API is: `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the `speedingviolations` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService runs on HTTP port `3600`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
 
    ```csharp
-   await _httpClient.PostAsync("http://localhost:3600/v1.0/publish/pubsub/collectfine", message);
+   await _httpClient.PostAsync("http://localhost:3600/v1.0/publish/pubsub/speedingviolations", message);
    ```
 
 That's it. You now use Dapr pub/sub to publish a message to a message broker.
@@ -140,16 +140,16 @@ Now you are going to prepare the FineCollectionService so it can receive message
    apiVersion: dapr.io/v1alpha1
    kind: Subscription
    metadata:
-     name: collectfine-subscription
+     name: speedingviolations-subscription
    spec:
-     topic: collectfine
+     topic: speedingviolations
      route: /collectfine
      pubsubname: pubsub
    scopes:
    - finecollectionservice
    ```
 
-   The `route` field tells Dapr to forward all messages send to the `collectfine` topic to the `/collectfine` endpoint in the app. The `scopes` field restricts this subscription to only the service with app-id `finecollectionservice` only.
+   The `route` field tells Dapr to forward all messages send to the `speedingviolations` topic to the `/collectfine` endpoint in the app. The `scopes` field restricts this subscription to only the service with app-id `finecollectionservice` only.
 
 Now your FineCollectionService is ready to receive messages through Dapr pub/sub. But there is a catch! Dapr uses the [CloudEvents](https://cloudevents.io/) message format for pub/sub. So when we send a message through pub/sub, the receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to change the code slightly. For now, you will parse the incoming JSON by hand (instead of ASP.NET Core model binding doing that for you). You will change this later when you will use the Dapr SDK for .NET.
 
@@ -229,14 +229,14 @@ You're going to start all the services now. You specify the custom components fo
 You should see the same logs as before. Obviously, the behavior of the application is exactly the same as before. But if you look closely at the Dapr logs of the FineCollectionService, you should see something like this in there:
 
 ```console
-time="2021-02-27T16:46:02.5989612+01:00" level=info msg="app is subscribed to the following topics: [collectfine] through pubsub=pubsub" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
+time="2021-02-27T16:46:02.5989612+01:00" level=info msg="app is subscribed to the following topics: [speedingviolations] through pubsub=pubsub" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
 ```
 
-So you can see that Dapr has asked the service which topics it want to subscribes to and created the necessary subscription to the `collectfine` topic.
+So you can see that Dapr has asked the service which topics it want to subscribes to and created the necessary subscription to the `speedingviolations` topic.
 
 ## Step 6: Receive messages in the FineCollectionService (programmatic)
 
-The other way of subscribing to pub/sub events is the programmatic way. Dapr will call your service on the well known endpoint `/dapr/subscribe` to retrieve the subscriptions for that service. You will implement this endpoint and return the subscription for the `collectfine` topic.
+The other way of subscribing to pub/sub events is the programmatic way. Dapr will call your service on the well known endpoint `/dapr/subscribe` to retrieve the subscriptions for that service. You will implement this endpoint and return the subscription for the `speedingviolations` topic.
 
 1. Stop the FineCollectionService by navigating to its terminal window and pressing `Ctrl-C`. You can keep the other services running for now.
 
@@ -254,7 +254,7 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
            new
            {
                pubsubname = "pubsub",
-               topic = "collectfine",
+               topic = "speedingviolations",
                route = "/collectfine"
            }
        };
@@ -314,14 +314,14 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
    ```csharp
    // publish speedingviolation
    var message = JsonContent.Create<SpeedingViolation>(speedingViolation);
-   await _httpClient.PostAsync("http://localhost:3600/v1.0/publish/pubsub/collectfine", message);
+   await _httpClient.PostAsync("http://localhost:3600/v1.0/publish/pubsub/speedingviolations", message);
    ```
 
 1. Replace this code with a call to the Dapr pub/sub building block using the DaprClient:
 
    ```csharp
    // publish speedingviolation
-   await daprClient.PublishEventAsync("pubsub", "collectfine", speedingViolation);
+   await daprClient.PublishEventAsync("pubsub", "speedingviolations", speedingViolation);
    ```
 
 1. Open the file `src/TrafficControlService/Startup.cs`.
@@ -375,10 +375,10 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
    using Dapr;
    ```
 
-1. Add an attribute above the `CollectFine` method to link this method to a topic called `collectfine`:
+1. Add an attribute above the `CollectFine` method to link this method to a topic called `speedingviolations`:
 
    ```csharp
-   [Topic("pubsub", "collectfine")]
+   [Topic("pubsub", "speedingviolations")]
    ```
 
    > The *"pubsub"* argument passed to this attribute refers to the name of the Dapr pub/sub component to use.
