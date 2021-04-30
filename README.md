@@ -113,7 +113,7 @@ During the workshop, you should be working in 1 instance of VS Code. You will us
 
 #### Prevent port collisions
 
-During the workshop you will run the services in the solution on your local machine. To prevent port-collisions, all services listen on a different HTTP port. When running the services with Dapr, you need additional ports voor HTTP and gRPC communication with the sidecars. By default these ports are `3500` and `50001`. But to prevent confusion, you'll use totally different port numbers in the assignments. If you follow the instructions, the services will use the following ports for their Dapr sidecars to prevent port collisions:
+During the workshop you will run the services in the solution on your local machine. To prevent port-collisions, all services listen on a different HTTP port. When running the services with Dapr, you need additional ports for HTTP and gRPC communication with the sidecars. By default these ports are `3500` and `50001`. But to prevent confusion, you'll use totally different port numbers in the assignments. If you follow the instructions, the services will use the following ports for their Dapr sidecars to prevent port collisions:
 
 | Service                    | Application Port | Dapr sidecar HTTP port | Dapr sidecar gRPC port |
 | -------------------------- | ---------------- | ---------------------- | ---------------------- |
