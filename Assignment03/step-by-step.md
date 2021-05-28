@@ -290,7 +290,7 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
 1. Add a reference to the Dapr ASP.NET Core integration package:
 
    ```console
-   dotnet add package Dapr.AspNetCore
+   dotnet add package Dapr.AspNetCore -v 1.2.0
    ```
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
