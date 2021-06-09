@@ -34,6 +34,6 @@ public class SimulationConfiguration {
 
     @Bean
     public TrafficControlService trafficControlService(final RestTemplate restTemplate) {
-        return new DefaultTrafficControlService(trafficEntryAddress, trafficExitAddress, restTemplate);
+        return new HttpTrafficControlService(trafficEntryAddress, trafficExitAddress, restTemplate);
     }
 }
