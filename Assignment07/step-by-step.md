@@ -109,7 +109,7 @@ Now, the output binding will use the `smtp.username` and `smtp.password` secrets
 
 ## Step 3: Get the license key for the FineCalculator component
 
-The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license key (also hard-coded, remember this is a sample application!).
+The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `src/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license key (this is just hard-coded, remember this is a sample application!). The `CollectionController` retrieves the key from the `appsettings.json` file using the standard ASP.NET Core configuration mechanism.
 
 You will now change the controller so it retrieves the license key from the Dapr secrets management building block:
 
@@ -117,7 +117,7 @@ You will now change the controller so it retrieves the license key from the Dapr
 
 1. Add a parameter named `daprClient` of type `DaprClient` to the constructor.
 
-1. Replace the line where the `_fineCalculatorLicenseKey` is set to a hard-coded value with the following code:
+1. Replace the line where the `_fineCalculatorLicenseKey` is set with a value retrieved from the settings with the following code:
 
    ```csharp
    var secrets = daprClient.GetSecretAsync(
