@@ -6,6 +6,7 @@ using FineCollectionService.Helpers;
 using FineCollectionService.Models;
 using FineCollectionService.Proxies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FineCollectionService.Controllers
@@ -19,7 +20,7 @@ namespace FineCollectionService.Controllers
         private readonly IFineCalculator _fineCalculator;
         private readonly VehicleRegistrationService _vehicleRegistrationService;
 
-        public CollectionController(ILogger<CollectionController> logger,
+        public CollectionController(IConfiguration config, ILogger<CollectionController> logger,
             IFineCalculator fineCalculator, VehicleRegistrationService vehicleRegistrationService)
         {
             _logger = logger;
@@ -29,7 +30,7 @@ namespace FineCollectionService.Controllers
             // set finecalculator component license-key
             if (_fineCalculatorLicenseKey == null)
             {
-                _fineCalculatorLicenseKey = "HX783-K2L7V-CRJ4A-5PN1G";
+                _fineCalculatorLicenseKey = config.GetValue<string>("fineCalculatorLicenseKey");
             }
         }
 
