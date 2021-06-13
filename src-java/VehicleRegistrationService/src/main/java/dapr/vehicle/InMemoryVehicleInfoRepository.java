@@ -39,14 +39,14 @@ public class InMemoryVehicleInfoRepository implements VehicleInfoRepository {
     private final NameGenerator nameGenerator = new NameGenerator();
 
     @Override
-    public VehicleInfo getVehicleInfo(final String licensePlate) {
+    public VehicleInfo getVehicleInfo(final String licenseNumber) {
         var make = selectRandom(vehicleMakes);
         var model = selectRandom(modelsByMake.get(make));
         var name = nameGenerator.generateNames(1).get(0).toString();
         var email = name.toLowerCase().replace(' ', '.') + "@gmail.com";
 
         return new VehicleInfo(
-                licensePlate,
+                licenseNumber,
                 make,
                 model,
                 name,

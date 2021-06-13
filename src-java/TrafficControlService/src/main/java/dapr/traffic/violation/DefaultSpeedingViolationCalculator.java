@@ -15,7 +15,7 @@ public class DefaultSpeedingViolationCalculator implements SpeedingViolationCalc
     private final int legalCorrectionInKmh;
 
     @Override
-    public int determineSpeedingViolationInKmh(final LocalDateTime entryTimestamp, final LocalDateTime exitTimestamp) {
+    public int determineExcessSpeed(final LocalDateTime entryTimestamp, final LocalDateTime exitTimestamp) {
         // In this simulation, 1 second clock time == 1 minute simulation time.
         final long elapsedMinutes = Duration.between(entryTimestamp, exitTimestamp).getSeconds();
         final double elapsedHours = (double) elapsedMinutes / 60;

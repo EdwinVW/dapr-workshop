@@ -2,8 +2,8 @@ package dapr.traffic.violation;
 
 import java.time.LocalDateTime;
 
-public record SpeedingViolation(String vehicleId,
+public record SpeedingViolation(String licenseNumber,
                                 String roadId,
-                                int violationInKmh,
+                                int excessSpeed,
                                 LocalDateTime timestamp) {
 }

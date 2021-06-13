@@ -19,7 +19,7 @@ public class ViolationProcessor {
     public void processSpeedingViolation(final SpeedingViolation violation) {
         var fine = fineCalculator.calculateFine(violation.excessSpeed());
         var fineText = fine == -1 ? "to be decided by the prosecutor" : String.format("EUR %.2f", (float) fine);
-        var vehicleInfo = vehicleRegistrationClient.getVehicleInfo(violation.licensePlate());
+        var vehicleInfo = vehicleRegistrationClient.getVehicleInfo(violation.licenseNumber());
 
         // Send notification of fine by email
         // TODO
@@ -35,12 +35,12 @@ public class ViolationProcessor {
 
         return String.format("""
                         Sent fine notification
-                        \t\t\tTo %s, registered owner of license plate %s.
+                        \t\t\tTo %s, registered owner of license number %s.
                         \t\t\tViolation of %d km/h detected on the %s road on %s at %s.
                         \t\t\tFine: %s.%n
                         """,
                 vehicleInfo.ownerName(),
-                violation.licensePlate(),
+                violation.licenseNumber(),
                 violation.excessSpeed(),
                 violation.roadId(),
                 date,

@@ -2,4 +2,4 @@
 POST http://127.0.0.1:6001/collectfine
 Content-Type: application/json
 
-{ "licensePlate": "RT-318-K", "roadId": "A12", "excessSpeed": 15, "timestamp": "2020-09-20T08:33:41" }
+{ "licenseNumber": "RT-318-K", "roadId": "A12", "excessSpeed": 15, "timestamp": "2020-09-20T08:33:41" }
