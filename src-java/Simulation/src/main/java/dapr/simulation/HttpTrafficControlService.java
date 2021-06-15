@@ -33,7 +33,7 @@ public class HttpTrafficControlService implements TrafficControlService {
         try {
             restTemplate.postForObject(trafficEntryAddress, entity, Void.class);
         } catch (RestClientException rce) {
-            log.error("Could not register entry for license number {}: {}", vehicleRegistered.licensePlate(),
+            log.error("Could not register entry for license number {}: {}", vehicleRegistered.licenseNumber(),
                     rce.getLocalizedMessage());
         }
     }
@@ -47,7 +47,7 @@ public class HttpTrafficControlService implements TrafficControlService {
         try {
             restTemplate.postForObject(trafficExitAddress, entity, Void.class);
         } catch (RestClientException rce) {
-            log.error("Could not register exit for license number {}: {}", vehicleRegistered.licensePlate(),
+            log.error("Could not register exit for license number {}: {}", vehicleRegistered.licenseNumber(),
                     rce.getLocalizedMessage());
         }
     }
