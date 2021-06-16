@@ -15,7 +15,7 @@ As a reminder, this is how the services will interact with each other:
 
 ## Step by step instructions
 
-To get step-by-step instructions to achieve the goals, open the [step-by-step instructions](step-by-step.md).
+To get step-by-step instructions to achieve the goals, open the step-by-step instructions [for .NET](step-by-step.md) or [.for Java](step-by-step-java.md).
 
 ## Next assignment
 
