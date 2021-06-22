@@ -172,6 +172,7 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
    using System.Net.Mqtt;
    using System.Text;
    using System.Text.Json;
+   using System.Threading.Tasks;
    using Simulation.Events;
    
    namespace Simulation.Proxies
@@ -189,18 +190,18 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
                    new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
            }
    
-           public void SendVehicleEntry(VehicleRegistered vehicleRegistered)
+           public async Task SendVehicleEntryAsync(VehicleRegistered vehicleRegistered)
            {
                var eventJson = JsonSerializer.Serialize(vehicleRegistered);
                var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
-               _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
            }
    
-           public void SendVehicleExit(VehicleRegistered vehicleRegistered)
+           public async Task SendVehicleExitAsync(VehicleRegistered vehicleRegistered)
            {
                var eventJson = JsonSerializer.Serialize(vehicleRegistered);
                var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
-               _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
            }
        }
    }
