@@ -15,14 +15,14 @@ namespace Simulation.Proxies
             _httpClient = httpClient;
         }
 
-        public async Task SendVehicleEntry(VehicleRegistered vehicleRegistered)
+        public async Task SendVehicleEntryAsync(VehicleRegistered vehicleRegistered)
         {
             var eventJson = JsonSerializer.Serialize(vehicleRegistered);
             var message = JsonContent.Create<VehicleRegistered>(vehicleRegistered);
             await _httpClient.PostAsync("http://localhost:6000/entrycam", message);
         }
 
-        public async Task SendVehicleExit(VehicleRegistered vehicleRegistered)
+        public async Task SendVehicleExitAsync(VehicleRegistered vehicleRegistered)
         {
             var eventJson = JsonSerializer.Serialize(vehicleRegistered);
             var message = JsonContent.Create<VehicleRegistered>(vehicleRegistered);
