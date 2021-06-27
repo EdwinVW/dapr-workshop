@@ -1,21 +1,28 @@
 package dapr.simulation;
 
 import dapr.simulation.events.VehicleRegistered;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-@RequiredArgsConstructor
-@Slf4j
 public class DefaultTrafficControlService implements TrafficControlService {
+    private static final Logger log = LoggerFactory.getLogger(DefaultTrafficControlService.class);
+
     private final String trafficEntryAddress;
     private final String trafficExitAddress;
     private final RestTemplate restTemplate;
+
+    public DefaultTrafficControlService(final String trafficEntryAddress,
+                                        final String trafficExitAddress,
+                                        final RestTemplate restTemplate) {
+        this.trafficEntryAddress = trafficEntryAddress;
+        this.trafficExitAddress = trafficExitAddress;
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public void sendVehicleEntry(final VehicleRegistered vehicleRegistered) {

@@ -4,15 +4,12 @@ import dapr.fines.fines.DefaultFineCalculator;
 import dapr.fines.fines.FineCalculator;
 import dapr.fines.vehicle.DefaultVehicleRegistrationClient;
 import dapr.fines.vehicle.VehicleRegistrationClient;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-
 @Configuration
-@Slf4j
 public class FineCollectionConfiguration {
     // We need to pass this key with every invocation of the FineFines library
     @Value("${finefines.license-key}")

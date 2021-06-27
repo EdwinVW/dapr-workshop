@@ -1,15 +1,16 @@
 package dapr.fines.fines;
 
 import finefines.FineFines;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
-@Slf4j
 public class DefaultFineCalculator implements FineCalculator {
-    @NonNull
     private final String fineCalculatorLicenseKey;
+
+    public DefaultFineCalculator(final String fineCalculatorLicenseKey) {
+        if (fineCalculatorLicenseKey == null) {
+            throw new IllegalArgumentException("fineCalculatorLicenseKey");
+        }
+        this.fineCalculatorLicenseKey = fineCalculatorLicenseKey;
+    }
 
     private final FineFines fineFines = new FineFines();
 

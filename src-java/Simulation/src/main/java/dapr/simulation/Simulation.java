@@ -1,8 +1,8 @@
 package dapr.simulation;
 
 import dapr.simulation.events.VehicleRegistered;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +14,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class Simulation implements CommandLineRunner {
+    private static final Logger log = LoggerFactory.getLogger(Simulation.class);
+
     private final ExecutorService executorService;
-    private final Random random = new SecureRandom();
+    private final Random random;
     private final SimulationSettings simulationSettings;
     private final TrafficControlService trafficControlService;
+
+    public Simulation(final ExecutorService executorService,
+                      final SimulationSettings simulationSettings,
+                      final TrafficControlService trafficControlService) {
+        this.executorService = executorService;
+        this.random = new SecureRandom();
+        this.simulationSettings = simulationSettings;
+        this.trafficControlService = trafficControlService;
+    }
 
     @Override
     public void run(final String... args) {

@@ -1,6 +1,5 @@
 package dapr.vehicle;
 
-import lombok.extern.slf4j.Slf4j;
 import org.ajbrown.namemachine.NameGenerator;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +8,6 @@ import java.util.Map;
 import java.util.Random;
 
 @Component
-@Slf4j
 public class InMemoryVehicleInfoRepository implements VehicleInfoRepository {
     private final Random random = new SecureRandom();
 

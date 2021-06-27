@@ -1,18 +1,23 @@
 package dapr.traffic.violation;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 public class DefaultSpeedingViolationCalculator implements SpeedingViolationCalculator {
-    @Getter
+    private final int legalCorrectionInKmh;
+    private final int maxAllowedSpeedInKmh;
     private final String roadId;
     private final int sectionLengthInKm;
-    private final int maxAllowedSpeedInKmh;
-    private final int legalCorrectionInKmh;
+
+    public DefaultSpeedingViolationCalculator(final int legalCorrectionInKmh,
+                                              final int maxAllowedSpeedInKmh,
+                                              final String roadId,
+                                              final int sectionLengthInKm) {
+        this.legalCorrectionInKmh = legalCorrectionInKmh;
+        this.maxAllowedSpeedInKmh = maxAllowedSpeedInKmh;
+        this.roadId = roadId;
+        this.sectionLengthInKm = sectionLengthInKm;
+    }
 
     @Override
     public int determineExcessSpeed(final LocalDateTime entryTimestamp, final LocalDateTime exitTimestamp) {
@@ -23,5 +28,10 @@ public class DefaultSpeedingViolationCalculator implements SpeedingViolationCalc
 
         final int violation = (int) (avgSpeedInKmh - (double) maxAllowedSpeedInKmh - (double) legalCorrectionInKmh);
         return Math.max(0, violation); // never return negative violation, doesn't make sense
+    }
+
+    @Override
+    public String getRoadId() {
+        return this.roadId;
     }
 }

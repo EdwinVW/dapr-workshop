@@ -1,16 +1,18 @@
 package dapr.fines.vehicle;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-@AllArgsConstructor
-@Slf4j
 public class DefaultVehicleRegistrationClient implements VehicleRegistrationClient {
     private final RestTemplate restTemplate;
     private final String vehicleInformationAddress;
+
+    public DefaultVehicleRegistrationClient(final RestTemplate restTemplate,
+                                            final String vehicleInformationAddress) {
+        this.restTemplate = restTemplate;
+        this.vehicleInformationAddress = vehicleInformationAddress;
+    }
 
     @Override
     public VehicleInfo getVehicleInfo(final String licenseNumber) {

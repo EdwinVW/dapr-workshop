@@ -1,6 +1,5 @@
 package dapr.simulation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,15 +9,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
-@RequiredArgsConstructor
 public class SimulationConfiguration {
     private final SimulationSettings settings;
+    private final String trafficEntryAddress;
+    private final String trafficExitAddress;
 
-    @Value("${traffic-control.entry.address}")
-    private String trafficEntryAddress;
-
-    @Value("${traffic-control.exit.address}")
-    private String trafficExitAddress;
+    public SimulationConfiguration(final SimulationSettings settings,
+                                   @Value("${traffic-control.entry.address}") final String trafficEntryAddress,
+                                   @Value("${traffic-control.exit.address}") final String trafficExitAddress) {
+        this.settings = settings;
+        this.trafficEntryAddress = trafficEntryAddress;
+        this.trafficExitAddress = trafficExitAddress;
+    }
 
     @Bean
     public RestTemplate restTemplate() {

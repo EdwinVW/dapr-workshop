@@ -35,7 +35,7 @@ public class TrafficControlConfiguration {
 
     @Bean
     public SpeedingViolationCalculator speedingViolationCalculator() {
-        return new DefaultSpeedingViolationCalculator(roadId, sectionLength, speedLimit, legalCorrection);
+        return new DefaultSpeedingViolationCalculator(legalCorrection, speedLimit, roadId, sectionLength);
     }
 
     @Bean

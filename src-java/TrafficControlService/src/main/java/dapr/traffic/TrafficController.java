@@ -6,8 +6,8 @@ import dapr.traffic.vehicle.VehicleState;
 import dapr.traffic.vehicle.VehicleStateRepository;
 import dapr.traffic.violation.SpeedingViolation;
 import dapr.traffic.violation.SpeedingViolationCalculator;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,15 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.format.DateTimeFormatter;
 
-@AllArgsConstructor
 @RestController
-@Slf4j
 public class TrafficController {
+    private static final Logger log = LoggerFactory.getLogger(TrafficController.class);
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ISO_TIME;
 
-    private final VehicleStateRepository repository;
-    private final SpeedingViolationCalculator speedingViolationCalculator;
     private final FineCollectionClient fineCollectionClient;
+    private final VehicleStateRepository vehicleStateRepository;
+    private final SpeedingViolationCalculator speedingViolationCalculator;
+
+    public TrafficController(final VehicleStateRepository vehicleStateRepository,
+                             final SpeedingViolationCalculator speedingViolationCalculator,
+                             final FineCollectionClient fineCollectionClient) {
+        this.fineCollectionClient = fineCollectionClient;
+        this.speedingViolationCalculator = speedingViolationCalculator;
+        this.vehicleStateRepository = vehicleStateRepository;
+    }
 
     @PostMapping(path = "/entrycam")
     public ResponseEntity<Void> vehicleEntry(@RequestBody final VehicleRegistered request) {
@@ -31,14 +38,14 @@ public class TrafficController {
                 request.lane(), TIMESTAMP_FORMATTER.format(request.timestamp()), request.licenseNumber());
 
         var state = new VehicleState(request.licenseNumber(), request.timestamp());
-        repository.saveVehicleState(state);
+        vehicleStateRepository.saveVehicleState(state);
 
         return ResponseEntity.accepted().build();
     }
 
     @PostMapping(path = "/exitcam")
     public ResponseEntity<Void> vehicleExit(@RequestBody final VehicleRegistered request) {
-        return repository.getVehicleState(request.licenseNumber())
+        return vehicleStateRepository.getVehicleState(request.licenseNumber())
                 .map(state -> this.storeVehicleExit(state, request))
                 .map(state -> this.handlePossibleSpeedingViolation(state))
                 .map(state -> ResponseEntity.accepted().<Void>build())
@@ -48,7 +55,7 @@ public class TrafficController {
     private VehicleState storeVehicleExit(final VehicleState existingState, final VehicleRegistered request) {
         log.info(" EXIT detected in lane {} at {} of vehicle with license number {}.",
                 request.lane(), TIMESTAMP_FORMATTER.format(request.timestamp()), request.licenseNumber());
-        return repository.saveVehicleState(existingState.withExit(request.timestamp()));
+        return vehicleStateRepository.saveVehicleState(existingState.withExit(request.timestamp()));
     }
 
     private VehicleState handlePossibleSpeedingViolation(final VehicleState state) {
