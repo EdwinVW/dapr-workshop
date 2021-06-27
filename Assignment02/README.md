@@ -39,7 +39,7 @@ Open the `src` folder in this repo in VS Code. Then open the [Dapr service invoc
 
 ## Step by step instructions
 
-To get step-by-step instructions to achieve the goals, open the [step-by-step instructions](step-by-step.md).
+To get step-by-step instructions to achieve the goals, open the step-by-step instructions [for .NET](step-by-step.md) or [.for Java](step-by-step-java.md).
 
 ## Next assignment
 
