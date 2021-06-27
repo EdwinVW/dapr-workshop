@@ -74,7 +74,7 @@ First you're going to change the code so it calls the Dapr sidecar:
    http://localhost:<daprPort>/v1.0/invoke/<appId>/method/<method-name>
    ```
 
-   You can substitute the placeholders in this URL with values for the VehicleRegistrationService, this yields the following URL:
+   You can substitute the placeholders in this URL with the appropriate values so the FineCollectionService's sidecar can call the the VehicleRegistrationService, this yields the following URL:
 
    ```http
    http://localhost:3601/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}
