@@ -11,7 +11,7 @@ This assignment targets number **1** in the end-state setup:
 
 <img src="../img/dapr-setup.png" style="zoom: 67%;" />
 
-### Step 1: Start the VehicleRegistrationService with Dapr
+## Step 1: Start the VehicleRegistrationService with Dapr
 
 In assignment 1, you started all the services using `dotnet run`. When you want to run a service with a Dapr sidecar that handles its communication, you need to start it using the Dapr CLI. There are a couple of things you need to specify when starting the service:
 
