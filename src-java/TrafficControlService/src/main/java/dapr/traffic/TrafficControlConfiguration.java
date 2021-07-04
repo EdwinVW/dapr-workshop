@@ -7,8 +7,11 @@ import dapr.traffic.vehicle.VehicleStateRepository;
 import dapr.traffic.violation.DefaultSpeedingViolationCalculator;
 import dapr.traffic.violation.SpeedingViolationCalculator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -44,7 +47,12 @@ public class TrafficControlConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public RestTemplate restTemplate(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
+        // The Spring-configured ObjectMapper writes timestamps as ISO string, in contrast to the
+        // default Jackson ObjectMapper that the RestTemplate constructor uses and that does not.
+        var objectMapper = jacksonObjectMapperBuilder.build();
+        return new RestTemplateBuilder()
+                .messageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
+                .build();
     }
 }

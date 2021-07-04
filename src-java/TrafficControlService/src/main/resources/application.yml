@@ -1,4 +1,7 @@
 spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
   main:
     banner-mode: off
 
