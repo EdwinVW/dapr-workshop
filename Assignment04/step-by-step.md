@@ -26,6 +26,7 @@ First, you need to add something to the state management configuration file:
      name: statestore
    spec:
      type: state.redis
+     version: v1
      metadata:
      - name: redisHost
        value: localhost:6379
@@ -267,7 +268,7 @@ Obviously, the behavior of the application is exactly the same as before. But ar
 
 1. You should see something similar to this:
 
-   <img src="img/redis-cli.png" />
+   ![CLI output](img/redis-cli.png)
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management building block supports different state-stores through its component model. So without changing any code but only specifying a different Dapr component configuration, you could use an entirely different storage mechanism.
 
