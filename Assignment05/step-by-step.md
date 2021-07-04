@@ -110,7 +110,7 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
        .UseGrpcEndpoint($"http://localhost:60001"));
    ```
 
-That's it, that's all the code you need to ask to send an email over SMTP.  
+That's it, that's all the code you need to write to send an email over SMTP.  
 
 ## Step 3: Configure the output binding
 
