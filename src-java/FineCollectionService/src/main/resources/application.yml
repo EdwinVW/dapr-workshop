@@ -8,8 +8,6 @@ server:
 finefines:
   license-key: HX783-5PN1G-CRJ4A-K2L7V
 
-fine-collection:
-  address: http://localhost:6001/collectfine
+fine-collection.address: http://localhost:6001/collectfine
 
-vehicle-information:
-  address: http://localhost:6002/vehicleinfo/{licenseNumber}
+vehicle-information.address: http://localhost:6002/vehicleinfo/{licenseNumber}

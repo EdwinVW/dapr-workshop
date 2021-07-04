@@ -15,5 +15,4 @@ traffic:
   # Legal correction - in kilometers/hour
   legal-correction: 5
 
-fine-collection:
-  address: http://localhost:6001/collectfine
+fine-collection.address: http://localhost:6001/collectfine

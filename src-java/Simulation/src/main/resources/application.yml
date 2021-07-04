@@ -14,8 +14,5 @@ simulation:
     minimum: 4
     maximum: 8
 
-traffic-control:
-  entry:
-    address: http://localhost:6000/entrycam
-  exit:
-    address: http://localhost:6000/exitcam
+traffic-control.entry.address: http://localhost:6000/entrycam
+traffic-control.exit.address: http://localhost:6000/exitcam
