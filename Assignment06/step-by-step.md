@@ -31,7 +31,8 @@ In order to connect to Mosquitto, you need to pass in a custom configuration fil
 1. Open the terminal window in VS Code and make sure the current folder is `src/Infrastructure/mosquitto`.
 
 1. Start a Mosquitto MQTT broker by entering the following command:
-**When running on Windows**:
+
+   **When running on Windows**:
 
    ```console
    docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
@@ -194,14 +195,14 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
            {
                var eventJson = JsonSerializer.Serialize(vehicleRegistered);
                var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
-               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
            }
    
            public async Task SendVehicleExitAsync(VehicleRegistered vehicleRegistered)
            {
                var eventJson = JsonSerializer.Serialize(vehicleRegistered);
                var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
-               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce).Wait();
+               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
            }
        }
    }
