@@ -106,7 +106,7 @@ As you can see, you specify a different type of pub/sub component (`pubsub.rabbi
 
 ## Step 3: Send messages from the TrafficControlService
 
-With the Dapr pub/sub building block, you use a *topic* to send and receive messages. The producer sends messages to the topic and a (or more) consumer(s) subscribe to this topic to receive messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub.
+With the Dapr pub/sub building block, you use a *topic* to send and receive messages. The producer sends messages to the topic and one or more consumers subscribe to this topic to receive those messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub.
 
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
