@@ -20,6 +20,7 @@
         <maven.compiler.release>16</maven.compiler.release>
 
         <spring-boot.version>2.5.0</spring-boot.version>
+        <dapr-sdk.version>1.1.0</dapr-sdk.version>
     </properties>
 
     <build>
@@ -88,7 +89,12 @@
             <dependency>
                 <groupId>io.dapr</groupId>
                 <artifactId>dapr-sdk</artifactId>
-                <version>1.1.0</version>
+                <version>${dapr-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dapr</groupId>
+                <artifactId>dapr-sdk-springboot</artifactId>
+                <version>${dapr-sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
