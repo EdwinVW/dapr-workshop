@@ -232,7 +232,7 @@ You should see the same logs as before. Obviously, the behavior of the applicati
 time="2021-02-27T16:46:02.5989612+01:00" level=info msg="app is subscribed to the following topics: [speedingviolations] through pubsub=pubsub" app_id=finecollectionservice instance=EDWINW01 scope=dapr.runtime type=log ver=1.0.0
 ```
 
-So you can see that Dapr has asked the service which topics it want to subscribes to and created the necessary subscription to the `speedingviolations` topic.
+So you can see that Dapr has registered a subscription for the FineCollectionService to the `speedingviolations` topic.
 
 ## Step 6: Receive messages in the FineCollectionService (programmatic)
 
