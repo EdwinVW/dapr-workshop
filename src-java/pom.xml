@@ -19,8 +19,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>16</maven.compiler.release>
 
-        <spring-boot.version>2.5.0</spring-boot.version>
-        <dapr-sdk.version>1.1.0</dapr-sdk.version>
+        <spring-boot.version>2.5.2</spring-boot.version>
+        <dapr-sdk.version>1.2.0</dapr-sdk.version>
     </properties>
 
     <build>
@@ -84,7 +84,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.30</version>
+                <version>1.7.31</version>
             </dependency>
             <dependency>
                 <groupId>io.dapr</groupId>
