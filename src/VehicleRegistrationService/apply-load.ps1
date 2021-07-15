@@ -1,6 +1,6 @@
 # This script uses Apache Bench to simulate concurrent load.
 # Download the Windows zip for apache (from https://www.apachelounge.com/download/)
-# and extract ab.exe form the zip file.
+# and extract ab.exe from the zip file.
 
 ab -k -l -d -S `
 -c 10 `
