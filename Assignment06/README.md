@@ -4,11 +4,11 @@ In this assignment, you're going to add a Dapr **input binding** in the TrafficC
 
 ## Dapr bindings
 
-In this assignment you're going to focus on Dapr input bindings See below for a diagram of how input bindings work:
+In this assignment you're going to focus on Dapr input bindings. See below for a diagram of how input bindings work:
 
 <img src="img/input-binding.png" style="zoom: 50%;" />
 
-For this hands-on assignment, this is all you need to know about output bindings. If you want to get more detailed information, read the [introduction to this building block](https://docs.dapr.io/developing-applications/building-blocks/bindings/) in the Dapr documentation.
+For this hands-on assignment, this is all you need to know about input bindings. If you want to get more detailed information, read the [introduction to this building block](https://docs.dapr.io/developing-applications/building-blocks/bindings/) in the Dapr documentation.
 
 ## Assignment goals
 

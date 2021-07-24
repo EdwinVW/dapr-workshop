@@ -20,7 +20,7 @@ You will add code to the TrafficControlService to use the Dapr input MQTT bindin
 
 1. Inspect the `VehicleEntry` and `VehicleExit` methods.
 
-And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed web API operations based on the name of the binding you specify in the component configuration in the next step. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings.
+And you're done! That's right, you don't need to change anything in order to use an input binding. The thing is that the binding will invoke exposed web API operations based on the name of the binding you specify in the component configuration in one of the next steps. As far as the TrafficControlService is concerned, it will just be called over HTTP and it has no knowledge of Dapr bindings.
 
 ## Step 2: Run the Mosquitto MQTT broker
 
@@ -228,11 +228,11 @@ Now you need to make sure this implementation is used instead of the HTTP one:
 
 1. Check all your code changes are correct by building the code. Execute the following command in the terminal window:
 
-```console
-dotnet build
-```
+   ```console
+   dotnet build
+   ```
 
-If you see any warnings or errors, review the previous steps to make sure the code is correct.
+   If you see any warnings or errors, review the previous steps to make sure the code is correct.
 
 Now you're ready to test the application.
 
