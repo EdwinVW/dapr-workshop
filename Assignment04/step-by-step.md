@@ -40,8 +40,6 @@ First, you need to add something to the state management configuration file:
 
 Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
 
-1. Open the `src` folder in this repo in VS Code.
-
 1. Open the file `src/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
 1. Inspect the code in the `VehicleEntry` method of this controller. It uses `_vehicleStateRepository` (an injected implementation of the `IVehicleStateRepository` interface) to store vehicle state:
