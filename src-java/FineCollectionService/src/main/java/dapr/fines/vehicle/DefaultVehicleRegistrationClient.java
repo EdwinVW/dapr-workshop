@@ -17,6 +17,6 @@ public class DefaultVehicleRegistrationClient implements VehicleRegistrationClie
     @Override
     public VehicleInfo getVehicleInfo(final String licenseNumber) {
         var params = Map.of("licenseNumber", licenseNumber);
-        return restTemplate.getForObject(vehicleInformationAddress, VehicleInfo.class);
+        return restTemplate.getForObject(vehicleInformationAddress, VehicleInfo.class, params);
     }
 }
