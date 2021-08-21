@@ -75,12 +75,19 @@ The sequence diagram below shows how the solution will work with Dapr:
 Make sure you have the following prerequisites installed on your machine:
 
 - Git ([download](https://git-scm.com/))
-- .NET 5 SDK ([download](https://dotnet.microsoft.com/download/dotnet/5.0))
 - Visual Studio Code ([download](https://code.visualstudio.com/download)) with at least the following extensions installed:
-  - [C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
   - [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
+
+For the .NET track:
+- .NET 5 SDK ([download](https://dotnet.microsoft.com/download/dotnet/5.0))
+- [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
+
+For the Java track:
+- Java 16 or above ([download](https://adoptopenjdk.net/?variant=openjdk16))
+- Maven 3.8.2 or above ([download](http://maven.apache.org/download.cgi))
+  - Make sure that Maven uses the correct Java runtime by running `mvn -version`.
 
 All scripts in the instructions are Powershell scripts. If you're working on a Mac, it is recommended to install Powershell for Mac:
 
@@ -96,6 +103,7 @@ The workshop has been tested with the following versions:
 | Dapr.NET SDK version | v1.2.0  |
 | Dapr CLI version     | v1.2.0  |
 | Platform             | .NET 5  |
+| Platform             | Java 16 |
 
 ### Instructions
 
