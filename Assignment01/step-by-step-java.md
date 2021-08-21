@@ -93,7 +93,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open the `src/TrafficControlService/traffic-control.http` file in VS Code.
 
-1. Click on `Execute request` for both requests in the file to send two requests to the API.
+1. Click on `Execute request` for all three requests in the file to send two requests to the API.
 
 1. The response of the requests will be shown in a separate window on the right. Both requests should yield a response with HTTP status code `200 OK` and no body.
 

@@ -115,17 +115,6 @@ You will now change the Spring configuration so it retrieves the license key fro
 
 1. Open the file `src-java/FineCollectionService/src/main/java/dapr/fines/FineCollectionConfiguration.java` in VS Code.
 
-1. Add a new method `daprClient` to declare a Spring Bean of type DaprClient:
-
-  ```java
-  @Bean
-  public DaprClient daprClient() {
-      return new DaprClientBuilder()
-              .withObjectSerializer(new JsonObjectSerializer()) // do we need that one?!
-              .build();
-  }
-  ```
-
 1. Replace the line with the `fineCalculatorLicenseKey` instance variable as well as the `@Value` annotation above it. Replace it with the following code:
 
    ```java

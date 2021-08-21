@@ -182,7 +182,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
    }
    ```
 
-   In the same class, the `vehicleRegistrationClient` method declares a Spring Bean that provides an implementation of the `VehicleRegistrationClient` interface. To do so, it needs a `RestTemplate` bean. Replace this method with the following:
+   In the same class, the `vehicleRegistrationClient` method declares a Spring Bean that provides an implementation of the `VehicleRegistrationClient` interface. To do so, it needs a `DaprClient` bean. Replace this method with the following:
 
    ```java
    @Bean
