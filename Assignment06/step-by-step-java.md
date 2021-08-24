@@ -26,9 +26,9 @@ And you're done! That's right, you don't need to change anything in order to use
 
 You will use [Mosquitto](https://mosquitto.org/), a lightweight MQTT broker, as the MQTT broker between the simulation and the TrafficControlService. You will run Mosquitto in a Docker container.
 
-In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `java/Infrastructure/mosquitto` already contains a config file you can use.
+In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `Infrastructure/mosquitto` already contains a config file you can use.
 
-1. Open the terminal window in VS Code and make sure the current folder is `java/Infrastructure/mosquitto`.
+1. Open the terminal window in VS Code and make sure the current folder is `Infrastructure/mosquitto`.
 
 1. Start a Mosquitto MQTT broker by entering the following command:
 
@@ -74,9 +74,9 @@ docker rm dtc-mosquitto -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `java/Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `java/Infrastructure/mosquitto/start-mosquitto.sh` script to start the Mosquitto container.
+> For your convenience, the `Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `Infrastructure/mosquitto/start-mosquitto.sh` script to start the Mosquitto container.
 >
-> If you don't mind starting all the infrastructural containers at once, you can also use the `src/Infrastructure/start-all.sh` script.
+> If you don't mind starting all the infrastructural containers at once, you can also use the `Infrastructure/start-all.sh` script.
 
 ## Step 3: Configure the input binding
 
@@ -280,7 +280,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `java/Infrastructure/start-all.sh` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `Infrastructure/start-all.sh` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `java/VehicleRegistrationService`.
 

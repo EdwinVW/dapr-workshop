@@ -56,9 +56,9 @@ docker rm dtc-rabbitmq -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `dotnet/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `dotnet/Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container.
+> For your convenience, the `Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start the RabbitMQ container.
 >
-> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `dotnet/Infrastructure/start-all.ps1` script.
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `Infrastructure/start-all.ps1` script.
 
 ## Step 2: Configure the pub/sub component
 

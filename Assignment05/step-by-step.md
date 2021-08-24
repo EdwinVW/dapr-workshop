@@ -53,9 +53,9 @@ docker rm dtc-maildev -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `dotnet/Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `dotnet/Infrastructure/maildev/start-maildev.ps1` script to start the MailDev container.
+> For your convenience, the `Infrastructure` folder contains Powershell scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `Infrastructure/maildev/start-maildev.ps1` script to start the MailDev container.
 >
-> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `dotnet/Infrastructure/start-all.ps1` script.
+> If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `Infrastructure/start-all.ps1` script.
 
 ## Step 2: Use the Dapr output binding in the FineCollectionService
 
@@ -159,7 +159,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows)
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `dotnet/Infrastructure/start-all.ps1` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `Infrastructure/start-all.ps1` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `dotnet/VehicleRegistrationService`.
 

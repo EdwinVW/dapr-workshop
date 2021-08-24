@@ -150,7 +150,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `java/Infrastructure/start-all.sh` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `Infrastructure/start-all.sh` script to start them).
 
 1. Open the terminal window in VS Code and make sure the current folder is `java/VehicleRegistrationService`.
 

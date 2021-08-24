@@ -56,7 +56,7 @@ docker rm dtc-rabbitmq -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `java/Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.sh` script to start the RabbitMQ container.
+> For your convenience, the `Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.sh` script to start the RabbitMQ container.
 >
 > If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.sh` script.
 
