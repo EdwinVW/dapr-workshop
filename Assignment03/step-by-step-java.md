@@ -56,7 +56,7 @@ docker rm dtc-rabbitmq -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src-java/Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.sh` script to start the RabbitMQ container.
+> For your convenience, the `java/Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.sh` script to start the RabbitMQ container.
 >
 > If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also use the `src/Infrastructure/start-all.sh` script.
 
@@ -66,11 +66,11 @@ Until now, you have been using the Dapr components that are installed by default
 
 Because you need to change the message broker from Redis to RabbitMQ, you will create a separate folder with the component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which folder to use on the command-line with the `--components-path` flag.
 
-1. Create a new folder `src-java/dapr/components`.
+1. Create a new folder `java/dapr/components`.
 
-1. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac to the `src-java/dapr/components` folder.
+1. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on Linux or Mac to the `java/dapr/components` folder.
 
-1. Open the file `src-java/dapr/components/pubsub.yaml` in VS Code.
+1. Open the file `java/dapr/components/pubsub.yaml` in VS Code.
 
 1. Inspect this file. As you can see, it specifies the type of the message broker to use (`pubsub.redis`) and specifies information on how to connect to the Redis server in the `metadata` section.
 
@@ -108,7 +108,7 @@ As you can see, you specify a different type of pub/sub component (`pubsub.rabbi
 
 With the Dapr pub/sub building block, you use a *topic* to send and receive messages. The producer sends messages to the topic and one or more consumers subscribe to this topic to receive those messages. First you are going to prepare the TrafficControlService so it can send messages using Dapr pub/sub.
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/fines/DefaultFineCollectionClient.java` in VS Code.
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/fines/DefaultFineCollectionClient.java` in VS Code.
 
 1. Inside the `submitForFine` method, you find the code that sends a `SpeedingViolation` message to the `collectfine` endpoint of the FineCollectionService over HTTP:
 
@@ -118,7 +118,7 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
 
    The `restTemplate` is a utility provided by Spring to invoke the FineCollectionService. Its base address for consuming that REST web service is injected through the constructor of that class. That constructor is invoked from a Spring configuration class, which in turn reads the Spring configuration file using `@Value`.
 
-1. Open the file `src-java/TrafficControlService/src/main/resources/application.yml` in VS Code.
+1. Open the file `java/TrafficControlService/src/main/resources/application.yml` in VS Code.
 
    Here we see the actual value being configured. Inspect the `fine-collection.address` setting. You can see that in the HTTP call, the URL of the VehicleRegistrationService (running on port 6001) is used.
 
@@ -134,7 +134,7 @@ That's it. You now use Dapr pub/sub to publish a message to a message broker.
 
 Now you are going to prepare the FineCollectionService so it can receive messages using Dapr pub/sub. Consuming messages can be done in two ways: *declaratively* (through configuration) or *programmatic* (from the code). First you'll use the declarative way. Later you'll also use the programmatic way and finally also using the Dapr SDK for Java.
 
-1. Add a new file in the `src-java/dapr/components` folder named `subscription.yaml`.
+1. Add a new file in the `java/dapr/components` folder named `subscription.yaml`.
 
 1. Open this file in VS Code.
 
@@ -157,7 +157,7 @@ Now you are going to prepare the FineCollectionService so it can receive message
 
 Now your FineCollectionService is ready to receive messages through Dapr pub/sub. But there is a catch! Dapr uses the [CloudEvents](https://cloudevents.io/) message format for pub/sub. So when we send a message through pub/sub, the receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to change the code slightly. For now, you will read the incoming JSON by hand (instead of the Jackson model binding doing that for you). You will change this later when you will use the Dapr SDK for Java.
 
-1. Open the file `src-java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java` in VS Code.
+1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java` in VS Code.
 
 1. Remove the `SpeedingViolation request` parameter from the `registerViolation` method and replace this with a `event` parameter of type `JsonNode`, and leave the `@RequestBody` annotation in place:
 
@@ -183,7 +183,7 @@ Now your FineCollectionService is ready to receive messages through Dapr pub/sub
 
    Also, add an import for the `java.time.LocalDateTime` class.
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/FineCollectionService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -199,7 +199,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the command-shell windows).
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -209,7 +209,7 @@ You're going to start all the services now. You specify the custom components fo
 
    > Notice that you specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use RabbitMQ for pub/sub.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -217,7 +217,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -225,7 +225,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/Simulation`.
 
 1. Start the simulation:
 
@@ -247,7 +247,7 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
 
 1. Stop the FineCollectionService by navigating to its terminal window and pressing `Ctrl-C`. You can keep the other services running for now.
 
-1. Open the file `src-java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java` in VS Code.
+1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java` in VS Code.
 
 1. Add a new method `subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
 
@@ -265,7 +265,7 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
 
 1. Remove the file `src/dapr/components/subscription.yaml`. This file is not needed anymore because you implemented the `/dapr/subscribe` method.
 
-1. Go back to the terminal window in VS Code and make sure the current folder is `src-java/FineCollectionService`.
+1. Go back to the terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -296,9 +296,9 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
    </dependency>
    ```
 
-   Again, the version of the dependency is managed using Mavens "dependency management" - you can inspect the pom.xml file inside the src-java folder to see the exact version.
+   Again, the version of the dependency is managed using Mavens "dependency management" - you can inspect the pom.xml file inside the java folder to see the exact version.
 
-1. Create a new file, src-java/TrafficControlService/src/main/java/dapr/traffic/fines/DaprFineCollectionClient.java and open it in VS Code.
+1. Create a new file, java/TrafficControlService/src/main/java/dapr/traffic/fines/DaprFineCollectionClient.java and open it in VS Code.
 
 1. Declare a class DaprFineCollectionClient that implements the FineCollectionClient interface. To fulfil the contract of the FineCollectionClient interface, add the following method:
 
@@ -308,7 +308,7 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   }
   ```
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java` in VS Code. The default JSON serialization is not suitable for todays goal, so you need to customize the Jackson `ObjectMapper` that it uses. You do so by adding a static inner class to configure the JSON serialization:
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java` in VS Code. The default JSON serialization is not suitable for todays goal, so you need to customize the Jackson `ObjectMapper` that it uses. You do so by adding a static inner class to configure the JSON serialization:
 
   ```java
   static class JsonObjectSerializer extends DefaultObjectSerializer {
@@ -371,7 +371,7 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   daprClient.publishEvent("pubsub",  "speedingviolations", speedingViolation).block();
   ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -392,7 +392,7 @@ Now you will change the FineCollectionService that receives messages. The Dapr S
    </dependency>
    ```
 
-1. Open the file `src-java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java`.
+1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java`.
 
 1. Remove the `subscribe` method.
 
@@ -422,7 +422,7 @@ Now you will change the FineCollectionService that receives messages. The Dapr S
 
    > The *"pubsubName"* argument passed to this attribute refers to the name of the Dapr pub/sub component to use.
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/FineCollectionService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 

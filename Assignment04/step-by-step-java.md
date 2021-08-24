@@ -40,7 +40,7 @@ First, you need to add something to the state management configuration file:
 
 Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/TrafficController.java` in VS Code.
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficController.java` in VS Code.
 
 1. Inspect the code in the `vehicleEntry` and `vehicleExit` methods of this controller. It uses `vehicleStateRepository` (an injected implementation of the `VehicleStateRepository` interface) to store vehicle state:
 
@@ -49,11 +49,11 @@ Now you will add code to the TrafficControlService so it uses the Dapr state man
    vehicleStateRepository.saveVehicleState(state);
    ```
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/vehicle/InMemoryVehicleStateRepository.java` in VS Code. 
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/vehicle/InMemoryVehicleStateRepository.java` in VS Code. 
 
 1. This is the repository used by the TrafficControlService. Inspect the code of this repository. As you can see, this repository uses a very simple in-memory key/value map to store the state. The license number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
 
-1. Create a new file `src-java/TrafficControlService/src/main/java/dapr/traffic/vehicle/DaprVehicleStateRepository.java` in VS Code.
+1. Create a new file `java/TrafficControlService/src/main/java/dapr/traffic/vehicle/DaprVehicleStateRepository.java` in VS Code.
 
 1. Create a new `DaprVehicleStateRepository` class in this file that implements the `VehicleStateRepository` interface. Use this snippet to get started:
 
@@ -201,7 +201,7 @@ public class DaprVehicleStateRepository implements VehicleStateRepository {
 
 Now you need to make sure Spring will use the Dapr-based repository rather than the in-memory one.
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java`.
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java`.
 
 1. Replace the `vehicleStateRepository` method with the following:
 
@@ -212,7 +212,7 @@ Now you need to make sure Spring will use the Dapr-based repository rather than 
   }
   ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -228,9 +228,9 @@ Now you're ready to test the application.
 
 1. Make sure no services from previous tests are running (close the terminal windows)
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src-java/Infrastructure/start-all.sh` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `java/Infrastructure/start-all.sh` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -238,7 +238,7 @@ Now you're ready to test the application.
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -246,7 +246,7 @@ Now you're ready to test the application.
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -254,7 +254,7 @@ Now you're ready to test the application.
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/Simulation`.
 
 1. Start the simulation:
 
@@ -296,13 +296,13 @@ Obviously, the behavior of the application is exactly the same as before. But ar
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management building block supports different state-stores through its component model. So without changing any code but only specifying a different Dapr component configuration, you could use an entirely different storage mechanism.
 
-> If you're up for it, try to swap-out Redis with another state provider. See the [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)). To configure a different state-store, you need to change the file `src-java/dapr/components/statestore.yaml`.
+> If you're up for it, try to swap-out Redis with another state provider. See the [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)). To configure a different state-store, you need to change the file `java/dapr/components/statestore.yaml`.
 
 ## Step 3: Use Dapr state management with the Dapr SDK for Java
 
 In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP with using the `DaprClient` from the Dapr SDK for Java.
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/vehicle/DaprVehicleStateRepository.java` in VS Code.
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/vehicle/DaprVehicleStateRepository.java` in VS Code.
 
 1. Add an import statement for the Dapr client:
 
@@ -378,7 +378,7 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
    }
    ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 

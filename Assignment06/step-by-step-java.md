@@ -16,7 +16,7 @@ This assignment targets number **5** in the end-state setup:
 
 You will add code to the TrafficControlService to use the Dapr input MQTT binding to receive entry- and exit-cam messages:
 
-1. Open the file `src-java/TrafficControlService/src/main/java/dapr/traffic/TrafficController.java` in VS Code.
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficController.java` in VS Code.
 
 1. Inspect the `vehicleEntry` and `vehicleExit` methods.
 
@@ -26,9 +26,9 @@ And you're done! That's right, you don't need to change anything in order to use
 
 You will use [Mosquitto](https://mosquitto.org/), a lightweight MQTT broker, as the MQTT broker between the simulation and the TrafficControlService. You will run Mosquitto in a Docker container.
 
-In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `src-java/Infrastructure/mosquitto` already contains a config file you can use.
+In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `java/Infrastructure/mosquitto` already contains a config file you can use.
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/Infrastructure/mosquitto`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/Infrastructure/mosquitto`.
 
 1. Start a Mosquitto MQTT broker by entering the following command:
 
@@ -74,7 +74,7 @@ docker rm dtc-mosquitto -f
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
-> For your convenience, the `src-java/Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `src-java/Infrastructure/mosquitto/start-mosquitto.sh` script to start the Mosquitto container.
+> For your convenience, the `java/Infrastructure` folder contains Bash scripts for starting the infrastructural components you'll use throughout the workshop. You can use the `java/Infrastructure/mosquitto/start-mosquitto.sh` script to start the Mosquitto container.
 >
 > If you don't mind starting all the infrastructural containers at once, you can also use the `src/Infrastructure/start-all.sh` script.
 
@@ -82,7 +82,7 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 In this step you will add a Dapr binding component configuration file to the custom components folder you created in Assignment 3.
 
-1. Add a new file in the `src-java/dapr/components` folder named `entrycam.yaml`.
+1. Add a new file in the `java/dapr/components` folder named `entrycam.yaml`.
 
 1. Open the file in VS Code.
 
@@ -114,7 +114,7 @@ Important to note with bindings is the `name` of the binding. This name must be 
 
 Now you need to also add an input binding for the `/exitcam` operation:
 
-1. Add a new file in the `src-java/dapr/components` folder named `exitcam.yaml`.
+1. Add a new file in the `java/dapr/components` folder named `exitcam.yaml`.
 
 1. Open this file in VS Code.
 
@@ -146,7 +146,7 @@ Now your input bindings are configured and it's time to change the Camera Simula
 
 In this step you change the Camera Simulation so it sends MQTT messages instead of doing HTTP requests:
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/Simulation`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/Simulation`.
 
 1. Add a dependency to the Simulation by opening it's **pom.xml** add adding the following snippet inside the `<dependencies>` tag:
 
@@ -159,17 +159,17 @@ In this step you change the Camera Simulation so it sends MQTT messages instead 
 
    Notice how you do not have to specify the version for this dependency. The Spring Integration Bill of Materials declares a version that is compatible with the Spring version that we use.
 
-1. Open the file `src-java/Simulation/src/main/java/dapr/simulation/Simulation.java` file in VS Code.
+1. Open the file `java/Simulation/src/main/java/dapr/simulation/Simulation.java` file in VS Code.
 
 1. Inspect the code in this file.
 
 As you can see, the simulation gets an `TrafficControlService` instance injected in its constructor. This is the proxy that is used by the simulation to send entry- and exit-cam messages to the TrafficControlService.
 
-1. Open the file `src-java/Simulation/src/main/java/dapr/simulation/HttpTrafficControlService.java` in VS Code and inspect the code.
+1. Open the file `java/Simulation/src/main/java/dapr/simulation/HttpTrafficControlService.java` in VS Code and inspect the code.
 
 The proxy uses HTTP to send the message to the TrafficControlService. You will replace this now with an implementation that uses MQTT.
 
-1. Add a new file in the `src-java/Simulation/src/main/java/dapr/simulation/` folder named `MqttTrafficControlService.java`. Paste the following code into this file:
+1. Add a new file in the `java/Simulation/src/main/java/dapr/simulation/` folder named `MqttTrafficControlService.java`. Paste the following code into this file:
 
    ```java
    package dapr.simulation;
@@ -201,7 +201,7 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
 
 1. Inspect the code. The `IntegrationFlow` instances are integration flows which you will configure using the Spring Integration Framework. Those flows provide an input channel that you use to publish messages, which are simple wrappers about around the existing events. 
 
-1. Also create a new file `MqttConfiguration.java` in the `src-java/Simulation/src/main/java/dapr/simulation/` folder. Add the following content into this file:
+1. Also create a new file `MqttConfiguration.java` in the `java/Simulation/src/main/java/dapr/simulation/` folder. Add the following content into this file:
 
   ```java
    package dapr.simulation;
@@ -253,7 +253,7 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
 
 1. Inspect the code. This Spring configuration class declares the two `IntegrationFlow` instances. They are very much alike: both of them convert an incoming message to JSON, add a header that in turn will be translated to an MQTT topic and finally hand the messages over to the MQTT client.
 
-1. Open the file `src-java/Simulation/src/main/java/dapr/simulation/SimulationConfiguration.java` and replace the method `trafficControlService` with the following snippet:
+1. Open the file `java/Simulation/src/main/java/dapr/simulation/SimulationConfiguration.java` and replace the method `trafficControlService` with the following snippet:
 
   ```java
   @Bean
@@ -262,7 +262,7 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
   }
   ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/Simulation`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/Simulation`.
 
 1. Check all your code changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -280,9 +280,9 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
-1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `src-java/Infrastructure/start-all.sh` script to start them).
+1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `java/Infrastructure/start-all.sh` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `src-java/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `java/VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -290,7 +290,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -298,7 +298,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -306,7 +306,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `src-java/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `java/Simulation`.
 
 1. Start the simulation:
 

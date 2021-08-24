@@ -15,7 +15,7 @@ As a reminder, this is how the services will interact with each other:
 
 ## Step 1. Run the VehicleRegistration service
 
-1. Open the `src-java` folder in VS Code. This guide assumes VS Code, but feel free to use an editor or IDE you're comfortable with.
+1. Open the `java` folder in VS Code. This guide assumes VS Code, but feel free to use an editor or IDE you're comfortable with.
 
    > Throughout the assignment you can execute all steps in the same instance of editor or IDE window.
 
@@ -23,7 +23,7 @@ As a reminder, this is how the services will interact with each other:
 
    > You can do this by using the hotkey ``Ctrl-` `` (Windows) or ``Shift-Ctrl-` `` (macOS).
 
-1. Make sure the current folder is `src-java/VehicleRegistrationService`.
+1. Make sure the current folder is `java/VehicleRegistrationService`.
 
 1. Start the service using `mvn spring-boot:run`.
 
@@ -31,7 +31,7 @@ As a reminder, this is how the services will interact with each other:
 
 Now you can test whether you can call the VehicleRegistrationService. You can do this using a browser, cURL or some other HTTP client. But there is a convenient way of testing RESTful APIs directly from VS Code (this uses the REST Client extension VS Code):
 
-1. Open the file `src-java/VehicleRegistrationService/test.http` in your editor. The request in this file simulates retrieving the vehicle- and owner information for a certain license-number.
+1. Open the file `java/VehicleRegistrationService/test.http` in your editor. The request in this file simulates retrieving the vehicle- and owner information for a certain license-number.
 
 1. Click on `Send request` in the file to send a request to the API:
 
@@ -69,7 +69,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
    > You can do this by using the hotkey (``Ctrl-` `` on Windows, ``Shift-Ctrl-` `` on macOS) or clicking on the `+` button in the terminal window title bar:
    > ![](img/terminal-new.png)
 
-1. Make sure the current folder is `src-java/FineCollectionService`.
+1. Make sure the current folder is `java/FineCollectionService`.
 
 1. Start the service using `mvn spring-boot:run`.
 
@@ -87,7 +87,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Make sure the VehicleRegistrationService and FineCollectionService are running (results of step 1 and 2).
 
-1. Open a **new** terminal window in VS Code and make sure the current folder is `src-java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
 
 1. Start the service using `mvn spring-boot:run`.
 
@@ -114,7 +114,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 You've tested the APIs directly by using a REST client. Now you're going to run the simulation that actually simulates cars driving on the highway. The simulation will simulate 3 entry- and exit-cameras (one for each lane).
 
-1. Open a new terminal window in VS Code and make sure the current folder is `src-java/Simulation`.
+1. Open a new terminal window in VS Code and make sure the current folder is `java/Simulation`.
 
 1. Start the service using `mvn spring-boot:run`.
 
