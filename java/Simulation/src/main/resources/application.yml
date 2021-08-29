@@ -1,0 +1,21 @@
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  main:
+    banner-mode: off
+
+simulation:
+  # How much traffic lanes and cameras to simulate
+  num-lanes: 3
+  # Minimum and maximum delay before a new vehicle enters a lane (in milliseconds)
+  entry-delay:
+    minimum: 50
+    maximum: 3000
+  # Minimum and maximum delay after which a vehicle exits the lane (in seconds)
+  exit-delay:
+    minimum: 4
+    maximum: 8
+
+traffic-control.entry.address: http://localhost:6000/entrycam
+traffic-control.exit.address: http://localhost:6000/exitcam

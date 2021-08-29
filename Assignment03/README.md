@@ -26,11 +26,11 @@ This assignment targets number **2** in the end-state setup:
 
 ## DIY instructions
 
-First open the `src` folder in this repo in VS Code. Then open the [Dapr documentation for publish / subscribe](https://github.com/dapr/docs) and start hacking away. Make sure you use the RabbitMQ pub/sub component and spin up a RabbitMQ container to act as message broker.
+First open the `dotnet` or `java` folder in this repo in VS Code. Then open the [Dapr documentation for publish / subscribe](https://github.com/dapr/docs) and start hacking away. Make sure you use the RabbitMQ pub/sub component and spin up a RabbitMQ container to act as message broker.
 
 ## Step by step instructions
 
-To get step-by-step instructions to achieve the goals, open the [step-by-step instructions](step-by-step.md).
+To get step-by-step instructions to achieve the goals, open the step-by-step instructions [for .NET](step-by-step.md) or [for Java](step-by-step-java.md).
 
 ## Next assignment
 

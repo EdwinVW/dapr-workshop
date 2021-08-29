@@ -1,0 +1,14 @@
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  main:
+    banner-mode: off
+
+server:
+  port: 6001
+
+finefines:
+  license-key: HX783-5PN1G-CRJ4A-K2L7V
+
+vehicle-information.address: http://localhost:6002/vehicleinfo/{licenseNumber}

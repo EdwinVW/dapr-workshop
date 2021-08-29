@@ -1,0 +1,21 @@
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  main:
+    banner-mode: off
+
+server:
+  port: 6000
+
+traffic:
+  # Identifier of the road - free text
+  road-id: A12
+  # Length of the track - in kilometers
+  section-length: 10
+  # Speed limit - in kilometers/hour
+  speed-limit: 100
+  # Legal correction - in kilometers/hour
+  legal-correction: 5
+
+fine-collection.address: http://localhost:6001/collectfine

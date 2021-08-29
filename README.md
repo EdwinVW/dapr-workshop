@@ -1,12 +1,14 @@
 # Dapr workshop
 
-This repository contains several hands-on assignments that will introduce you to Dapr. You will start with a simple ASP.NET Core application that contains a number of services. In each assignment, you will change a part of the application so it works with Dapr (or "rub some Dapr on it" as Donovan Brown would say). The Dapr building blocks you will be working with are:
+This repository contains several hands-on assignments that will introduce you to Dapr. You will start with a simple microservices application that contains a number of services. In each assignment, you will change a part of the application so it works with Dapr (or "rub some Dapr on it" as Donovan Brown would say). The Dapr building blocks you will be working with are:
 
 - Service invocation
 - State-management
 - Publish / Subscribe
 - Bindings
 - Secrets management
+
+Because Dapr can be used from several programming languages, we added 2 versions of the hands-on assignments to the workshop. All the assignments can be executed using **.NET (C#)** or **Java**. Please decide which language and follow the instructions accordingly.
 
 You will be using Dapr in self-hosted mode.
 
@@ -26,12 +28,12 @@ In order to simulate this in code, the following services are defined:
 
 ![Services](img/services.png)
 
-The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
+The `dotnet` and `java` folders in the repo each contain the starting-point for the workshop. The starting-point is a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
-- The **Camera Simulation** is a .NET Core console application that will simulate passing cars.
-- The **Traffic Control Service** is an ASP.NET Core WebAPI application that offers 2 endpoints: `/entrycam` and `/exitcam`.
-- The **Fine Collection Service** is an ASP.NET Core WebAPI application that offers 1 endpoint: `/collectfine` for collecting fines.
-- The **Vehicle Registration Service** is an ASP.NET Core WebAPI application that offers 1 endpoint: `/getvehicleinfo/{license-number}` for getting the vehicle- and owner-information of a vehicle.
+- The **Camera Simulation** simulates passing cars.
+- The **Traffic Control Service** offers 2 HTTP endpoints: `/entrycam` and `/exitcam`. These endpoints can be used simulate a car passing the entry- or exit-cam.
+- The **Fine Collection Service** offers 1 HTTP endpoint: `/collectfine` for collecting fines.
+- The **Vehicle Registration Service** offers 1 HTTP endpoint: `/getvehicleinfo/{license-number}` for getting the vehicle- and owner-information of a vehicle.
 
 The way the simulation works is depicted in the sequence diagram below:
 
@@ -75,12 +77,23 @@ The sequence diagram below shows how the solution will work with Dapr:
 Make sure you have the following prerequisites installed on your machine:
 
 - Git ([download](https://git-scm.com/))
-- .NET 5 SDK ([download](https://dotnet.microsoft.com/download/dotnet/5.0))
 - Visual Studio Code ([download](https://code.visualstudio.com/download)) with at least the following extensions installed:
-  - [C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
   - [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
+
+As stated, you can do the assignments using .NET or Java. Each technology stack has its own prerequisites:
+
+For the .NET assignments:
+
+- .NET 5 SDK ([download](https://dotnet.microsoft.com/download/dotnet/5.0))
+- [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
+
+For the Java assignments:
+
+- Java 16 or above ([download](https://adoptopenjdk.net/?variant=openjdk16))
+- Maven 3.8.2 or above ([download](http://maven.apache.org/download.cgi))
+  - Make sure that Maven uses the correct Java runtime by running `mvn -version`.
 
 All scripts in the instructions are Powershell scripts. If you're working on a Mac, it is recommended to install Powershell for Mac:
 
@@ -96,6 +109,7 @@ The workshop has been tested with the following versions:
 | Dapr.NET SDK version | v1.2.0  |
 | Dapr CLI version     | v1.2.0  |
 | Platform             | .NET 5  |
+| Platform             | Java 16 |
 
 ### Instructions
 
@@ -103,7 +117,7 @@ Every assignment is contained in a separate folder in this repo. Each folder con
 
 **It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.**
 
-The `src` folder in the repo contains the starting-point for the workshop. It contains a version of the services that use plain HTTP communication and stores state in memory. With each assignment of the workshop, you will add a Dapr building block to this solution.
+The `dotnet` and `java` folders in the repo each contain the starting-point for the workshop. The starting-point is a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
 Every description of an assignment (except the first one) contains two parts with each a certain approach to executing the assignment: a **DIY** part and a **step-by-step** part. The DIY part just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step part describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step approach for some help.
 
@@ -139,6 +153,6 @@ Now it's time for you to get your hands dirty and start with the first assignmen
    git clone https://github.com/EdwinVW/dapr-workshop.git
    ```
 
-2. Before starting with the assignments, I suggest you check-out the code of the different services. You can open the `src` folder in this repo in VS Code. All folders used in the assignments are specified relative to the root of the folder where you have cloned the dapr-workshop repository.
+2. Before starting with the assignments, I suggest you check-out the code of the different services. You can open the `dotnet` or `java` folder in this repo in VS Code. All folders used in the assignments are specified relative to the root of the folder where you have cloned the dapr-workshop repository.
 
 3. Go to [assignment 1](Assignment01/README.md).
