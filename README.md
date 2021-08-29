@@ -8,7 +8,7 @@ This repository contains several hands-on assignments that will introduce you to
 - Bindings
 - Secrets management
 
-Because Dapr can be used from several programming languages, we added 2 versions of the hands-on assignments to the workshop. All the assignments can be executed using **.NET (C#)** or **Java**. Please decide which language and follow the instructions accordingly.
+Because Dapr can be used from several programming languages, we added 2 versions of the hands-on assignments to the workshop. All the assignments can be executed using **.NET (C#)** or **Java**. Please decide which language you want to use, and follow the instructions accordingly.
 
 You will be using Dapr in self-hosted mode.
 
