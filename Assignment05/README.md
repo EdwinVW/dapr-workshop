@@ -27,7 +27,7 @@ First open the `dotnet` or `java` folder in this repo in VS Code. Then open the 
 
 ## Step by step instructions
 
-To get step-by-step instructions to achieve the goals, open the step-by-step instructions [for .NET](step-by-step.md) or [.for Java](step-by-step-java.md).
+To get step-by-step instructions to achieve the goals, open the step-by-step instructions [for .NET](step-by-step.md) or [for Java](step-by-step-java.md).
 
 ## Next assignment
 
