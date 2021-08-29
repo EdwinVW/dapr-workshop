@@ -137,13 +137,27 @@ During the workshop you will run the services in the solution on your local mach
 
 If you're doing the DIY approach, make sure you use the ports specified in the table above.
 
-> If you're on Windows with Hyper-V enabled, you might run into an issue that you're not able to use one (or more) of these ports. This could have something to do with port reservations by Hyper-V. See [this article](https://hungyi.net/posts/wsl2-reserved-ports/) for more information on the root-cause and a possible solution for this issue.
-
 The ports can be specified on the command-line when starting a service with the Dapr CLI. The following command-line flags can be used:
 
 - `--app-port`
 - `--dapr-http-port`
 - `--dapr-grpc-port`
+
+If you're on Windows with Hyper-V enabled, you might run into an issue that you're not able to use one (or more) of these ports. This could have something to do with aggressive port reservations by Hyper-V. You can check whether or not this is the case by executing this command: 
+
+```powershell
+netsh int ipv4 show excludedportrange protocol=tcp
+```
+
+If you see one (or more) of the ports shown as reserved in the output, fix it by executing the following commands in an administrative terminal:
+
+```powershell
+dism.exe /Online /Disable-Feature:Microsoft-Hyper-V
+netsh int ipv4 add excludedportrange protocol=tcp startport=6000 numberofports=3
+netsh int ipv4 add excludedportrange protocol=tcp startport=3600 numberofports=3
+netsh int ipv4 add excludedportrange protocol=tcp startport=60000 numberofports=3
+dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
+```
 
 #### Get started
 
