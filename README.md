@@ -137,6 +137,8 @@ During the workshop you will run the services in the solution on your local mach
 
 If you're doing the DIY approach, make sure you use the ports specified in the table above.
 
+> If you're on Windows with Hyper-V enabled, you might run into an issue that you're not able to use one (or more) of these ports. This could have something to do with port reservations by Hyper-V. See [this article](https://hungyi.net/posts/wsl2-reserved-ports/) for more information on the root-cause and a possible solution for this issue.
+
 The ports can be specified on the command-line when starting a service with the Dapr CLI. The following command-line flags can be used:
 
 - `--app-port`
