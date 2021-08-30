@@ -103,13 +103,14 @@ All scripts in the instructions are Powershell scripts. If you're working on a M
 
 The workshop has been tested with the following versions:
 
-| Attribute            | Details |
-| -------------------- | ------- |
-| Dapr runtime version | v1.2.0  |
-| Dapr.NET SDK version | v1.2.0  |
-| Dapr CLI version     | v1.2.0  |
-| Platform             | .NET 5  |
-| Platform             | Java 16 |
+| Attribute                 | Details |
+|---------------------------|---------|
+| Dapr runtime version      | v1.3.0  |
+| Dapr SDK for .NET version | v1.3.0  |
+| Dapr SDK for Java version | v1.2.0  |
+| Dapr CLI version          | v1.3.0  |
+| .NET version              | .NET 5  |
+| Java version              | Java 16 |
 
 ### Instructions
 
@@ -130,7 +131,7 @@ During the workshop, you should be working in 1 instance of VS Code. You will us
 During the workshop you will run the services in the solution on your local machine. To prevent port-collisions, all services listen on a different HTTP port. When running the services with Dapr, you need additional ports for HTTP and gRPC communication with the sidecars. By default these ports are `3500` and `50001`. But to prevent confusion, you'll use totally different port numbers in the assignments. If you follow the instructions, the services will use the following ports for their Dapr sidecars to prevent port collisions:
 
 | Service                    | Application Port | Dapr sidecar HTTP port | Dapr sidecar gRPC port |
-| -------------------------- | ---------------- | ---------------------- | ---------------------- |
+|----------------------------|------------------|------------------------|------------------------|
 | TrafficControlService      | 6000             | 3600                   | 60000                  |
 | FineCollectionService      | 6001             | 3601                   | 60001                  |
 | VehicleRegistrationService | 6002             | 3602                   | 60002                  |
