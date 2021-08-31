@@ -66,7 +66,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open a **new** terminal window in VS Code.
 
-   > You can do this by using the hotkey (``Ctrl-` `` on Windows, ``Shift-Ctrl-` `` on macOS) or clicking on the `+` button in the terminal window title bar:
+   > You can do this by using the hotkey (``Ctrl-` `` on Windows, ``Shift-Ctrl-` `` on macOS) or clicking on the `+` button in the terminal window title bar:  
    > ![](img/terminal-new.png)
 
 1. Make sure the current folder is `dotnet/FineCollectionService`.
