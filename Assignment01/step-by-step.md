@@ -103,8 +103,8 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Also inspect the logging of the FineCollectionService.
 
-   > You can do this by selecting another terminal window using the dropdown in the title-bar of the terminal window:
-   > ![](img/terminal-dropdown.png)
+   > You can select another terminal window by clicking on it in the **tabs view** on the right side of the terminal window:  
+   > ![](img/terminal-tabs.png)
 
    You should see the speeding-violation being handled by the FineCollectionService:
 
