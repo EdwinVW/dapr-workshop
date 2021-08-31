@@ -6,4 +6,3 @@ public record VehicleInfo(String vehicleId,
                           String ownerName,
                           String ownerEmail) {
 }
-
