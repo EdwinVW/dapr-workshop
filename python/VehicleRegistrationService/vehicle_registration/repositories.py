@@ -1,7 +1,8 @@
-from faker import Faker
+from python.FineCollectionService.fine_collection.clients import Vehicle
 import random
-
+from faker import Faker
 from . import models
+
 
 MAKES = [
     "Mercedes", "Toyota", "Audi", "Volkswagen", "Seat", "Renault", "Skoda",
@@ -27,10 +28,10 @@ TYPES = dict([
 
 
 class VehicleRepository:
-    def __init__(self):
+    def __init__(self) -> None:
         self.data_generator = Faker()
 
-    def get_vehicle_info(self, license_number):
+    def get_vehicle_info(self, license_number: str) -> models.Vehicle:
         make = random.choice(MAKES)
         type = random.choice(TYPES[make])
         owner_name = self.data_generator.name()
