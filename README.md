@@ -28,7 +28,7 @@ In order to simulate this in code, the following services are defined:
 
 ![Services](img/services.png)
 
-The `dotnet` and `java` folders in the repo each contain the starting-point for the workshop. The starting-point is a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
+The `dotnet` and `java` folders in the repo contain the starting-point for the workshop. Each folder obviously corresponds to the different programming languages you use during the workshop. The starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
 - The **Camera Simulation** simulates passing cars.
 - The **Traffic Control Service** offers 2 HTTP endpoints: `/entrycam` and `/exitcam`. These endpoints can be used simulate a car passing the entry- or exit-cam.
@@ -118,9 +118,9 @@ Every assignment is contained in a separate folder in this repo. Each folder con
 
 **It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.**
 
-The `dotnet` and `java` folders in the repo each contain the starting-point for the workshop. The starting-point is a version of the services that use plain HTTP communication and store state in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
+The `dotnet` and `java` folders in the repo contain the starting-point for the workshop. Each folder obviously corresponds to the different programming languages you use during the workshop. The starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
-Every description of an assignment (except the first one) contains two parts with each a certain approach to executing the assignment: a **DIY** part and a **step-by-step** part. The DIY part just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step part describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step approach for some help.
+Every assignment offers instructions on how to complete the assignment. With the exception of assignment 1, each assignment offers two versions of the instructions: the **DIY** version and the **step-by-step** version. The DIY version just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step version describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step approach for some help.
 
 #### Integrated terminal
 
