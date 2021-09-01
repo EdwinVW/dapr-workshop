@@ -72,6 +72,8 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Make sure the current folder is `python/FineCollectionService`.
 
+1. Run the command `pip install -r requirements.txt`
+
 1. Start the service using `uvicorn fine_collection:app --port 6001`.
 
 1. Open the file `python/FineCollectionService/test.http` in VS Code. The request in this file simulates sending a detected speeding-violation to the FineCollectionService.
