@@ -2,7 +2,7 @@
 POST http://127.0.0.1:6000/entrycam
 Content-Type: application/json
 
-{ "lane": 1, "license_number": "XT-346-Y", "timestamp": "2020-09-10T10:38:47" }
+{ "lane": 1, "licenseNumber": "XT-346-Y", "timestamp": "2020-09-10T10:38:47" }
 
 ###
 
@@ -10,7 +10,7 @@ Content-Type: application/json
 POST http://127.0.0.1:6000/exitcam
 Content-Type: application/json
 
-{ "lane": 1, "license_number": "XT-346-Y", "timestamp": "2020-09-10T10:38:53" }
+{ "lane": 1, "licenseNumber": "XT-346-Y", "timestamp": "2020-09-10T10:38:53" }
 
 ###
 
@@ -18,4 +18,4 @@ Content-Type: application/json
 POST http://127.0.0.1:6000/exitcam
 Content-Type: application/json
 
-{ "lane": 1, "license_number": "XT-346-Y", "timestamp": "2020-09-10T10:38:52" }
+{ "lane": 1, "licenseNumber": "XT-346-Y", "timestamp": "2020-09-10T10:38:52" }

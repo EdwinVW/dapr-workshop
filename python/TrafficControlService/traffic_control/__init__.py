@@ -17,10 +17,10 @@ fine_collector = clients.FineCollectionClient(app_settings.fine_collection_addre
 
 @app.post("/entrycam")
 def entrycam(msg: events.VehicleRegistered):
-    logger.info("Vehicle %s entering lane %i at %s", msg.license_number, msg.lane, msg.timestamp)
+    logger.info("Vehicle %s entering lane %i at %s", msg.licenseNumber, msg.lane, msg.timestamp)
 
     state = models.VehicleState(
-        license_number=msg.license_number,
+        license_number=msg.licenseNumber,
         entry_timestamp=msg.timestamp
     )
 
@@ -31,20 +31,20 @@ def entrycam(msg: events.VehicleRegistered):
 
 @app.post("/exitcam")
 def exitcam(msg: events.VehicleRegistered):
-    logger.info("Vehicle %s leaving lane %i at %s", msg.license_number, msg.lane, msg.timestamp)
+    logger.info("Vehicle %s leaving lane %i at %s", msg.licenseNumber, msg.lane, msg.timestamp)
 
-    state = repository.get_vehicle_state(msg.license_number)
+    state = repository.get_vehicle_state(msg.licenseNumber)
 
-    if not state is None:
+    if state is not None:
         state.exit_timestamp = msg.timestamp
-    
+
     repository.set_vehicle_state(state)
 
     excess_speed = calculator.get_excess_speed(state.entry_timestamp, state.exit_timestamp)
 
     if excess_speed > 0:
         logger.warn("Vehicle %s is over the speed limit. Collecting fine", state.license_number)
-        
+   
         violation = models.SpeedingViolation(
             license_number=state.license_number,
             road_id=calculator.road_id,
@@ -54,7 +54,7 @@ def exitcam(msg: events.VehicleRegistered):
 
         try:
             fine_collector.collect_fine(violation)
-        except:
+        except clients.ClientError:
             return Response(status_code=500)
 
     return Response(status_code=200)

@@ -57,12 +57,12 @@ class SimulationAgent:
 
         while self.camera_running:
             sleep(random.randrange(50,5000) / 1000) # wait for a little bit before sending the next car in.
-            
+
             license_number = generate_license_number()
 
             self.client.send_vehicle_entry(events.VehicleRegistered(
                 lane=random.randint(1, self.lanes),
-                license_number=license_number,
+                licenseNumber=license_number,
                 timestamp=datetime.now()
             ))
 
@@ -72,9 +72,8 @@ class SimulationAgent:
 
             self.client.send_vehicle_exit(events.VehicleRegistered(
                 lane=random.randint(1, self.lanes),
-                license_number=license_number,
+                licenseNumber=license_number,
                 timestamp=datetime.now()
             ))
 
             print(f"Car {license_number} left the traffic control system")
-

@@ -4,5 +4,5 @@ from pydantic import BaseModel
 
 class VehicleRegistered(BaseModel):
     lane: int
-    license_number: str
+    licenseNumber: str
     timestamp: datetime
