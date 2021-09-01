@@ -66,8 +66,8 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open a **new** terminal window in VS Code.
 
-   > You can do this by using the hotkey (``Ctrl-` `` on Windows, ``Shift-Ctrl-` `` on macOS) or clicking on the `+` button in the terminal window title bar:
-   > ![](img/terminal-new.png)
+   > You can do this by using the hotkey (``Ctrl-` `` on Windows, ``Shift-Ctrl-` `` on macOS) or clicking on the `+` button in the terminal window title bar:  
+   > ![](img/terminal-new-java.png)
 
 1. Make sure the current folder is `java/FineCollectionService`.
 
@@ -103,12 +103,12 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Also inspect the logging of the FineCollectionService.
 
-   > You can do this by selecting another terminal window using the dropdown in the title-bar of the terminal window:
-   > ![](img/terminal-dropdown.png)
+   > You can select another terminal window by clicking on it in the **tabs view** on the right side of the terminal window:  
+   > ![](img/terminal-tabs-java.png)
 
    You should see the speeding-violation being handled by the FineCollectionService:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice.png)
+   ![FineCollectionService logging](img/logging-finecollectionservice-java.png)
 
 ## Step 4. Run the simulation
 
