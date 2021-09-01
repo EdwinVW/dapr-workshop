@@ -121,6 +121,8 @@ You've tested the APIs directly by using a REST client. Now you're going to run 
 
 1. Open a new terminal window in VS Code and make sure the current folder is `python/Simulation`.
 
+1. Run the command `pip install -r requirements.txt`
+
 1. Start the service using `python simulation`.
 
 1. In the simulation window you should see something like this:
