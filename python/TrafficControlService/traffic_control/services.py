@@ -12,8 +12,6 @@ class SpeedingViolationCalculator:
         time_diff = exit_timestamp - entry_timestamp
         time_diff_seconds = time_diff.total_seconds()
 
-        print(time_diff_seconds)
-
         speed = round((self.section_length / time_diff_seconds) * 60)
         excess_speed = int(speed - self.max_speed - self.legal_correction)
 

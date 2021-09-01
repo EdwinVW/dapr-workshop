@@ -1,8 +1,8 @@
 from datetime import datetime
+from pydantic import BaseModel
 
 
-class VehicleRegistered:
-    def __init__(self, lane: int, license_number: str, timestamp: datetime) -> None:
-        self.license_number = license_number
-        self.lane = lane
-        self.timestamp = timestamp
+class VehicleRegistered(BaseModel):
+    lane: int
+    license_number: str
+    timestamp: datetime
