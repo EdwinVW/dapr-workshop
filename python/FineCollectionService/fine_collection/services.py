@@ -6,7 +6,7 @@ class FineCalculator:
         pass
 
     def calculate_fine(self, excess_speed: int) -> int:
-        fine = 9 # Default administration costs
+        fine = 9  # Default administration costs
 
         if excess_speed < 5:
             fine += 18
@@ -26,7 +26,7 @@ class FineCalculator:
             fine += 372
         else:
             return -1
-        
+
         return fine
 
 
@@ -36,8 +36,8 @@ class ViolationProcessor:
         self.vehicle_registrations = vehicle_registrations
 
     def process_speed_violation(self, violation: models.SpeedingViolation) -> None:
-        fine = self.calculator.calculate_fine(violation.excess_speed)
+        fine = self.calculator.calculate_fine(violation.violationInKmh)
         fine_text = "To be decided by the prosecutor" if fine == -1 else f"EUR {fine:.2f}"
-        vehicle = self.vehicle_registrations.get_vehicle_info(violation.license_number)
+        vehicle = self.vehicle_registrations.get_vehicle_info(violation.licenseNumber)
 
         # TODO: Send the fine notification per email

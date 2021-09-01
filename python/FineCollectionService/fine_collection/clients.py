@@ -3,17 +3,17 @@ from pydantic import BaseModel
 
 
 class ClientError(Exception):
-    def  __init__(self, message: str):
+    def __init__(self, message: str):
         super().__init__(message)
 
 
 class Vehicle(BaseModel):
-    vehicle_id: str
+    vehicleId: str
     make: str
     model: str
-    owner_name: str
-    owner_email: str
-    
+    ownerName: str
+    ownerEmail: str
+
 
 class VehicleRegistrationClient:
     def __init__(self, base_address: str):
@@ -24,5 +24,7 @@ class VehicleRegistrationClient:
 
         if response.status_code == 200:
             return Vehicle.parse_raw(response.content)
-        
-        raise ClientError("Failed to retrieve vehicle data. Got status %i: %s", response.status_code, str(response.content))
+
+        raise ClientError(
+            f"Failed to retrieve vehicle data. Got status {response.status_code}: {str(response.content)}"
+        )
