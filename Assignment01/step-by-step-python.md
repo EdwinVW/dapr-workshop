@@ -92,6 +92,8 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Open a **new** terminal window in VS Code and make sure the current folder is `python/TrafficControlService`.
 
+1. Run the command `pip install -r requirements.txt`
+
 1. Start the service using `uvicorn traffic_control:app --port 6000`.
 
 1. Open the `python/TrafficControlService/test.http` file in VS Code.
