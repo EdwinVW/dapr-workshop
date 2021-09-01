@@ -90,11 +90,11 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Make sure the VehicleRegistrationService and FineCollectionService are running (results of step 1 and 2).
 
-1. Open a **new** terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and make sure the current folder is `python/TrafficControlService`.
 
-1. Start the service using `mvn spring-boot:run`.
+1. Start the service using `uvicorn traffic_control:app --port 6000`.
 
-1. Open the `src/TrafficControlService/traffic-control.http` file in VS Code.
+1. Open the `python/TrafficControlService/test.http` file in VS Code.
 
 1. Click on `Execute request` for all three requests in the file to send two requests to the API.
 
@@ -102,7 +102,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Check the logging in the terminal window. It should look like this:
 
-   ![TrafficControlService logging](img/logging-trafficcontrolservice-java.png)
+   ![TrafficControlService logging](img/logging-trafficcontrolservice-python.png)
 
 1. Also inspect the logging of the FineCollectionService.
 
@@ -117,13 +117,13 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 You've tested the APIs directly by using a REST client. Now you're going to run the simulation that actually simulates cars driving on the highway. The simulation will simulate 3 entry- and exit-cameras (one for each lane).
 
-1. Open a new terminal window in VS Code and make sure the current folder is `java/Simulation`.
+1. Open a new terminal window in VS Code and make sure the current folder is `python/Simulation`.
 
-1. Start the service using `mvn spring-boot:run`.
+1. Start the service using `python simulation`.
 
 1. In the simulation window you should see something like this:
 
-   ![](img/logging-simulation-java.png)
+   ![](img/logging-simulation-python.png)
 
 1. Also check the logging in all the other Terminal windows. You should see all entry- and exit events and any speeding-violations that were detected in the logging.
 
