@@ -22,6 +22,8 @@ TYPES = dict([
     ("Mitsubishi", ["Space Star", "ASX", "Eclipse Cross", "Outlander PHEV"]),
     ("Ford", ["Focus", "Ka", "C-Max", "Fusion", "Fiesta", "Mondeo", "Kuga"]),
     ("BMW", ["500", "Panda", "Punto", "Tipo", "Multipla"]),
+    ("Opel", ["Karl", "Corsa", "Astra", "Crossland X", "Insignia"]),
+    ("Fiat", ["500", "Panda", "Punto", "Tipo", "Multipla"]),
     ("Opel", ["Karl", "Corsa", "Astra", "Crossland X", "Insignia"])
 ])
 
