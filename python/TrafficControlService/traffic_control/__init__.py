@@ -44,11 +44,11 @@ def exitcam(msg: events.VehicleRegistered):
 
     if excess_speed > 0:
         logger.warn("Vehicle %s is over the speed limit. Collecting fine", state.license_number)
-   
+
         violation = models.SpeedingViolation(
-            license_number=state.license_number,
-            road_id=calculator.road_id,
-            excess_speed=excess_speed,
+            licenseNumber=state.license_number,
+            roadId=calculator.road_id,
+            violationInKmh=excess_speed,
             timestamp=state.exit_timestamp
         )
 

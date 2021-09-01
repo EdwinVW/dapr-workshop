@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
+
 class VehicleState:
     exit_timestamp: datetime
 
@@ -11,8 +12,7 @@ class VehicleState:
 
 
 class SpeedingViolation(BaseModel):
-    license_number: str
-    road_id: str
-    excess_speed: int
+    licenseNumber: str
+    roadId: str
+    violationInKmh: int
     timestamp: datetime
-
