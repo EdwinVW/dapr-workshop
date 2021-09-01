@@ -245,13 +245,15 @@ You should see similar logging as before when you ran the application.
 
 ## Step 4: Use Dapr observability
 
-So how can you check whether or not the call to the VehicleRegistrationService is handled by Dapr? Well, Dapr has some observability built in. You can look at Dapr traffic using Zipkin:
+So how can you check whether or not the call to the VehicleRegistrationService is handled by Dapr? Well, Dapr has some
+observability built in. You can look at Dapr traffic using Zipkin:
 
 1. Open a browser and go the this URL: [http://localhost:9411/zipkin](http://localhost:9411/zipkin).
 
 2. Click the `RUN QUERY` button in the top right of the screen to search for traces.
 
-3. You should see the calls between the FineCollectionService and the VehicleRegistrationService. You can expand and collapse each trace and click the `SHOW` button to get more details:
+3. You should see the calls between the FineCollectionService and the VehicleRegistrationService. You can expand and
+   collapse each trace and click the `SHOW` button to get more details:
 
    ![](img/zipkin-traces.png)
 
@@ -261,6 +263,7 @@ So how can you check whether or not the call to the VehicleRegistrationService i
 
 ## Next assignment
 
-Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next
+assignment.
 
 Go to [assignment 3](../Assignment03/README.md).
