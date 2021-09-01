@@ -1,4 +1,3 @@
-from python.FineCollectionService.fine_collection.clients import Vehicle
 import random
 from faker import Faker
 from . import models
