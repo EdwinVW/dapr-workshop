@@ -111,7 +111,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
    You should see the speeding-violation being handled by the FineCollectionService:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice.png)
+   ![FineCollectionService logging](img/logging-finecollectionservice-python.png)
 
 ## Step 4. Run the simulation
 
