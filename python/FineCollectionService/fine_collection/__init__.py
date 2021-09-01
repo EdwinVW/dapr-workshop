@@ -1,20 +1,19 @@
 from fastapi import FastAPI
 from fastapi.responses import Response
-from . import models, processing, calculator, settings, clients
-
+from . import models, settings, services, clients
 
 
 app = FastAPI()
-settings = settings.ApplicationSettings()
+app_settings = settings.ApplicationSettings()
+
+processor = services.ViolationProcessor(
+    services.FineCalculator(), 
+    clients.VehicleRegistrationClient(app_settings.vehicle_registration_address)
+)
 
 
 @app.post("/collectfine")
-def collect_fine(violation: models.SpeedingViolation):
-    processor = processing.ViolationProcessor(
-        calculator.FineCalculator(), 
-        clients.VehicleRegistrationClient(settings.vehicle_registration_address)
-    )
-    
+def collect_fine(violation: models.SpeedingViolation) -> Response:
     processor.process_speed_violation(violation)
 
     return Response(status_code=200)
