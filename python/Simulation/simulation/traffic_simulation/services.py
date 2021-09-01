@@ -5,7 +5,7 @@ from datetime import datetime
 from . import clients, events
 
 
-ALLOWED_CHARS = ["D","F","G","H","J","K","L","N","P","R","S","T","X","Y","Z"]
+ALLOWED_CHARS = ["D", "F", "G", "H", "J", "K", "L", "N", "P", "R", "S", "T", "X", "Y", "Z"]
 
 
 def generate_license_number():
@@ -15,28 +15,28 @@ def generate_license_number():
         chars = [random.choice(ALLOWED_CHARS) for _ in range(length)]
         return str.join("", chars)
 
-    if license_type == 0: # 99-AA-99
+    if license_type == 0:  # 99-AA-99
         return f"{random.randrange(1,100):02}-{random_chars(2)}-{random.randrange(1,100):02}"
-    elif license_type == 1: # AA-99-AA
+    elif license_type == 1:  # AA-99-AA
         return f"{random_chars(2)}-{random.randrange(1,100):02}-{random_chars(2)}"
-    elif license_type == 2: # AA-AA-99
+    elif license_type == 2:  # AA-AA-99
         return f"{random_chars(2)}-{random_chars(2)}-{random.randrange(0,100):02}"
-    elif license_type == 3: # 99-AA-AA
+    elif license_type == 3:  # 99-AA-AA
         return f"{random.randrange(1,100):02}-{random_chars(2)}-{random_chars(2)}"
-    elif license_type == 4: # 99-AAA-9
+    elif license_type == 4:  # 99-AAA-9
         return f"{random.randrange(1,100):02}-{random_chars(3)}-{random.randrange(1,10)}"
-    elif license_type == 5: # 9-AAA-99
+    elif license_type == 5:  # 9-AAA-99
         return f"{random.randrange(1,10)}-{random_chars(3)}-{random.randrange(1,100):02}"
-    elif license_type == 6: # AA-999-A
+    elif license_type == 6:  # AA-999-A
         return f"{random_chars(2)}-{random.randrange(1,1000):03}-{random_chars(1)}"
-    elif license_type == 7: # A-999-AA
+    elif license_type == 7:  # A-999-AA
         return f"{random_chars(1)}-{random.randrange(1,1000):03}-{random_chars(2)}"
 
     return None
 
 
 class SimulationAgent:
-    def __init__(self, lanes:int, client: clients.TrafficControlClient) -> None:
+    def __init__(self, lanes: int, client: clients.TrafficControlClient) -> None:
         self.client = client
         self.camera_running = False
         self.lanes = lanes
@@ -56,7 +56,7 @@ class SimulationAgent:
         self.camera_running = True
 
         while self.camera_running:
-            sleep(random.randrange(50,5000) / 1000) # wait for a little bit before sending the next car in.
+            sleep(random.randrange(50, 5000) / 1000)  # wait for a little bit before sending the next car in.
 
             license_number = generate_license_number()
 
@@ -68,7 +68,7 @@ class SimulationAgent:
 
             print(f"Sent car {license_number} into the traffic control system")
 
-            sleep(random.randrange(4, 10)) # wait before exiting the lane on the other side.
+            sleep(random.randrange(4, 10))  # wait before exiting the lane on the other side.
 
             self.client.send_vehicle_exit(events.VehicleRegistered(
                 lane=random.randint(1, self.lanes),
