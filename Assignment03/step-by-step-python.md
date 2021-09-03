@@ -26,7 +26,7 @@ a standard Docker image containing RabbitMQ to your machine and start it as a co
 
 1. Start a RabbitMQ message broker by entering the following command:
 
-   ```console
+   ```powershell
    docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-management-alpine
    ```
 
@@ -43,26 +43,26 @@ If everything goes well, you should see some output like this:
 
 The container will keep running in the background. If you want to stop it, enter the following command:
 
-```console
+```powershell
 docker stop dtc-rabbitmq
 ```
 
 You can then start the container later by entering the following command:
 
-```console
+```powershell
 docker start dtc-rabbitmq
 ```
 
 If you are done using the container, you can also remove it by entering the following command:
 
-```console
+```powershell
 docker rm dtc-rabbitmq -f
 ```
 
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
 > For your convenience, the `Infrastructure` folder contains Bash scripts for starting the infrastructural components
-> you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.sh` script to start
+> you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start
 > the RabbitMQ container.
 >
 > If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also
@@ -130,7 +130,7 @@ the TrafficControlService so it can send messages using Dapr pub/sub.
 
 1. Open the file `python\TrafficControlService\traffic_control\clients.py` in VS Code.
 
-2. Inside the `collect_fine` method, you find the code that sends a `SpeedingViolation` message to the `collectfine` 
+2. Inside the `collect_fine` method, you find the code that sends a `SpeedingViolation` message to the `collectfine`
    endpoint of the FineCollectionService over HTTP:
 
    ```python
@@ -146,15 +146,15 @@ the TrafficControlService so it can send messages using Dapr pub/sub.
    )
    ```
 
-   The base_address comes from the `settings.py` file which ultimately reads the base address from
-   `python/TrafficControlService/.env`.
+   The base_address comes from `python/TrafficControlService/traffic_control/settings.py` which contains the
+   `AppSettings` class. This class loads the data from the file `python/TrafficControlService/.env`.
 
 3. Open the file `python/TrafficControlService/.env` in VS Code.
 
    Here we see the actual value being configured. Inspect the `FINE_COLLECTION_ADDRESS` setting. You can see that in
    the HTTP call, the URL of the VehicleRegistrationService (running on port 6001) is used.
 
-4. The URL for publishing a message using the Dapr pub/sub API is: 
+4. The URL for publishing a message using the Dapr pub/sub API is:
    `http://localhost:<daprPort>/v1.0/publish/<pubsub-name>/<topic>`. You'll use this API to send a message to the
    `speedingviolations` topic using the pub/sub component named `pubsub`. The Dapr sidecar for the TrafficControlService
    runs on HTTP port `3600`. Replace the URL in the HTTP call with a call to the Dapr pub/sub API:
@@ -174,9 +174,9 @@ Python.
 
 1. Add a new file in the `python/dapr/components` folder named `subscription.yaml`.
 
-1. Open this file in VS Code.
+2. Open this file in VS Code.
 
-1. You're going to define a subscription on a topic and link that to a web API operation on the FineCollectionService.
+3. You're going to define a subscription on a topic and link that to a web API operation on the FineCollectionService.
    Paste this snippet into the file:
 
    ```yaml
@@ -203,29 +203,36 @@ change the code slightly. For now we write some code, later we're going to use t
 
 1. Open the file `python\FineCollectionService\fine_collection\__init__.py` in VS Code.
 
-2. Remove the `violation: models.SpeedingViolation` parameter and replace it with `request: Request`
+2. Remove the `violation: models.SpeedingViolation` parameter and replace it with `request: Request`.
+   In addition to replacing the parameter, make sure to mark the method as async.
+
+   After replacing the parameter and marking the operation async, you should have a method definition that looks 
+   like this:
 
    ```python
-   def collect_fine(request: Request) -> Response:
+   async def collect_fine(request: Request) -> Response:
    ```
 
-   > This enables you to get to the raw JSON in the request.
+   You now have access to the incoming HTTP request data including the body of the request that contains the event
+   that's sent to the FineCollectionService.
 
-3. Add the following code to the top of the body of the method to extract the `SpeedingViolation` data from the event:
+3. Add the following code to the top of the body of the `collect_fine` method to extract the `SpeedingViolation` data
+   from the request:
 
    ```python
-   evt_data = request.json()
-   violation = models.SpeedingViolation.parse_obj(evt_data["data"])
+   evt_data = await request.json()
+   violation = models.SpeedingViolation.parse_raw(evt_data["data"])
    ```
 
-   Make sure to import the `Request` class by adding the following import statement
-   to the top of the file:
+4. Add the following import statement to the top of the file to get the `Request` class.
 
    ```python
    from fastapi.requests import Request
    ```
 
-4. Open the terminal window in VS Code and make sure the current folder is `python/FineCollectionService`.
+5. Save the changes to the file.
+
+6. Open the terminal window in VS Code and make sure the current folder is `python/FineCollectionService`.
 
 ## Step 5: Test the application
 
@@ -272,7 +279,7 @@ You should see the same logs as before. Obviously, the behavior of the applicati
 But if you look closely at the Dapr logs of the FineCollectionService, you should see something like this in there:
 
 ```console
-INFO[0004] app is subscribed to the following topics: [speedingviolations] through pubsub=pubsub  app_id=finecollectionservice instance=maartenm03 scope=dapr.runtime type=log ver=1.2.2
+INFO[0004] app is subscribed to the following topics: [speedingviolations] through pubsub=pubsub  app_id=finecollectionservice instance=willemm01 scope=dapr.runtime type=log ver=1.2.2
 ```
 
 So you can see that Dapr has registered a subscription for the FineCollectionService to the `speedingviolations` topic.
@@ -286,190 +293,63 @@ the subscription for the `speedingviolations` topic.
 1. Stop the FineCollectionService by navigating to its terminal window and pressing `Ctrl-C`. You can keep the other
    services running for now.
 
-2. Open the file `java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java` in VS Code.
+2. Open the file `python\FineCollectionService\fine_collection\__init__.py` in VS Code.
 
 3. Add a new method `subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
 
-   ```java
-   @GetMapping("/dapr/subscribe")
-   public ResponseEntity<List<Map<String, Object>>> subscribe() {
-       var subscription = Map.<String, Object>of(
-           "pubsubname", "pubsub",
-           "topic", "speedingviolations",
-           "route", "/collectfine"
-       );
-       return ResponseEntity.ok(Collections.singletonList(subscription));
-   }
+   ```python
+   @app.get("/dapr/subscribe")
+   def subscribe():
+      subscription = [dict(
+         pubsubname="pubsub",
+         topic="speedingviolations",
+         route="/collectfine"
+      )]
+
+      return subscription
    ```
 
-4. Remove the file `src/dapr/components/subscription.yaml`. This file is not needed anymore because you implemented the `/dapr/subscribe` method.
+4. Remove the file `src/dapr/components/subscription.yaml`. This file is not needed anymore because you implemented
+   the `/dapr/subscribe` endpoint that we just added to the application.
 
-5. Go back to the terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
+5. Go back to the terminal window in VS Code and make sure the current folder is `python/FineCollectionService`.
 
-6. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
+6. Start the updated FineCollectionService:
 
    ```console
-   mvn package
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components uvicorn fine_collection:app --port 6001
    ```
 
-   If you see any warnings or errors, review the previous steps to make sure the code is correct.
+7. After you've looked at the log output and confirmed that everything works, you can stop all the services.
 
-7. Start the updated FineCollectionService:
+## Step 7: Use Dapr publish / subscribe with the Dapr SDK for Python
+
+In this step, you will change the code slightly so it uses the Dapr SDK for Python. First you'll change the
+TrafficControlService that sends messages.
+
+1. Run the following command to install the dapr SDK for python
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components mvn spring-boot:run
+   pip install dapr
    ```
 
-8. After you've looked at the log output and confirmed that everything works, you can stop all the services.
+2. Open the file `python\TrafficControlService\traffic_control\clients.py`.
 
-## Step 7: Use Dapr publish / subscribe with the Dapr SDK for Java
+3. Replace the content of the file with the following code:
 
-In this step, you will change the code slightly so it uses the Dapr SDK for Java. First you'll change the TrafficControlService that sends messages.
+   ```python
+   from . import models
+   from dapr.clients import DaprClient
 
-1. Add a dependency to the Dapr SDK for Java to the pom.xml in the TrafficControlService directory:
 
-   ```xml
-   <dependency>
-      <groupId>io.dapr</groupId>
-      <artifactId>dapr-sdk</artifactId>
-   </dependency>
+   class FineCollectionClient:
+      def __init__(self, base_address: str):
+         self.base_address = base_address
+
+      def collect_fine(self, violation: models.SpeedingViolation):
+         with DaprClient() as client:
+               client.publish_event("pubsub", "speedingviolations", violation.json())
+
    ```
 
-   Again, the version of the dependency is managed using Mavens "dependency management" - you can inspect the pom.xml file inside the java folder to see the exact version.
-
-1. Create a new file, java/TrafficControlService/src/main/java/dapr/traffic/fines/DaprFineCollectionClient.java and open it in VS Code.
-
-1. Declare a class DaprFineCollectionClient that implements the FineCollectionClient interface. To fulfil the contract of the FineCollectionClient interface, add the following method:
-
-  ```java
-  @Override
-  public void submitForFine(SpeedingViolation speedingViolation) {
-  }
-  ```
-
-1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java` in VS Code. The default JSON serialization is not suitable for todays goal, so you need to customize the Jackson `ObjectMapper` that it uses. You do so by adding a static inner class to configure the JSON serialization:
-
-  ```java
-  static class JsonObjectSerializer extends DefaultObjectSerializer {
-      public JsonObjectSerializer() {
-          OBJECT_MAPPER.registerModule(new JavaTimeModule());
-          OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-      }
-  }
-  ```
-
-  This is a bit of a lazy approach, but it is enough for this workshop. In fact, the SDK documentation [recommends to write your own serializer for production scenario's](https://github.com/dapr/java-sdk#how-to-use-a-custom-serializer).
-
-1. In the same class, add a new method to declare a Spring Bean of type DaprClient:
-
-  ```java
-  @Bean
-  public DaprClient daprClient() {
-      return new DaprClientBuilder()
-              .withObjectSerializer(new JsonObjectSerializer())
-              .build();
-  }
-  ```
-
-  In the same class, the fineCollectionClient method declares a Spring Bean that provides an implementation of the FineCollectionClient interface. To do so, it needs a RestTemplate bean. Replace this method with the following:
-
-  ```java
-  @Bean
-  public FineCollectionClient fineCollectionClient(final DaprClient daprClient) {
-      return new DaprFineCollectionClient(daprClient);
-  }
-  ```
-
-  Finally, update the import statements in the class:
-
-  ```java
-  import dapr.traffic.fines.DaprFineCollectionClient;
-  import io.dapr.client.DaprClient;
-  import io.dapr.client.DaprClientBuilder;
-  ```
-
-1. Go back to the DaprFineCollectionClient implementation class and add a using statement in this file to make sure you can use the Dapr client:
-
-  ```java
-  import io.dapr.client.DaprClient;
-  ```
-
-  Now add an instance variable of type DaprClient, and add a constructor to inject it:
-
-  ```java
-  private final DaprClient daprClient;
-
-  public DaprFineCollectionClient(final DaprClient daprClient) {
-     this.daprClient = daprClient;
-  }
-  ```
-
-1. Finally, update the `submitForFine()` method in this class to use the `DaprClient`:
-
-  ```java
-  daprClient.publishEvent("pubsub",  "speedingviolations", speedingViolation).block();
-  ```
-
-1. Open the terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
-
-1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
-
-   ```console
-   mvn package
-   ```
-
-   If you see any warnings or errors, review the previous steps to make sure the code is correct.
-
-Now you will change the FineCollectionService that receives messages. The Dapr SDK for Java provides an additional Spring Boot integration library, which automatically wires correctly annotated methods to a pub/sub topic. For every message sent to that topic, the corresponding Java method is invoked and the payload of the message is delivered as request body. You don't have to poll for messages on the message broker.
-
-1. Add a dependency to the Dapr SDK for Java to the pom.xml in the FineCollectionService directory:
-
-   ```xml
-   <dependency>
-      <groupId>io.dapr</groupId>
-      <artifactId>dapr-sdk-springboot</artifactId>
-   </dependency>
-   ```
-
-1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/violation/ViolationController.java`.
-
-1. Remove the `subscribe` method.
-
-1. Make the type of the `event` parameter a `CloudEvent`, and add an import for `io.dapr.client.domain.CloudEvent`. method with a parameter of type `SpeedingViolation` named `speedingViolaton`; keep the `@RequestBody` annotation in place:
-
-   ```java
-   public ResponseEntity<Void> registerViolation(@RequestBody final CloudEvent event) {
-   ```
-
-1. Change the code that parses the cloud event data at the beginning of the method:
-
-   ```java
-   var data = (Map<String, Object>) event.getData();
-   var violation = new SpeedingViolation(
-       (String) data.get("licenseNumber"),
-       (String) data.get("roadId"),
-       (Integer) data.get("excessSpeed"),
-       LocalDateTime.parse((String) data.get("timestamp"))
-   );
-   ```
-
-1. Add an import for the `io.dapr.Topic` class. Add a `@Topic` annotation above the `registerViolation` method to link this method to a topic called `speedingviolations`:
-
-   ```java
-   @Topic(name = "speedingviolations", pubsubName = "pubsub")
-   ```
-
-   > The *"pubsubName"* argument passed to this attribute refers to the name of the Dapr pub/sub component to use.
-
-1. Open the terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
-
-1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
-
-   ```console
-   mvn package
-   ```
-
-   If you see any warnings or errors, review the previous steps to make sure the code is correct.
-
-Now you can test the application again. Execute the activities in step 5 again.
-
+4. Test the services using the activities in Step 5 of this exercise.
