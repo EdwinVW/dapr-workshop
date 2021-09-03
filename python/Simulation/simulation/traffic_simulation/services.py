@@ -35,7 +35,7 @@ def generate_license_number():
     return None
 
 
-class SimulationAgent:
+class CameraSimulation:
     def __init__(self, lanes: int, client: clients.TrafficControlClient) -> None:
         self.client = client
         self.camera_running = False

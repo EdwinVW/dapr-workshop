@@ -4,7 +4,7 @@ from traffic_simulation import settings,services, clients
 app_settings = settings.ApplicationSettings()
 
 agents = [
-    services.SimulationAgent(3, clients.TrafficControlClient(app_settings.traffic_control_address)) 
+    services.CameraSimulation(3, clients.TrafficControlClient(app_settings.traffic_control_address)) 
     for _ in range(3)
 ]
 
