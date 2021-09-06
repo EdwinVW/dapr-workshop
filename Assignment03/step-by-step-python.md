@@ -203,14 +203,13 @@ change the code slightly. For now we write some code, later we're going to use t
 
 1. Open the file `python\FineCollectionService\fine_collection\__init__.py` in VS Code.
 
-2. Remove the `violation: models.SpeedingViolation` parameter and replace it with `request: Request`.
-   In addition to replacing the parameter, make sure to mark the method as async.
+2. Remove the `violation: models.SpeedingViolation` parameter and replace it with `evt_data=Body(...)`.
 
-   After replacing the parameter and marking the operation async, you should have a method definition that looks 
+   After replacing the parameter you should have a method definition that looks 
    like this:
 
    ```python
-   async def collect_fine(request: Request) -> Response:
+   def collect_fine(evt_data=Body(...)) -> Response:
    ```
 
    You now have access to the incoming HTTP request data including the body of the request that contains the event
@@ -220,14 +219,13 @@ change the code slightly. For now we write some code, later we're going to use t
    from the request:
 
    ```python
-   evt_data = await request.json()
    violation = models.SpeedingViolation.parse_raw(evt_data["data"])
    ```
 
-4. Add the following import statement to the top of the file to get the `Request` class.
+4. Add the following import statement to the top of the file to get the `Body` class.
 
    ```python
-   from fastapi.requests import Request
+   from fastapi import Body
    ```
 
 5. Save the changes to the file.
