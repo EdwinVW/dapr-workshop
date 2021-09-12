@@ -1,23 +1,32 @@
 package dapr.fines.violation;
 
+import dapr.fines.fines.EmailGenerator;
 import dapr.fines.fines.FineCalculator;
 import dapr.fines.vehicle.VehicleInfo;
 import dapr.fines.vehicle.VehicleRegistrationClient;
+import io.dapr.client.DaprClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @Component
 public class ViolationProcessor {
     private static final Logger log = LoggerFactory.getLogger(ViolationProcessor.class);
 
+    private final DaprClient daprClient;
+    private final EmailGenerator emailGenerator;
     private final FineCalculator fineCalculator;
     private final VehicleRegistrationClient vehicleRegistrationClient;
 
-    public ViolationProcessor(final FineCalculator fineCalculator,
+    public ViolationProcessor(final DaprClient daprClient,
+                              final EmailGenerator emailGenerator,
+                              final FineCalculator fineCalculator,
                               final VehicleRegistrationClient vehicleRegistrationClient) {
+        this.daprClient = daprClient;
+        this.emailGenerator = emailGenerator;
         this.fineCalculator = fineCalculator;
         this.vehicleRegistrationClient = vehicleRegistrationClient;
     }
@@ -28,7 +37,15 @@ public class ViolationProcessor {
         var vehicleInfo = vehicleRegistrationClient.getVehicleInfo(violation.licenseNumber());
 
         // Send notification of fine by email
-        // TODO
+        var body = emailGenerator.createEmailBody(violation, vehicleInfo, fineText);
+        var metadata = Map.of(
+                "emailFrom", "noreply@cfca.gov",
+                "emailTo", vehicleInfo.ownerEmail(),
+                "subject", String.format("Speeding violation on the %s", violation.roadId())
+        );
+
+        daprClient.invokeBinding("sendmail", "create", body, metadata, Void.class)
+                .block();
 
         log.info(constructLogMessage(violation, vehicleInfo, fineText));
     }
