@@ -13,7 +13,7 @@ public class ViolationController {
         this.violationProcessor = violationProcessor;
     }
 
-    @PostMapping("/collectfine")
+    @PostMapping(path = "/collectfine")
     public ResponseEntity<Void> registerViolation(@RequestBody final SpeedingViolation violation) {
         violationProcessor.processSpeedingViolation(violation);
         return ResponseEntity.ok().build();
