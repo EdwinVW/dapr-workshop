@@ -1,11 +1,17 @@
 package dapr.traffic;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import dapr.traffic.fines.DaprFineCollectionClient;
 import dapr.traffic.fines.DefaultFineCollectionClient;
 import dapr.traffic.fines.FineCollectionClient;
 import dapr.traffic.vehicle.InMemoryVehicleStateRepository;
 import dapr.traffic.vehicle.VehicleStateRepository;
 import dapr.traffic.violation.DefaultSpeedingViolationCalculator;
 import dapr.traffic.violation.SpeedingViolationCalculator;
+import io.dapr.client.DaprClient;
+import io.dapr.client.DaprClientBuilder;
+import io.dapr.serializer.DefaultObjectSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -42,8 +48,8 @@ public class TrafficControlConfiguration {
     }
 
     @Bean
-    public FineCollectionClient fineCollectionClient(final RestTemplate restTemplate) {
-        return new DefaultFineCollectionClient(fineCollectionAddress, restTemplate);
+    public FineCollectionClient fineCollectionClient(final DaprClient daprClient) {
+        return new DaprFineCollectionClient(daprClient);
     }
 
     @Bean
@@ -54,5 +60,19 @@ public class TrafficControlConfiguration {
         return new RestTemplateBuilder()
                 .messageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
                 .build();
+    }
+
+    @Bean
+    public DaprClient daprClient() {
+        return new DaprClientBuilder()
+                .withObjectSerializer(new JsonObjectSerializer())
+                .build();
+    }
+
+    static class JsonObjectSerializer extends DefaultObjectSerializer {
+        public JsonObjectSerializer() {
+            OBJECT_MAPPER.registerModule(new JavaTimeModule());
+            OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        }
     }
 }

@@ -23,6 +23,10 @@
             <groupId>io.dapr</groupId>
             <artifactId>dapr-sdk</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.dapr</groupId>
+            <artifactId>dapr-sdk-springboot</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

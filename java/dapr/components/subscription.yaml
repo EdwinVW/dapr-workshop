@@ -1,0 +1,10 @@
+#apiVersion: dapr.io/v1alpha1
+#kind: Subscription
+#metadata:
+#  name: speedingviolations-subscription
+#spec:
+#  topic: speedingviolations
+#  route: /collectfine
+#  pubsubname: pubsub
+#scopes:
+#  - finecollectionservice
