@@ -40,7 +40,7 @@ public class TrafficController {
         var state = new VehicleState(request.licenseNumber(), request.timestamp());
         vehicleStateRepository.saveVehicleState(state);
 
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path = "/exitcam")
@@ -48,7 +48,7 @@ public class TrafficController {
         return vehicleStateRepository.getVehicleState(request.licenseNumber())
                 .map(state -> this.storeVehicleExit(state, request))
                 .map(state -> this.handlePossibleSpeedingViolation(state))
-                .map(state -> ResponseEntity.accepted().<Void>build())
+                .map(state -> ResponseEntity.ok().<Void>build())
                 .orElse(ResponseEntity.notFound().build());
     }
 
