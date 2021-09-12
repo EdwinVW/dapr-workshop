@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dapr.traffic.fines.DaprFineCollectionClient;
 import dapr.traffic.fines.DefaultFineCollectionClient;
 import dapr.traffic.fines.FineCollectionClient;
+import dapr.traffic.vehicle.DaprVehicleStateRepository;
 import dapr.traffic.vehicle.InMemoryVehicleStateRepository;
 import dapr.traffic.vehicle.VehicleStateRepository;
 import dapr.traffic.violation.DefaultSpeedingViolationCalculator;
@@ -38,8 +39,8 @@ public class TrafficControlConfiguration {
     private String fineCollectionAddress;
 
     @Bean
-    public VehicleStateRepository vehicleStateRepository() {
-        return new InMemoryVehicleStateRepository();
+    public VehicleStateRepository vehicleStateRepository(final DaprClient daprClient) {
+        return new DaprVehicleStateRepository(daprClient);
     }
 
     @Bean
