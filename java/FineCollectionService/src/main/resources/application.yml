@@ -11,4 +11,4 @@ server:
 finefines:
   license-key: HX783-5PN1G-CRJ4A-K2L7V
 
-vehicle-information.address: http://localhost:6002/vehicleinfo/{licenseNumber}
+vehicle-information.address: http://localhost:3601/v1.0/invoke/vehicleregistrationservice/method/vehicleinfo/{licenseNumber}

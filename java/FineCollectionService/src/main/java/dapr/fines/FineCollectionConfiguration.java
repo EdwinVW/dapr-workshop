@@ -2,8 +2,11 @@ package dapr.fines;
 
 import dapr.fines.fines.DefaultFineCalculator;
 import dapr.fines.fines.FineCalculator;
+import dapr.fines.vehicle.DaprVehicleRegistrationClient;
 import dapr.fines.vehicle.DefaultVehicleRegistrationClient;
 import dapr.fines.vehicle.VehicleRegistrationClient;
+import io.dapr.client.DaprClient;
+import io.dapr.client.DaprClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +32,12 @@ public class FineCollectionConfiguration {
     }
 
     @Bean
-    public VehicleRegistrationClient vehicleRegistrationClient(final RestTemplate restTemplate) {
-        return new DefaultVehicleRegistrationClient(restTemplate, vehicleInformationAddress);
+    public VehicleRegistrationClient vehicleRegistrationClient(final DaprClient daprClient) {
+        return new DaprVehicleRegistrationClient(daprClient);
+    }
+
+    @Bean
+    public DaprClient daprClient() {
+        return new DaprClientBuilder().build();
     }
 }
