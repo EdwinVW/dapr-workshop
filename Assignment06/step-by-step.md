@@ -30,7 +30,7 @@ In order to connect to Mosquitto, you need to pass in a custom configuration fil
 
 1. Open the terminal window in VS Code and make sure the current folder is `Infrastructure/mosquitto`.
 
-1. Start a Mosquitto MQTT broker by entering the following command:
+1. Start a Mosquitto MQTT broker by entering the following command. Take care to use the correct command; you can ruin your system if you select the wrong one...
 
    **When running on Windows**:
 
