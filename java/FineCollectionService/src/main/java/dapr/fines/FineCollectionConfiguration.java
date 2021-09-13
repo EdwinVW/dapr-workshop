@@ -1,5 +1,7 @@
 package dapr.fines;
 
+import io.dapr.client.DaprClient;
+import io.dapr.client.DaprClientBuilder;
 import dapr.fines.fines.DefaultFineCalculator;
 import dapr.fines.fines.FineCalculator;
 import dapr.fines.vehicle.DaprVehicleRegistrationClient;
@@ -14,15 +16,18 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class FineCollectionConfiguration {
-    // We need to pass this key with every invocation of the FineFines library
-    @Value("${finefines.license-key}")
-    private String fineCalculatorLicenseKey;
+    @Bean
+    public String fineCalculatorLicenseKey(final DaprClient daprClient) {
+        return daprClient.getSecret("trafficcontrol-secrets", "finecalculator.licensekey")
+                .block()
+                .get("finecalculator.licensekey");
+    }
 
     @Value("${vehicle-information.address}")
     private String vehicleInformationAddress;
 
     @Bean
-    public FineCalculator fineCalculator() {
+    public FineCalculator fineCalculator(final String fineCalculatorLicenseKey) {
         return new DefaultFineCalculator(fineCalculatorLicenseKey);
     }
 

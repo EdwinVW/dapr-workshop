@@ -11,10 +11,16 @@ spec:
     - name: port
       value: 4025
     - name: user
-      value: "_username"
+      secretKeyRef:
+        name: smtp.user
+        key: smtp.user
     - name: password
-      value: "_password"
+      secretKeyRef:
+        name: smtp.password
+        key: smtp.password
     - name: skipTLSVerify
       value: true
+auth:
+  secretStore: trafficcontrol-secrets
 scopes:
   - finecollectionservice
