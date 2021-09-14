@@ -230,7 +230,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
             VehicleInfo.class
    );
 
-   return result.block(Duration.ofMillis(100));
+   return result.block(Duration.ofMillis(1000));
    ```
 
    As you can see in this snippet, this code does not require our application to know the _address_ of the Vehicle Registration Service, only it's _name_. With each call to the `DaprClient`, you specify the `app-id` of the service you want to communicate with.
