@@ -26,33 +26,36 @@ And you're done! That's right, you don't need to change anything in order to use
 
 You will use [Mosquitto](https://mosquitto.org/), a lightweight MQTT broker, as the MQTT broker between the simulation and the TrafficControlService. You will run Mosquitto in a Docker container.
 
-In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `Infrastructure/mosquitto` already contains a config file you can use.
+In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. You will create a Docker image that contains the configuration file for the workshop. The folder `Infrastructure/mosquitto` already contains the correct config file you can use.
 
 1. Open the terminal window in VS Code and make sure the current folder is `Infrastructure/mosquitto`.
 
+1. Create the custom Docker image by entering the following command:
+
+   ```console
+   docker build -t dapr-trafficcontrol/mosquitto .
+   ```
+
+1. Check whether the image was created successfully by entering the following command:
+
+   ```console
+   docker images
+   ```
+
+   You should see that the image is available on your machine:
+
+   ```console
+   REPOSITORY                      TAG      IMAGE ID      CREATED       SIZE
+   dapr-trafficcontrol/mosquitto   latest   3875762720a9  2 hours       9.95MB
+   ```
+
 1. Start a Mosquitto MQTT broker by entering the following command:
 
-   **When running on Windows**:
-
    ```console
-   docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   docker run -d -p 1883:1883 --name dtc-mosquitto dapr-trafficcontrol/mosquitto
    ```
 
-   **When running on Mac or Linux**:
-
-   ```console
-   docker run -d -p 1883:1883 -p 9001:9001 -v $(pwd)/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
-   ```
-
-This will pull the docker image `eclipse-mosquitto` from Docker Hub and start it. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on port `1883` for MQTT traffic.
-
-The `-v` flag specifies a Docker volume mount. It mounts the current folder (containing the config file) as the ``/mosquitto/config/` folder in the container. Mosquitto reads its config file from that folder.  
-
-If everything goes well, you should see some output like this:
-
-![](img/docker-mosquitto-output.png)
-
-> If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
+This will start a container based on the `dapr-trafficcontrol/mosquitto` image. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on ports `1883` and `9001` for MQTT traffic.
 
 The container will keep running in the background. If you want to stop it, enter the following command:
 
