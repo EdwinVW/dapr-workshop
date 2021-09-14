@@ -52,7 +52,7 @@ In order to connect to Mosquitto, you need to pass in a custom configuration fil
 1. Start the Mosquitto MQTT broker by entering the following command:
 
    ```console
-   docker run -d -p 1883:1883 --name dtc-mosquitto dapr-trafficcontrol/mosquitto
+   docker run -d -p 1883:1883 -p 9001:9001 --name dtc-mosquitto dapr-trafficcontrol/mosquitto
    ```
 
 This will start a container based on the `dapr-trafficcontrol/mosquitto` image. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on ports `1883` and `9001` for MQTT traffic.
