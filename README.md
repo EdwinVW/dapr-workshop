@@ -173,4 +173,13 @@ Now it's time for you to get your hands dirty and start with the first assignmen
 
 2. Before starting with the assignments, I suggest you check-out the code of the different services. You can open the `dotnet` or `java` folder in this repo in VS Code. All folders used in the assignments are specified relative to the root of the folder where you have cloned the dapr-workshop repository.
 
-3. Go to [assignment 1](Assignment01/README.md).
+3. Start with [assignment 1](Assignment01/README.md).
+
+## Dapr for .NET Developers
+
+If you want to learn more about Dapr after doing the workshop, you can read the book "Dapr for .NET developers" that was co-authored by the creators of this workshop. Although the book is targeted at .NET developers, it covers all the concepts and generic APIs of Dapr. So it should also be useful for developers that use a different technology stack.
+
+[Dowload the PDF](https://aka.ms/dapr-ebook)
+[Read it online](https://docs.microsoft.com/dotnet/architecture/dapr-for-net-developers/)
+
+![Dapr for .NET Developers](img/dapr-for-net-devs-cover-thumb.png)

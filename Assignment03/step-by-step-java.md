@@ -32,7 +32,24 @@ This will pull the docker image `rabbitmq:3-management-alpine` from Docker Hub a
 
 If everything goes well, you should see some output like this:
 
-![](img/docker-rmq-output.png)
+```console
+❯ docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-management-alpine
+Unable to find image 'rabbitmq:3-management-alpine' locally
+3-management-alpine: Pulling from library/rabbitmq
+a0d0a0d46f8b: Pull complete
+31312314eeb3: Pull complete
+926937e20d4d: Pull complete
+f5676ddf0782: Pull complete
+ff9526ce7ab4: Pull complete
+6163319fe438: Pull complete
+592def0a276e: Pull complete
+59922d736a7b: Pull complete
+76025ca84b3c: Pull complete
+4965e42a5d3c: Pull complete
+Digest: sha256:8885c08827289c61133d30be68658b67c6244e517931bb7f1b31752a9fcaec73
+Status: Downloaded newer image for rabbitmq:3-management-alpine
+85a98f00f1a87b856008fec85de98c8412eb099e3a7675b87945c777b131d876
+```
 
 > If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
 
