@@ -7,9 +7,10 @@ from os import environ
 app = FastAPI()
 app_settings = settings.ApplicationSettings()
 
+license_key = app_settings.license_key
 
 processor = services.ViolationProcessor(
-    services.FineCalculator(app_settings.license_key),
+    services.FineCalculator(license_key),
     clients.VehicleRegistrationClient(app_settings.vehicle_registration_address)
 )
 
