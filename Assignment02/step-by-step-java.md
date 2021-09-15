@@ -237,7 +237,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
 
    > Also note that the `invokeMethod` method of the `DaprClient` returns a `Mono`. Because we don't want to get distracted by all the possibilities that reactive progamming brings, we immediately invoke `block` to await the result. In a real-world scenario, it would make more sense to propagate that Mono through our application to make it more reactive.
 
-   > At this point, you could consider removing the `vehicle-information.address` entry from the `application.yml` file. The Dapr SDK for Java does not need it.
+   > At this point, you can remove the `vehicle-information.address` entry from the `application.yml` file. The Dapr SDK for Java does not need it.
 
 Now the FineCollectionService is changed to use the Dapr SDK for service invocation. Let's test this.
 
