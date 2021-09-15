@@ -258,7 +258,22 @@ docker logs dtc-mosquitto
 
 You should see connections being made to the server:
 
-![](img/mosquitto-logging.png)
+```console
+❯ docker logs dtc-mosquitto
+1631735130: mosquitto version 2.0.12 starting
+1631735130: Config loaded from /mosquitto/config/mosquitto.conf.
+1631735130: Opening ipv4 listen socket on port 1883.
+1631735130: Opening ipv6 listen socket on port 1883.
+1631735130: mosquitto version 2.0.12 running
+1631735150: New connection from 172.17.0.1:37348 on port 1883.
+1631735150: New connection from 172.17.0.1:37350 on port 1883.
+1631735150: New client connected from 172.17.0.1:37350 as simulation (p2, c1, k60).
+1631735150: Client simulation already connected, closing old connection.
+1631735150: New client connected from 172.17.0.1:37348 as simulation (p2, c1, k60).
+1631735150: New connection from 172.17.0.1:37356 on port 1883.
+1631735150: Client simulation already connected, closing old connection.
+1631735150: New client connected from 172.17.0.1:37356 as simulation (p2, c1, k60).
+```
 
 ## Next assignment
 
