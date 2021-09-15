@@ -67,7 +67,6 @@ Client extension VS Code):
 
    ```console
    > uvicorn vehicle_registration:app --port 6002
-
    INFO:     Started server process [29384]
    INFO:     Waiting for application startup.
    INFO:     Application startup complete.
