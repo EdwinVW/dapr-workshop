@@ -58,7 +58,19 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Check the logging in the terminal window. It should look like this:
 
-   ![VehicleRegistrationService logging](img/logging-vehicleregistrationservice.png)
+   ```console
+   ❯ dotnet run
+   info: Microsoft.Hosting.Lifetime[0]
+         Now listening on: http://localhost:6002
+   info: Microsoft.Hosting.Lifetime[0]
+         Application started. Press Ctrl+C to shut down.
+   info: Microsoft.Hosting.Lifetime[0]
+         Hosting environment: Development
+   info: Microsoft.Hosting.Lifetime[0]
+         Content root path: D:\dev\Dapr\dapr-workshop\dotnet\VehicleRegistrationService
+   info: VehicleRegistrationService.Controllers.VehicleInfoController[0]
+         Retrieving vehicle-info for licensenumber KZ-49-VX
+   ```
 
 ## Step 2. Run the FineCollection service
 
@@ -81,7 +93,27 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Check the logging in the terminal window. It should look like this:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice.png)
+   ```console
+   ❯ dotnet run
+   info: Microsoft.Hosting.Lifetime[0]
+         Now listening on: http://localhost:6001
+   info: Microsoft.Hosting.Lifetime[0]
+         Application started. Press Ctrl+C to shut down.
+   info: Microsoft.Hosting.Lifetime[0]
+         Hosting environment: Development
+   info: Microsoft.Hosting.Lifetime[0]
+         Content root path: D:\dev\Dapr\dapr-workshop\dotnet\FineCollectionService
+   info: System.Net.Http.HttpClient.Default.LogicalHandler[100]
+         Start processing HTTP request GET http://localhost:6002/vehicleinfo/RT-318-K
+   info: System.Net.Http.HttpClient.Default.ClientHandler[100]
+         Sending HTTP request GET http://localhost:6002/vehicleinfo/RT-318-K
+   info: System.Net.Http.HttpClient.Default.ClientHandler[101]
+         Received HTTP response headers after 148.5761ms - 200
+   info: System.Net.Http.HttpClient.Default.LogicalHandler[101]
+         End processing HTTP request after 156.5675ms - 200
+   info: FineCollectionService.Controllers.CollectionController[0]
+         Sent speeding ticket to Cassi Dakes. Road: A12, Licensenumber: RT-318-K, Vehicle: Mercedes SLK, Violation: 15 Km/h, Fine: 130 Euro, On: 20-09-2020 at 08:33:41.
+   ```
 
 ## Step 3. Run the TrafficControl service
 
@@ -99,7 +131,31 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Check the logging in the terminal window. It should look like this:
 
-   ![TrafficControlService logging](img/logging-trafficcontrolservice.png)
+   ```console
+   ❯ dotnet run
+   info: Microsoft.Hosting.Lifetime[0]
+         Now listening on: http://localhost:6000
+   info: Microsoft.Hosting.Lifetime[0]
+         Application started. Press Ctrl+C to shut down.
+   info: Microsoft.Hosting.Lifetime[0]
+         Hosting environment: Development
+   info: Microsoft.Hosting.Lifetime[0]
+         Content root path: D:\dev\Dapr\dapr-workshop\dotnet\TrafficControlService
+   info: TrafficControlService.Controllers.TrafficController[0]
+         ENTRY detected in lane 1 at 10:38:47 of vehicle with license-number XT-346-Y.
+   info: TrafficControlService.Controllers.TrafficController[0]
+         EXIT detected in lane 1 at 10:38:52 of vehicle with license-number XT-346-Y.
+   info: TrafficControlService.Controllers.TrafficController[0]
+         Speeding violation detected (15 KMh) of vehiclewith license-number XT-346-Y.
+   info: System.Net.Http.HttpClient.Default.LogicalHandler[100]
+         Start processing HTTP request POST http://localhost:6001/collectfine
+   info: System.Net.Http.HttpClient.Default.ClientHandler[100]
+         Sending HTTP request POST http://localhost:6001/collectfine
+   info: System.Net.Http.HttpClient.Default.ClientHandler[101]
+         Received HTTP response headers after 254.3259ms - 200
+   info: System.Net.Http.HttpClient.Default.LogicalHandler[101]
+         End processing HTTP request after 264.8462ms - 200
+   ```
 
 1. Also inspect the logging of the FineCollectionService.
 
@@ -108,7 +164,18 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
    You should see the speeding-violation being handled by the FineCollectionService:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice.png)
+   ```console
+   info: System.Net.Http.HttpClient.Default.LogicalHandler[100]
+         Start processing HTTP request GET http://localhost:6002/vehicleinfo/XT-346-Y
+   info: System.Net.Http.HttpClient.Default.ClientHandler[100]
+         Sending HTTP request GET http://localhost:6002/vehicleinfo/XT-346-Y
+   info: System.Net.Http.HttpClient.Default.ClientHandler[101]
+         Received HTTP response headers after 175.9129ms - 200
+   info: System.Net.Http.HttpClient.Default.LogicalHandler[101]
+         End processing HTTP request after 176.0221ms - 200
+   info: FineCollectionService.Controllers.CollectionController[0]
+         Sent speeding ticket to Refugio Petterson. Road: A12, Licensenumber: XT-346-Y, Vehicle: Fiat Panda, Violation: 15 Km/h, Fine: 130 Euro, On: 10-09-2020 at 10:38:52.
+   ```
 
 ## Step 4. Run the simulation
 
@@ -120,7 +187,27 @@ You've tested the APIs directly by using a REST client. Now you're going to run 
 
 1. In the simulation window you should see something like this:
 
-   ![](img/logging-simulation.png)
+   ```console
+   ❯ dotnet run
+   Start camera 2 simulation.
+   Start camera 3 simulation.
+   Start camera 1 simulation.
+   Simulated ENTRY of vehicle with license-number Y-373-JF in lane 2
+   Simulated ENTRY of vehicle with license-number RL-001-D in lane 2
+   Simulated ENTRY of vehicle with license-number TF-352-N in lane 3
+   Simulated ENTRY of vehicle with license-number JY-94-SY in lane 1
+   Simulated ENTRY of vehicle with license-number 4-JSL-09 in lane 1
+   Simulated ENTRY of vehicle with license-number 87-DGR-7 in lane 3
+   Simulated ENTRY of vehicle with license-number 44-FK-64 in lane 2
+   Simulated EXIT of vehicle with license-number Y-373-JF in lane 3
+   Simulated ENTRY of vehicle with license-number TH-822-X in lane 1
+   Simulated ENTRY of vehicle with license-number G-127-SN in lane 2
+   Simulated ENTRY of vehicle with license-number 44-TN-JD in lane 3
+   Simulated ENTRY of vehicle with license-number T-252-NJ in lane 2
+   Simulated ENTRY of vehicle with license-number 1-HXS-04 in lane 2
+   Simulated EXIT of vehicle with license-number RL-001-D in lane 1
+   Simulated ENTRY of vehicle with license-number DJ-940-S in lane 1
+   ```
 
 1. Also check the logging in all the other Terminal windows. You should see all entry- and exit events and any speeding-violations that were detected in the logging.
 

@@ -266,7 +266,25 @@ Obviously, the behavior of the application is exactly the same as before. But ar
 
 1. You should see something similar to this:
 
-   ![CLI output](img/redis-cli.png)
+   ```console
+   ❯ docker exec -it dapr_redis redis-cli
+   127.0.0.1:6379> keys *
+    1) "trafficcontrolservice||18-RSS-4"
+    2) "trafficcontrolservice||84-GJ-06"
+    3) "trafficcontrolservice||KJ-HS-06"
+    4) "trafficcontrolservice||JN-TH-23"
+    5) "trafficcontrolservice||11-GT-84"
+    6) "trafficcontrolservice||RN-KR-35"
+    7) "trafficcontrolservice||10-HYD-5"
+    8) "trafficcontrolservice||YT-66-PY"
+    9) "trafficcontrolservice||ND-841-Y"
+   10) "trafficcontrolservice||T-375-NF"
+   127.0.0.1:6379> hgetall trafficcontrolservice||ND-841-Y
+   1) "version"
+   2) "1"
+   3) "data"
+   4) "{\"licenseNumber\":\"ND-841-Y\",\"entryTimestamp\":\"2021-09-15T11:19:18.1781609+02:00\",\"exitTimestamp\":\"0001-01-01T00:00:00\"}"
+   ```
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management building block supports different state-stores through its component model. So without changing any code but only specifying a different Dapr component configuration, you could use an entirely different storage mechanism.
 

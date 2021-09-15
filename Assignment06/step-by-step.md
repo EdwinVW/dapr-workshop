@@ -289,7 +289,36 @@ docker logs dtc-mosquitto
 
 You should see connections being made to the server:
 
-![](img/mosquitto-logging.png)
+```console
+❯ docker logs dtc-mosquitto
+1631694413: mosquitto version 2.0.11 starting
+1631694413: Config loaded from /mosquitto/config/mosquitto.conf.
+1631694413: Opening ipv4 listen socket on port 1883.
+1631694413: Opening ipv6 listen socket on port 1883.
+1631694413: Opening websockets listen socket on port 9001.
+1631694413: mosquitto version 2.0.11 running
+1631694457: New connection from 172.17.0.1:43718 on port 1883.
+1631694457: New client connected from 172.17.0.1:43718 as cf23b02b-e37b-4b2b-a743-7ab76e3b63f1-producer (p2, c1, k30).
+1631694457: New connection from 172.17.0.1:43724 on port 1883.
+1631694457: New client connected from 172.17.0.1:43724 as 66847156-3b71-40c8-9854-3b43cfea4240-producer (p2, c1, k30).
+1631694457: New connection from 172.17.0.1:43730 on port 1883.
+1631694457: New client connected from 172.17.0.1:43730 as a56d0ff5-380d-4cb9-a4e2-c8d73a162b6c-producer (p2, c1, k30).
+1631694457: New connection from 172.17.0.1:43736 on port 1883.
+1631694457: New client connected from 172.17.0.1:43736 as 4b5b4e9c-6949-4078-9863-38d3538fb8f9-producer (p2, c1, k30).
+1631694462: Client a56d0ff5-380d-4cb9-a4e2-c8d73a162b6c-producer closed its connection.
+1631694462: Client 66847156-3b71-40c8-9854-3b43cfea4240-producer closed its connection.
+1631694462: Client 4b5b4e9c-6949-4078-9863-38d3538fb8f9-producer closed its connection.
+1631694462: Client cf23b02b-e37b-4b2b-a743-7ab76e3b63f1-producer closed its connection.
+1631694465: New connection from 172.17.0.1:43904 on port 1883.
+1631694465: New client connected from 172.17.0.1:43904 as camerasim1 (p2, c0, k0).
+1631694465: New connection from 172.17.0.1:43910 on port 1883.
+1631694465: New client connected from 172.17.0.1:43910 as camerasim2 (p2, c0, k0).
+1631694465: New connection from 172.17.0.1:43916 on port 1883.
+1631694465: New client connected from 172.17.0.1:43916 as camerasim3 (p2, c0, k0).
+1631694510: Client camerasim1 closed its connection.
+1631694510: Client camerasim2 closed its connection.
+1631694510: Client camerasim3 closed its connection.
+```
 
 ## Next assignment
 

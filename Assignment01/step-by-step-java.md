@@ -36,7 +36,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 1. Click on `Send request` in the file to send a request to the API:
 
    ![REST client](img/rest-client.png)
-
+   
 1. The response of the request will be shown in a separate window on the right. It should be a response with HTTP status code `200 OK` and the body should contain some random vehicle and owner-information:
 
    ```json
