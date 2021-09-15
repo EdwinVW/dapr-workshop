@@ -2,11 +2,14 @@ from . import clients, models, templates
 
 
 class FineCalculator:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, license_key: str) -> None:
+        self._license_key = license_key
 
     def calculate_fine(self, excess_speed: int) -> int:
         fine = 9  # Default administration costs
+
+        if self._license_key != "HX783-K2L7V-CRJ4A-5PN1G":
+            raise ValueError("Invalid license key")
 
         if excess_speed < 5:
             fine += 18

@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from fastapi.responses import Response
 from . import models, settings, services, clients
+from os import environ
 
 
 app = FastAPI()
 app_settings = settings.ApplicationSettings()
 
+
 processor = services.ViolationProcessor(
-    services.FineCalculator(), 
+    services.FineCalculator(app_settings.license_key),
     clients.VehicleRegistrationClient(app_settings.vehicle_registration_address)
 )
 
