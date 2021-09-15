@@ -29,7 +29,7 @@ As a reminder, this is how the services will interact with each other:
 4. Run the command `pip install -r requirements.txt`
 5. Start the service using `uvicorn vehicle_registration:app --port 6002`
 
-> If you receive an error here, please double-check whether or not you have installed all the 
+> If you receive an error here, please double-check whether or not you have installed all the
 > [prerequisites](../README.md#Prerequisites) for the workshop!
 
 Now you can test whether you can call the VehicleRegistrationService. You can do this using a browser, cURL or some
@@ -65,7 +65,15 @@ Client extension VS Code):
 
 4. Check the logging in the terminal window. It should look like this:
 
-   ![VehicleRegistrationService logging](img/logging-vehicleregistrationservice-python.png)
+   ```console
+   > uvicorn vehicle_registration:app --port 6002
+
+   INFO:     Started server process [29384]
+   INFO:     Waiting for application startup.
+   INFO:     Application startup complete.
+   INFO:     Uvicorn running on http://127.0.0.1:6002 (Press CTRL+C to quit)
+   INFO:     127.0.0.1:64855 - "GET /vehicleinfo/KZ-49-VX HTTP/1.1" 200 OK
+   ```
 
 ## Step 2. Run the FineCollection service
 
@@ -93,7 +101,14 @@ Client extension VS Code):
 
 4. Check the logging in the terminal window. It should look like this:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice-python.png)
+   ```console
+   ❯ uvicorn fine_collection:app --port 6001
+   INFO:     Started server process [3108]
+   INFO:     Waiting for application startup.
+   INFO:     Application startup complete.
+   INFO:     Uvicorn running on http://127.0.0.1:6001 (Press CTRL+C to quit)
+   INFO:     127.0.0.1:52778 - "POST /collectfine HTTP/1.1" 200 OK
+   ```
 
 ## Step 3. Run the TrafficControl service
 
@@ -112,18 +127,29 @@ Client extension VS Code):
 1. The response of the requests will be shown in a separate window on the right. Both requests should yield a response
    with HTTP status code `200 OK` and no body.
 
-2. Check the logging in the terminal window. It should look like this:
+1. Check the logging in the terminal window. It should look like this:
 
-   ![TrafficControlService logging](img/logging-trafficcontrolservice-python.png)
+   ```console
+   ❯ uvicorn traffic_control:app --port 6000
+   INFO      traffic_control - Vehicle XT-346-Y entering lane 1 at 2020-09-10 10:38:47
+   INFO:     127.0.0.1:64933 - "POST /entrycam HTTP/1.1" 200 OKz
+   ```
 
-3. Also inspect the logging of the FineCollectionService.
+1. Also inspect the logging of the FineCollectionService.
 
    > You can do this by selecting another terminal window using the dropdown in the title-bar of the terminal window:
    > ![](img/terminal-dropdown.png)
 
    You should see the speeding-violation being handled by the FineCollectionService:
 
-   ![FineCollectionService logging](img/logging-finecollectionservice-python.png)
+   ```console
+   ❯ uvicorn fine_collection:app --port 6001
+   INFO:     Started server process [8728]
+   INFO:     Waiting for application startup.
+   INFO:     Application startup complete.
+   INFO:     Uvicorn running on http://127.0.0.1:6001 (Press CTRL+C to quit)
+   INFO:     127.0.0.1:49916 - "POST /collectfine HTTP/1.1" 200 OK
+   ```
 
 ## Step 4. Run the simulation
 
@@ -138,7 +164,16 @@ cars driving on the highway. The simulation will simulate 3 entry- and exit-came
 
 1. In the simulation window you should see something like this:
 
-   ![](img/logging-simulation-python.png)
+   ```console
+   ❯ python simulation
+   Starting agent 0...
+   Starting agent 1...
+   Starting agent 2...
+   Simulation started. Press Ctrl+C to exit.
+   Sent car 20-TK-YH into the traffic control system
+   Sent car ZD-84-GG into the traffic control system
+   Sent car PZ-36-FF into the traffic control system
+   ```
 
 1. Also check the logging in all the other Terminal windows. You should see all entry- and exit events and any
    speeding-violations that were detected in the logging.
