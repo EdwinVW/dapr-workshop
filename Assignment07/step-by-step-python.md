@@ -130,7 +130,11 @@ the application so it loads the license key as a secret.
 
 1. Open the file `python\FineCollectionService\fine_collection\__init__.py` in VS Code.
 
-2. Add the following import to the top of the file: `from dapr.clients import DaprClient`.
+2. Add the following import to the top of the file:
+
+   ```python
+   from dapr.clients import DaprClient
+   ```
 
 3. Replace the assignment of the `license_key` variable with the following code:
 
