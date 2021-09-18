@@ -4,7 +4,6 @@ from fastapi.responses import Response
 from . import events, repositories, services, models, clients, settings
 
 
-logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
