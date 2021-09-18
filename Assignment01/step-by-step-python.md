@@ -130,8 +130,13 @@ Client extension VS Code):
 
    ```console
    ❯ uvicorn traffic_control:app --port 6000
-   INFO      traffic_control - Vehicle XT-346-Y entering lane 1 at 2020-09-10 10:38:47
-   INFO:     127.0.0.1:64933 - "POST /entrycam HTTP/1.1" 200 OKz
+   INFO:     Started server process [29680]
+   INFO:     Waiting for application startup.
+   INFO:     Application startup complete.
+   INFO:     Uvicorn running on http://127.0.0.1:6000 (Press CTRL+C to quit)
+   INFO:     127.0.0.1:56477 - "POST /entrycam HTTP/1.1" 200 OK
+   Vehicle XT-346-Y is over the speed limit. Collecting fine
+   INFO:     127.0.0.1:56478 - "POST /exitcam HTTP/1.1" 200 OK
    ```
 
 1. Also inspect the logging of the FineCollectionService.
