@@ -26,7 +26,7 @@ As a reminder, this is how the services will interact with each other:
 
 3. Make sure the current folder is `python/VehicleRegistrationService`.
 
-4. Run the command `pip install -r requirements.txt`
+4. Run the command `pip3 install -r requirements.txt`
 5. Start the service using `uvicorn vehicle_registration:app --port 6002`
 
 > If you receive an error here, please double-check whether or not you have installed all the
@@ -86,7 +86,7 @@ Client extension VS Code):
 
 1. Make sure the current folder is `python/FineCollectionService`.
 
-1. Run the command `pip install -r requirements.txt`
+1. Run the command `pip3 install -r requirements.txt`
 
 1. Start the service using `uvicorn fine_collection:app --port 6001`.
 
@@ -115,7 +115,7 @@ Client extension VS Code):
 
 1. Open a **new** terminal window in VS Code and make sure the current folder is `python/TrafficControlService`.
 
-1. Run the command `pip install -r requirements.txt`
+1. Run the command `pip3 install -r requirements.txt`
 
 1. Start the service using `uvicorn traffic_control:app --port 6000`.
 
@@ -157,7 +157,7 @@ cars driving on the highway. The simulation will simulate 3 entry- and exit-came
 
 1. Open a new terminal window in VS Code and make sure the current folder is `python/Simulation`.
 
-1. Run the command `pip install -r requirements.txt`
+1. Run the command `pip3 install -r requirements.txt`
 
 1. Start the service using `python simulation`.
 

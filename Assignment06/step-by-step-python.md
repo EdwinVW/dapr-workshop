@@ -164,8 +164,8 @@ In this step you change the Camera Simulation so it sends MQTT messages instead 
 
 1. Add a dependency to the Simulation executing the following command in your terminal:
 
-    ```xml
-    pip install paho-mqtt
+    ```console
+    pip3 install paho-mqtt
     ```
 
 1. Open the file `python\Simulation\simulation\traffic_simulation\clients.py` file in VS Code.
