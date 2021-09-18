@@ -105,7 +105,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
    As you can see in this URL, the FineCollectionService's Dapr sidecar will run on HTTP port `3601`.
 
-5. Replace the URL in the configuration file with the new Dapr service invocation URL. The file should now look like
+5. Replace the URL in the configuration file with the new Dapr service invocation URL. The line should now look like
    this:
 
    ```sh
