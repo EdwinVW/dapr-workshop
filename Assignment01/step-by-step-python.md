@@ -159,7 +159,7 @@ cars driving on the highway. The simulation will simulate 3 entry- and exit-came
 
 1. Run the command `pip3 install -r requirements.txt`
 
-1. Start the service using `python simulation`.
+1. Start the service using `python3 simulation`.
 
 1. In the simulation window you should see something like this:
 

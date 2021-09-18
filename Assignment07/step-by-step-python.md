@@ -182,7 +182,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Start the simulation:
 
    ```console
-   python simulation
+   python3 simulation
    ```
 
 You should see the same logs as before.

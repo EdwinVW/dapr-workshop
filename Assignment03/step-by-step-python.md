@@ -345,7 +345,7 @@ TrafficControlService that sends messages.
 1. Run the following command to install the dapr SDK for python
 
    ```console
-   pip install dapr
+   pip3 install dapr
    ```
 
 2. Open the file `python\TrafficControlService\traffic_control\clients.py`.

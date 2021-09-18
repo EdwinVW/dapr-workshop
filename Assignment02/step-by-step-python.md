@@ -150,7 +150,7 @@ The services are up & running. Now you're going to test this using the simulatio
 2. Start the simulation:
 
    ```console
-   python simulation
+   python3 simulation
    ```
 
 You should see similar logging as before when you ran the application. So all the functionality works the same, but now
@@ -175,7 +175,7 @@ First stop the simulation:
 5. Run the following command to install the Dapr SDK for Python:
 
    ```console
-   pip install dapr
+   pip3 install dapr
    ```
 
    > The Dapr SDK for Python contains the `DaprClient` class that we will use to directly invoke the Dapr API. There
@@ -238,7 +238,7 @@ The services are up & running. Now you're going to test this using the simulatio
 1. Start the simulation:
 
    ```console
-   python simulation
+   python3 simulation
    ```
 
 You should see similar logging as before when you ran the application.
