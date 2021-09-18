@@ -37,7 +37,7 @@ specify when starting the service:
   | FineCollectionService      | 6001             | 3601                   | 60001                  |
   | VehicleRegistrationService | 6002             | 3602                   | 60002                  |
 
-- Finally you need to tell Dapr how to start the service. The services are Java/Spring Boot services which can be
+- Finally you need to tell Dapr how to start the service. The services are Python services which can be
   started with the command `uvicorn <app>`.
 
 You will use the `run` command of the Dapr CLI and specify all the options above on the command-line:
