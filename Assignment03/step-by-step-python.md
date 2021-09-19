@@ -332,7 +332,7 @@ the subscription for the `speedingviolations` topic.
 6. Start the updated FineCollectionService:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components uvicorn fine_collection:app --port 6001
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components -- uvicorn fine_collection:app --port 6001
    ```
 
 7. After you've looked at the log output and confirmed that everything works, you can stop all the services.
