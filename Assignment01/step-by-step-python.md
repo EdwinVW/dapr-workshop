@@ -29,8 +29,11 @@ As a reminder, this is how the services will interact with each other:
 4. Run the command `pip3 install -r requirements.txt`
 5. Start the service using `uvicorn vehicle_registration:app --port 6002`
 
+> **Note** The `uvicorn` command may not work if you're running on Linux/Ubuntu.
+> You can run the command `sudo apt install uvicorn` to make `uvicorn` available on your system.
+
 > If you receive an error here, please double-check whether or not you have installed all the
-> [prerequisites](../README.md#Prerequisites) for the workshop!
+> [prerequisites](../README.md#Prerequisites) for the workshop! 
 
 Now you can test whether you can call the VehicleRegistrationService. You can do this using a browser, cURL or some
 other HTTP client. But there is a convenient way of testing RESTful APIs directly from VS Code (this uses the REST
