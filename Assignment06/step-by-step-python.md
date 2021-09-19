@@ -191,7 +191,7 @@ instead of the HTTP endpoint.
    self.messaging_adapter.publish("trafficcontrol/exitcam", payload=evt.json())
    ```
 
-1. Add the following lines to the `__init__` method of the `TrafficControl` class.
+1. Add the following lines to the `__init__` method of the `TrafficControlClient` class.
 
    ```python
    self.messaging_adapter = Client(client_id="simulation")
