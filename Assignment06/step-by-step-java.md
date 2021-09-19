@@ -26,33 +26,36 @@ And you're done! That's right, you don't need to change anything in order to use
 
 You will use [Mosquitto](https://mosquitto.org/), a lightweight MQTT broker, as the MQTT broker between the simulation and the TrafficControlService. You will run Mosquitto in a Docker container.
 
-In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. With Docker, you can pass a configuration file when starting a container using a so called *Volume mount*. The folder `Infrastructure/mosquitto` already contains a config file you can use.
+In order to connect to Mosquitto, you need to pass in a custom configuration file when starting it. You will create a Docker image that contains the configuration file for the workshop. The folder `Infrastructure/mosquitto` already contains the correct config file you can use.
 
 1. Open the terminal window in VS Code and make sure the current folder is `Infrastructure/mosquitto`.
 
-1. Start a Mosquitto MQTT broker by entering the following command:
-
-    **When running on Windows**:
+1. Create the custom Docker image by entering the following command:
 
    ```console
-   docker run -d -p 1883:1883 -p 9001:9001 -v $pwd/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   docker build -t dapr-trafficcontrol/mosquitto .
    ```
 
-   **When running on Mac or Linux**:
+1. Check whether the image was created successfully by entering the following command:
 
    ```console
-   docker run -d -p 1883:1883 -p 9001:9001 -v $(pwd)/:/mosquitto/config/ --name dtc-mosquitto eclipse-mosquitto
+   docker images
    ```
 
-This will pull the docker image `eclipse-mosquitto` from Docker Hub and start it. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on port `1883` for MQTT traffic.
+   You should see that the image is available on your machine:
 
-The `-v` flag specifies a Docker volume mount. It mounts the current folder (containing the config file) as the ``/mosquitto/config/` folder in the container. Mosquitto reads its config file from that folder.  
+   ```console
+   REPOSITORY                      TAG      IMAGE ID      CREATED       SIZE
+   dapr-trafficcontrol/mosquitto   latest   3879166620c2  2 hours       9.95MB
+   ```
 
-If everything goes well, you should see some output like this:
+1. Start the Mosquitto MQTT broker by entering the following command:
 
-![](img/docker-mosquitto-output.png)
+   ```console
+   docker run -d -p 1883:1883 -p 9001:9001 --name dtc-mosquitto dapr-trafficcontrol/mosquitto
+   ```
 
-> If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
+This will start a container based on the `dapr-trafficcontrol/mosquitto` image. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on ports `1883` and `9001` for MQTT traffic.
 
 The container will keep running in the background. If you want to stop it, enter the following command:
 
@@ -249,7 +252,7 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
            return handler;
        }
    }
-   ```
+  ```
 
 1. Inspect the code. This Spring configuration class declares the two `IntegrationFlow` instances. They are very much alike: both of them convert an incoming message to JSON, add a header that in turn will be translated to an MQTT topic and finally hand the messages over to the MQTT client.
 
@@ -324,7 +327,36 @@ docker logs dtc-mosquitto
 
 You should see connections being made to the server:
 
-![](img/mosquitto-logging.png)
+```console
+❯ docker logs dtc-mosquitto
+1631694413: mosquitto version 2.0.11 starting
+1631694413: Config loaded from /mosquitto/config/mosquitto.conf.
+1631694413: Opening ipv4 listen socket on port 1883.
+1631694413: Opening ipv6 listen socket on port 1883.
+1631694413: Opening websockets listen socket on port 9001.
+1631694413: mosquitto version 2.0.11 running
+1631694457: New connection from 172.17.0.1:43718 on port 1883.
+1631694457: New client connected from 172.17.0.1:43718 as cf23b02b-e37b-4b2b-a743-7ab76e3b63f1-producer (p2, c1, k30).
+1631694457: New connection from 172.17.0.1:43724 on port 1883.
+1631694457: New client connected from 172.17.0.1:43724 as 66847156-3b71-40c8-9854-3b43cfea4240-producer (p2, c1, k30).
+1631694457: New connection from 172.17.0.1:43730 on port 1883.
+1631694457: New client connected from 172.17.0.1:43730 as a56d0ff5-380d-4cb9-a4e2-c8d73a162b6c-producer (p2, c1, k30).
+1631694457: New connection from 172.17.0.1:43736 on port 1883.
+1631694457: New client connected from 172.17.0.1:43736 as 4b5b4e9c-6949-4078-9863-38d3538fb8f9-producer (p2, c1, k30).
+1631694462: Client a56d0ff5-380d-4cb9-a4e2-c8d73a162b6c-producer closed its connection.
+1631694462: Client 66847156-3b71-40c8-9854-3b43cfea4240-producer closed its connection.
+1631694462: Client 4b5b4e9c-6949-4078-9863-38d3538fb8f9-producer closed its connection.
+1631694462: Client cf23b02b-e37b-4b2b-a743-7ab76e3b63f1-producer closed its connection.
+1631694465: New connection from 172.17.0.1:43904 on port 1883.
+1631694465: New client connected from 172.17.0.1:43904 as camerasim1 (p2, c0, k0).
+1631694465: New connection from 172.17.0.1:43910 on port 1883.
+1631694465: New client connected from 172.17.0.1:43910 as camerasim2 (p2, c0, k0).
+1631694465: New connection from 172.17.0.1:43916 on port 1883.
+1631694465: New client connected from 172.17.0.1:43916 as camerasim3 (p2, c0, k0).
+1631694510: Client camerasim1 closed its connection.
+1631694510: Client camerasim2 closed its connection.
+1631694510: Client camerasim3 closed its connection.
+```
 
 ## Next assignment
 
