@@ -59,21 +59,24 @@ class CameraSimulation:
             sleep(random.randrange(50, 5000) / 1000)  # wait for a little bit before sending the next car in.
 
             license_number = generate_license_number()
+            lane_number = random.randint(1, self.lanes)
 
             self.client.send_vehicle_entry(events.VehicleRegistered(
-                lane=random.randint(1, self.lanes),
+                lane=lane_number,
                 licenseNumber=license_number,
                 timestamp=datetime.now()
             ))
 
-            print(f"Sent car {license_number} into the traffic control system")
+            print(f"Simulated ENTRY of vehicle with license number {license_number} in lane {lane_number}")
 
             sleep(random.randrange(1, 3))  # wait before exiting the lane on the other side.
 
+            lane_number = random.randint(1, self.lanes)
+
             self.client.send_vehicle_exit(events.VehicleRegistered(
-                lane=random.randint(1, self.lanes),
+                lane=lane_number,
                 licenseNumber=license_number,
                 timestamp=datetime.now()
             ))
 
-            print(f"Car {license_number} left the traffic control system")
+            print(f"Simulated EXIT of vehicle with license number {license_number} in lane {lane_number}")
