@@ -296,6 +296,8 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
+   > If you kept the other services running before you started with this step, you may observe that there a few speeding limitations waiting to be processed. The application will immediately start processing this backlog.
+
 1. After you've looked at the log output and confirmed that everything works, you can stop all the services.
 
 ## Step 7: Use Dapr publish / subscribe with the Dapr SDK for .NET

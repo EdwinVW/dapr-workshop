@@ -28,7 +28,7 @@ First, you will add a secrets management component configuration to the project:
            "password": "_password"
        },
        "finecalculator":{
-           "licensekey": "HX783-K2L7V-CRJ4A-5PN1G"
+           "licensekey": "HX783-5PN1G-CRJ4A-K2L7V"
        }
    }
    ```
@@ -115,7 +115,7 @@ You will now change the Spring configuration so it retrieves the license key fro
 
 1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/FineCollectionConfiguration.java` in VS Code.
 
-1. Replace the line with the `fineCalculatorLicenseKey` instance variable as well as the `@Value` annotation above it. Replace it with the following code:
+1. Remove the line with the `fineCalculatorLicenseKey` instance variable as well as the `@Value` annotation above it. Replace them with the following code:
 
    ```java
    @Bean

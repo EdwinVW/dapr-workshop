@@ -265,6 +265,8 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
   }
   ```
 
+  Also add an import for the `IntegrationFlow` class: `import org.springframework.integration.dsl.IntegrationFlow;`.
+
 1. Open the terminal window in VS Code and make sure the current folder is `java/Simulation`.
 
 1. Check all your code changes are correct by building the code. Execute the following command in the terminal window:

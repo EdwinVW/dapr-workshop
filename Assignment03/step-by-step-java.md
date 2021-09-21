@@ -186,7 +186,7 @@ Now your FineCollectionService is ready to receive messages through Dapr pub/sub
 
    > This enables you to get to the raw JSON in the request.
 
-1. Add the following code in the body of the method to extract the `SpeedingViolation` data from the event:
+1. Add the following code in the body of the method to extract the `SpeedingViolation` data from the event, just before the call to `violationProcessor.processSpeedingViolation`:
 
    ```java
    var data = event.get("data");
@@ -280,6 +280,15 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
    }
    ```
 
+   Add the following imports to the class:
+
+   ```java
+   import org.springframework.web.bind.annotation.GetMapping;
+   import java.util.Collections;
+   import java.util.List;
+   import java.util.Map;
+   ```
+
 1. Remove the file `src/dapr/components/subscription.yaml`. This file is not needed anymore because you implemented the `/dapr/subscribe` method.
 
 1. Go back to the terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
@@ -298,6 +307,8 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components mvn spring-boot:run
    ```
 
+   > If you kept the other services running before you started with this step, you may observe that there a few speeding limitations waiting to be processed. The application will immediately start processing this backlog.
+
 1. After you've looked at the log output and confirmed that everything works, you can stop all the services.
 
 ## Step 7: Use Dapr publish / subscribe with the Dapr SDK for Java
@@ -315,15 +326,17 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
 
    Again, the version of the dependency is managed using Mavens "dependency management" - you can inspect the pom.xml file inside the java folder to see the exact version.
 
-1. Create a new file, java/TrafficControlService/src/main/java/dapr/traffic/fines/DaprFineCollectionClient.java and open it in VS Code.
+1. Create a new file, **java/TrafficControlService/src/main/java/dapr/traffic/fines/DaprFineCollectionClient.java** and open it in VS Code. Make sure to include a package declaration: `package dapr.traffic.fines;`.
 
-1. Declare a class DaprFineCollectionClient that implements the FineCollectionClient interface. To fulfil the contract of the FineCollectionClient interface, add the following method:
+1. Declare a class `DaprFineCollectionClient` that implements the `FineCollectionClient` interface. To fulfil the contract of the `FineCollectionClient` interface, add the following method:
 
   ```java
   @Override
   public void submitForFine(SpeedingViolation speedingViolation) {
   }
   ```
+
+  Add an import for the `SpeedingViolation` class: `import dapr.traffic.violation.SpeedingViolation;`.
 
 1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java` in VS Code. The default JSON serialization is not suitable for todays goal, so you need to customize the Jackson `ObjectMapper` that it uses. You do so by adding a static inner class to configure the JSON serialization:
 
@@ -349,7 +362,7 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   }
   ```
 
-  In the same class, the fineCollectionClient method declares a Spring Bean that provides an implementation of the FineCollectionClient interface. To do so, it needs a RestTemplate bean. Replace this method with the following:
+  In the same class, the `fineCollectionClient` method declares a Spring Bean that provides an implementation of the FineCollectionClient interface. To do so, it needs a RestTemplate bean. Replace this method with the following:
 
   ```java
   @Bean
@@ -361,12 +374,15 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   Finally, update the import statements in the class:
 
   ```java
+  import com.fasterxml.jackson.databind.SerializationFeature;
+  import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
   import dapr.traffic.fines.DaprFineCollectionClient;
   import io.dapr.client.DaprClient;
   import io.dapr.client.DaprClientBuilder;
+  import io.dapr.serializer.DefaultObjectSerializer;
   ```
 
-1. Go back to the DaprFineCollectionClient implementation class and add a using statement in this file to make sure you can use the Dapr client:
+1. Go back to the `DaprFineCollectionClient` implementation class and add an import statement in this file to make sure you can use the Dapr client:
 
   ```java
   import io.dapr.client.DaprClient;
@@ -419,18 +435,6 @@ Now you will change the FineCollectionService that receives messages. The Dapr S
    public ResponseEntity<Void> registerViolation(@RequestBody final CloudEvent event) {
    ```
 
-1. Change the code that parses the cloud event data at the beginning of the method:
-
-   ```java
-   var data = (Map<String, Object>) event.getData();
-   var violation = new SpeedingViolation(
-       (String) data.get("licenseNumber"),
-       (String) data.get("roadId"),
-       (Integer) data.get("excessSpeed"),
-       LocalDateTime.parse((String) data.get("timestamp"))
-   );
-   ```
-
 1. Add an import for the `io.dapr.Topic` class. Add a `@Topic` annotation above the `registerViolation` method to link this method to a topic called `speedingviolations`:
 
    ```java
@@ -451,3 +455,8 @@ Now you will change the FineCollectionService that receives messages. The Dapr S
 
 Now you can test the application again. Execute the activities in step 5 again.
 
+## Next assignment
+
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
+
+Go to [assignment 4](../Assignment04/README.md).

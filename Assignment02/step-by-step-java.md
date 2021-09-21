@@ -163,7 +163,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
 
 1. Create a new file, `java/FineCollectionService/src/main/java/dapr/fines/vehicle/DaprVehicleRegistrationClient.java` and open it in VS Code.
 
-1. Declare a class `DaprVehicleRegistrationClient` that implements the `VehicleRegistrationClient` interface. To fulfil the contract of the `VehicleRegistrationClient` interface, add the following method:
+1. Declare a class `DaprVehicleRegistrationClient` that implements the `VehicleRegistrationClient` interface. Make sure to include a package declaration: `package dapr.fines.vehicle;`. To fulfil the contract of the `VehicleRegistrationClient` interface, add the following method:
 
    ```java
    @Override
@@ -219,7 +219,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
        }
    ```
 
-   Finally, update the `getVehicleInfo()` method in this class to use the `DaprClient`:
+   Finally, update the implementation of the `getVehicleInfo()` method in this class to use the `DaprClient`:
 
    ```java
    var result = daprClient.invokeMethod(
@@ -236,6 +236,8 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
    As you can see in this snippet, this code does not require our application to know the _address_ of the Vehicle Registration Service, only it's _name_. With each call to the `DaprClient`, you specify the `app-id` of the service you want to communicate with.
 
    > Also note that the `invokeMethod` method of the `DaprClient` returns a `Mono`. Because we don't want to get distracted by all the possibilities that reactive progamming brings, we immediately invoke `block` to await the result. In a real-world scenario, it would make more sense to propagate that Mono through our application to make it more reactive.
+
+   > At this point, you can remove the `vehicle-information.address` entry from the `application.yml` file. The Dapr SDK for Java does not need it.
 
 Now the FineCollectionService is changed to use the Dapr SDK for service invocation. Let's test this.
 

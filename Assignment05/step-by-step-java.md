@@ -80,10 +80,11 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
 1. Inspect the code of the `processSpeedingViolation` method. There's a TODO comment at the end of the method. You'll add code to complete this TODO and actually send an email.
 
-1. Add an import statement in the `ViolationProcessor` class so you can use the Dapr client:
+1. Add two import statements in the `ViolationProcessor` class so you can use the Dapr client and the `EmailGenerator` class
 
      ```java
      import io.dapr.client.DaprClient;
+     import dapr.fines.fines.EmailGenerator;
      ```
 
 1. Add an instance variable `daprClient` of type `DaprClient`, and an instance variable `emailGenerator`of type `EmailGenerator`. Also update the constructor to accept similar arguments:

@@ -212,6 +212,8 @@ Now you need to make sure Spring will use the Dapr-based repository rather than 
   }
   ```
 
+  Also, add an import to this class: `import dapr.traffic.vehicle.DaprVehicleStateRepository;`.
+
 1. Open the terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
@@ -322,10 +324,11 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/vehicle/DaprVehicleStateRepository.java` in VS Code.
 
-1. Add an import statement for the Dapr client:
+1. Add two import statements for the Dapr client:
 
    ```java
    import io.dapr.client.DaprClient;
+   import io.dapr.client.domain.State;
    ```
    
 1. Replace the `RestTemplate` instance variable with a different name and different type. Also replace the constructor:
@@ -394,6 +397,15 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
                    .map(State::getValue);
        }
    }
+   ```
+
+1. Open the file `java/TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java`. Replace the `vehicleStateRepository` method with the following implementation:
+
+   ```java
+    @Bean
+    public VehicleStateRepository vehicleStateRepository(final DaprClient daprClient) {
+        return new DaprVehicleStateRepository(daprClient);
+    }
    ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `java/TrafficControlService`.
