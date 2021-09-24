@@ -27,7 +27,7 @@ class FineCollectionClient:
             headers=request_headers
         )
 
-        if response.status_code != 200:
+        if not response.ok:
             logger.error(
                 "Received status %i from finecollection service: %s",
                 response.status_code,
