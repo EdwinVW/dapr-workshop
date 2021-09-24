@@ -2,6 +2,7 @@
     "recommendations": [
         "vscjava.vscode-java-pack",
         "humao.rest-client",
-        "ms-dotnettools.csharp"
+        "ms-dotnettools.csharp",
+        "ms-python.python"
     ]
 }
