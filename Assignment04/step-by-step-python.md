@@ -82,10 +82,10 @@ state:
 
     ```python
     state_entry = [
-         dict(key=vehicle_state.license_number, value=vehicle_state.json()),
-     ]
+        dict(key=vehicle_state.license_number, value=vehicle_state.json()),
+    ]
 
-     requests.post("http://localhost:3600/v1.0/state/statestore/", json=state_entry)
+    requests.post("http://localhost:3600/v1.0/state/statestore/", json=state_entry)
     ```
 
     This may look a little cryptic. So let's take a look at what we're doing here. We create a new list of state entries
