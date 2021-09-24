@@ -69,7 +69,7 @@ class CameraSimulation:
 
             print(f"Simulated ENTRY of vehicle with license number {license_number} in lane {lane_number}")
 
-            sleep(random.randrange(1, 3))  # wait before exiting the lane on the other side.
+            sleep(random.randrange(1, 4))  # wait before exiting the lane on the other side.
 
             lane_number = random.randint(1, self.lanes)
 
