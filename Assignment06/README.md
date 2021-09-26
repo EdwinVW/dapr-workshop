@@ -24,11 +24,15 @@ This assignment targets number **5** in the end-state setup:
 
 ## DIY instructions
 
-First open the `dotnet` or `java` folder in this repo in VS Code. Then open the [Bindings documentation](https://docs.dapr.io/developing-applications/building-blocks/bindings/) and start hacking away. As MQTT broker, you can use the lightweight MQTT broker [Mosquitto](https://mosquitto.org/).
+First open the `dotnet`, `java` or `python` folder in this repo in VS Code. Then open the [Bindings documentation](https://docs.dapr.io/developing-applications/building-blocks/bindings/) and start hacking away. As MQTT broker, you can use the lightweight MQTT broker [Mosquitto](https://mosquitto.org/).
 
 ## Step by step instructions
 
-To get step-by-step instructions to achieve the goals, open the step-by-step instructions [for .NET](step-by-step.md) or [for Java](step-by-step-java.md).
+To get step-by-step instructions to achieve the goals, open the step-by-step instructions:
+
+- [for .NET](step-by-step.md)
+- [for Java](step-by-step-java.md)
+- [for Python](step-by-step-python.md)
 
 ## Next assignment
 

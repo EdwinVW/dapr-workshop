@@ -8,8 +8,13 @@ This repository contains several hands-on assignments that will introduce you to
 - Bindings
 - Secrets management
 
-Because Dapr can be used from several programming languages, we added 2 versions of the hands-on assignments to the workshop. All the assignments can be executed using **.NET (C#)** or **Java**. Please decide which language you want to use, and follow the instructions accordingly.
+Because Dapr can be used from several programming languages, we added 3 versions of the hands-on assignments to the workshop:
 
+- C#
+- Java
+- Python
+
+Before starting the workshop, please choose a language you want to use and follow the instructions for that language.
 You will be using Dapr in self-hosted mode.
 
 ## The domain
@@ -28,7 +33,7 @@ In order to simulate this in code, the following services are defined:
 
 ![Services](img/services.png)
 
-The `dotnet` and `java` folders in the repo contain the starting-point for the workshop. Each folder obviously corresponds to the different programming languages you use during the workshop. The starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
+The `dotnet`, `java` and `python` folders in the repo contain the starting-point for the workshop. Each folder obviously corresponds to the different programming languages you use during the workshop. The starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
 - The **Camera Simulation** simulates passing cars.
 - The **Traffic Control Service** offers 2 HTTP endpoints: `/entrycam` and `/exitcam`. These endpoints can be used simulate a car passing the entry- or exit-cam.
@@ -40,14 +45,14 @@ The way the simulation works is depicted in the sequence diagram below:
 <img src="img/sequence.png" alt="Sequence diagram" style="zoom:67%;" />
 
 1. The Camera Simulation generates a random license-number and sends a *VehicleRegistered* message (containing this license-number, a random entry-lane (1-3) and the timestamp) to the `/entrycam` endpoint of the TrafficControlService.
-1. The TrafficControlService stores the *VehicleState* (license-number and entry-timestamp).
-1. After some random interval, the Camera Simulation sends a *VehicleRegistered* message to the `/exitcam` endpoint of the TrafficControlService (containing the license-number generated in step 1, a random exit-lane (1-3) and the exit timestamp).
-1. The TrafficControlService retrieves the *VehicleState* that was stored at vehicle entry.
-1. The TrafficControlService calculates the average speed of the vehicle using the entry- and exit-timestamp. It also stores the *VehicleState* with the exit timestamp for audit purposes, but this is left out of the sequence diagram for clarity.
-1. If the average speed is above the speed-limit, the TrafficControlService calls the `/collectfine` endpoint of the FineCollectionService. The request payload will be a *SpeedingViolation* containing the license-number of the vehicle, the identifier of the road, the speeding-violation in KMh and the timestamp of the violation.
-1. The FineCollectionService calculates the fine for the speeding-violation.
-1. The FineCollectionSerivice calls the `/vehicleinfo/{license-number}` endpoint of the VehicleRegistrationService with the license-number of the speeding vehicle to retrieve its vehicle- and owner-information.
-1. The FineCollectionService sends a fine to the owner of the vehicle by email.
+2. The TrafficControlService stores the *VehicleState* (license-number and entry-timestamp).
+3. After some random interval, the Camera Simulation sends a *VehicleRegistered* message to the `/exitcam` endpoint of the TrafficControlService (containing the license-number generated in step 1, a random exit-lane (1-3) and the exit timestamp).
+4. The TrafficControlService retrieves the *VehicleState* that was stored at vehicle entry.
+5. The TrafficControlService calculates the average speed of the vehicle using the entry- and exit-timestamp. It also stores the *VehicleState* with the exit timestamp for audit purposes, but this is left out of the sequence diagram for clarity.
+6. If the average speed is above the speed-limit, the TrafficControlService calls the `/collectfine` endpoint of the FineCollectionService. The request payload will be a *SpeedingViolation* containing the license-number of the vehicle, the identifier of the road, the speeding-violation in KMh and the timestamp of the violation.
+7. The FineCollectionService calculates the fine for the speeding-violation.
+8. The FineCollectionSerivice calls the `/vehicleinfo/{license-number}` endpoint of the VehicleRegistrationService with the license-number of the speeding vehicle to retrieve its vehicle- and owner-information.
+9. The FineCollectionService sends a fine to the owner of the vehicle by email.
 
 All actions described in this sequence are logged to the console during execution so you can follow the flow.
 
@@ -96,6 +101,11 @@ For the Java assignments:
 - Apache Maven 3.6.3 or above is required; Apache Maven 3.8.1 is advised ([download](http://maven.apache.org/download.cgi))
   - Make sure that Maven uses the correct Java runtime by running `mvn -version`.
 
+For the Python assignments:
+
+- Python 3.9 ([download](https://www.python.org/downloads/))
+- Python Extension for Visual Studio Code ([download](https://marketplace.visualstudio.com/items?itemName=ms-python.python))
+
 All scripts in the instructions are Powershell scripts. If you're working on a Mac, it is recommended to install Powershell for Mac:
 
 - Powershell for Mac ([instructions](https://docs.microsoft.com/nl-nl/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
@@ -112,6 +122,7 @@ The workshop has been tested with the following versions:
 | Dapr CLI version          | v1.3.0  |
 | .NET version              | .NET 5  |
 | Java version              | Java 16 |
+| Python version            | 3.9.6   |
 
 ### Instructions
 
@@ -119,7 +130,7 @@ Every assignment is contained in a separate folder in this repo. Each folder con
 
 **It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.**
 
-The `dotnet` and `java` folders in the repo contain the starting-point for the workshop. Each folder obviously corresponds to the different programming languages you use during the workshop. The starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
+The `dotnet`, `java`, and `python` folders in the repo contain the starting-point for the workshop. Each folder obviously corresponds to the different programming languages you use during the workshop. The starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
 Every assignment offers instructions on how to complete the assignment. With the exception of assignment 1, each assignment offers two versions of the instructions: the **DIY** version and the **step-by-step** version. The DIY version just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step version describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step instructions for some help.
 
@@ -171,7 +182,7 @@ Now it's time for you to get your hands dirty and start with the first assignmen
    git clone https://github.com/EdwinVW/dapr-workshop.git
    ```
 
-2. Before starting with the assignments, I suggest you check-out the code of the different services. You can open the `dotnet` or `java` folder in this repo in VS Code. All folders used in the assignments are specified relative to the root of the folder where you have cloned the dapr-workshop repository.
+2. Before starting with the assignments, I suggest you check-out the code of the different services. You can open the `dotnet`, `java` or `python` folder in this repo in VS Code. All folders used in the assignments are specified relative to the root of the folder where you have cloned the dapr-workshop repository.
 
 3. Start with [assignment 1](Assignment01/README.md).
 
