@@ -45,8 +45,8 @@ In order to connect to Mosquitto, you need to pass in a custom configuration fil
    You should see that the image is available on your machine:
 
    ```console
-   REPOSITORY                      TAG      IMAGE ID      CREATED       SIZE
-   dapr-trafficcontrol/mosquitto   latest   3875762720a9  2 hours       9.95MB
+   REPOSITORY                          TAG      IMAGE ID      CREATED       SIZE
+   dapr-trafficcontrol/mosquitto:1.0   latest   3875762720a9  2 hours       9.95MB
    ```
 
 1. Start a Mosquitto MQTT broker by entering the following command:
