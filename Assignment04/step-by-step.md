@@ -15,7 +15,7 @@ This assignment targets number **3** in the end-state setup:
 
 First, you need to add something to the state management configuration file:
 
-1. Open the file `dotnet/dapr/components/statestore.yaml` in VS Code.
+1. Open the file `dapr/components/statestore.yaml` in VS Code.
 
 1. Add a `scopes` section to the configuration file that specifies that only the TrafficControlService should use the state management building block:
 
@@ -40,7 +40,7 @@ First, you need to add something to the state management configuration file:
 
 Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle state:
 
-1. Open the file `dotnet/TrafficControlService/Controllers/TrafficController.cs` in VS Code.
+1. Open the file `TrafficControlService/Controllers/TrafficController.cs` in VS Code.
 
 1. Inspect the code in the `VehicleEntry` method of this controller. It uses `_vehicleStateRepository` (an injected implementation of the `IVehicleStateRepository` interface) to store vehicle state:
 
@@ -54,11 +54,11 @@ Now you will add code to the TrafficControlService so it uses the Dapr state man
    await _vehicleStateRepository.SaveVehicleStateAsync(vehicleState);
    ```
 
-1. Open the file `dotnet/TrafficControlService/Repositories/InMemoryVehicleStateRepository.cs` in VS Code.
+1. Open the file `TrafficControlService/Repositories/InMemoryVehicleStateRepository.cs` in VS Code.
 
 1. This is the repository used by the TrafficControlService. Inspect the code in this class. Inspect the code of this repository. As you can see, this repository uses a very simple in-memory dictionary to store the state. The license number of the vehicle is used as the key. You are going to replace this implementation with one that uses Dapr state management.
 
-1. Create a new file `dotnet/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
+1. Create a new file `TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
 1. Create a new `DaprVehicleStateRepository` class in this file that implements the `IVehicleStateRepository` interface. Use this snippet to get started:
 
@@ -172,7 +172,7 @@ namespace TrafficControlService.Repositories
 
 Now you need to make sure your new repository is registered with dependency-injection.
 
-1. Open the file `dotnet/TrafficControlService/Startup.cs`.
+1. Open the file `TrafficControlService/Startup.cs`.
 
 1. In the `ConfigureServices` method, the `IVehicleStateRepository` implementation to use is registered with dependency injection:
 
@@ -186,7 +186,7 @@ Now you need to make sure your new repository is registered with dependency-inje
    services.AddSingleton<IVehicleStateRepository, DaprVehicleStateRepository>();
    ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `dotnet/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 
@@ -204,7 +204,7 @@ Now you're ready to test the application.
 
 1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `Infrastructure/start-all.ps1` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `dotnet/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -212,7 +212,7 @@ Now you're ready to test the application.
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -220,7 +220,7 @@ Now you're ready to test the application.
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -228,7 +228,7 @@ Now you're ready to test the application.
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 
@@ -288,13 +288,13 @@ Obviously, the behavior of the application is exactly the same as before. But ar
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management building block supports different state-stores through its component model. So without changing any code but only specifying a different Dapr component configuration, you could use an entirely different storage mechanism.
 
-> If you're up for it, try to swap-out Redis with another state provider. See the [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)). To configure a different state-store, you need to change the file `dotnet/dapr/components/statestore.yaml`.
+> If you're up for it, try to swap-out Redis with another state provider. See the [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)). To configure a different state-store, you need to change the file `dapr/components/statestore.yaml`.
 
 ## Step 3: Use Dapr state management with the Dapr SDK for .NET
 
 In this step you're going to change the `DaprVehicleStateRepository` and replace calling the Dapr state management API directly over HTTP with using the `DaprClient` from the Dapr SDK for .NET.
 
-1. Open the file `dotnet/TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
+1. Open the file `TrafficControlService/Repositories/DaprVehicleStateRepository.cs` in VS Code.
 
 1. Add a using statement for the Dapr client:
 
@@ -352,7 +352,7 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
    }
    ```
 
-1. Open the terminal window in VS Code and make sure the current folder is `dotnet/TrafficControlService`.
+1. Open the terminal window in VS Code and make sure the current folder is `TrafficControlService`.
 
 1. Check all your code-changes are correct by building the code. Execute the following command in the terminal window:
 

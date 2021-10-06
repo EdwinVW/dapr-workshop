@@ -16,7 +16,7 @@ This assignment targets number **5** in the end-state setup:
 
 You will add code to the TrafficControlService to use the Dapr input MQTT binding to receive entry- and exit-cam messages:
 
-1. Open the file `python\TrafficControlService\traffic_control\__init__.py` in VS Code.
+1. Open the file `TrafficControlService\traffic_control\__init__.py` in VS Code.
 
 1. Inspect the `entrycam` and `exitcam` methods.
 
@@ -90,7 +90,7 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 In this step you will add a Dapr binding component configuration file to the custom components folder you created in Assignment 3.
 
-1. Add a new file in the `java/dapr/components` folder named `entrycam.yaml`.
+1. Add a new file in the `dapr/components` folder named `entrycam.yaml`.
 
 1. Open the file in VS Code.
 
@@ -128,7 +128,7 @@ you want to be called on your service. In your case this is `/entrycam`.
 
 Now you need to also add an input binding for the `/exitcam` operation:
 
-1. Add a new file in the `python/dapr/components` folder named `exitcam.yaml`.
+1. Add a new file in the `dapr/components` folder named `exitcam.yaml`.
 
 1. Open this file in VS Code.
 
@@ -160,7 +160,7 @@ Now your input bindings are configured and it's time to change the Camera Simula
 
 In this step you change the Camera Simulation so it sends MQTT messages instead of doing HTTP requests:
 
-1. Open the terminal window in VS Code and make sure the current folder is `python/Simulation`.
+1. Open the terminal window in VS Code and make sure the current folder is `Simulation`.
 
 1. Add a dependency to the Simulation executing the following command in your terminal:
 
@@ -168,7 +168,7 @@ In this step you change the Camera Simulation so it sends MQTT messages instead 
     pip3 install paho-mqtt
     ```
 
-1. Open the file `python\Simulation\simulation\traffic_simulation\clients.py` file in VS Code.
+1. Open the file `Simulation\simulation\traffic_simulation\clients.py` file in VS Code.
 
 1. Inspect the code in this file.
 
@@ -216,7 +216,7 @@ using the `--components-path` flag so Dapr will use these config files:
 1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the 
    `Infrastructure/start-all.ps1` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `python/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -224,7 +224,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components -- uvicorn vehicle_registration:app --port 6002
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -232,7 +232,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components -- uvicorn fine_collection:app --port 6001
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -240,7 +240,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components -- uvicorn traffic_control:app --port 6000
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 

@@ -15,7 +15,7 @@ This assignment targets number **6** in the end-state setup:
 
 First, you will add a secrets management component configuration to the project:
 
-1. Add a new file in the `java/dapr/components` folder named `secrets.json`.
+1. Add a new file in the `dapr/components` folder named `secrets.json`.
 
 1. Open this file in VS Code. The file will hold the secrets used in the application.
 
@@ -33,7 +33,7 @@ First, you will add a secrets management component configuration to the project:
    }
    ```
 
-1. Add a new file in the `java/dapr/components` folder named `secrets-file.yaml`.
+1. Add a new file in the `dapr/components` folder named `secrets-file.yaml`.
 
 1. Open this file in VS Code.
 
@@ -72,7 +72,7 @@ Now you've configured the secrets management building block. Time to use the sec
 
 As stated, you can reference secrets from other Dapr component configuration files.
 
-1. Open the file `java/dapr/components/email.yaml` in VS Code.
+1. Open the file `dapr/components/email.yaml` in VS Code.
 
 1. Inspect the contents of the file. As you can see, it contains clear-text credentials (username and password). Replace the `user` and `password` fields of the `metadata` with secret references and add a reference to the secrets management building block named `trafficcontrol-secrets` you configured in step 1. The resulting file should look like this:
 
@@ -109,11 +109,11 @@ Now, the output binding will use the `smtp.username` and `smtp.password` secrets
 
 ## Step 3: Get the license key for the FineCalculator component
 
-The `ViolationProcessor` of the FineCollectionService uses a `FineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is implemented in the `java/FineCollectionService/src/main/java/dapr/fines/fines/DefaultFineCalculator.java` file. It uses a (fake) third-party component, the "FineFines" library. This library expects a license key for each call; it reads the expected key from a classpath resource. Remember it's just a sample application... The actual value that the application will provide with each call is injected by Spring. The `FineCollectionConfiguration` Spring configuration class retrieves the key from the Spring configuration using the standard Spring configuration mechanism.
+The `ViolationProcessor` of the FineCollectionService uses a `FineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is implemented in the `FineCollectionService/src/main/java/dapr/fines/fines/DefaultFineCalculator.java` file. It uses a (fake) third-party component, the "FineFines" library. This library expects a license key for each call; it reads the expected key from a classpath resource. Remember it's just a sample application... The actual value that the application will provide with each call is injected by Spring. The `FineCollectionConfiguration` Spring configuration class retrieves the key from the Spring configuration using the standard Spring configuration mechanism.
 
 You will now change the Spring configuration so it retrieves the license key from the Dapr secrets management building block:
 
-1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/FineCollectionConfiguration.java` in VS Code.
+1. Open the file `FineCollectionService/src/main/java/dapr/fines/FineCollectionConfiguration.java` in VS Code.
 
 1. Remove the line with the `fineCalculatorLicenseKey` instance variable as well as the `@Value` annotation above it. Replace them with the following code:
 
@@ -152,7 +152,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `Infrastructure/start-all.sh` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `java/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -160,7 +160,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `java/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -168,7 +168,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -176,7 +176,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components mvn spring-boot:run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `java/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 
@@ -197,7 +197,7 @@ INFO[0000] component loaded. name: trafficcontrol-secrets, type: secretstores.lo
 To validate that the secrets management building block is actually used:
 
 1. Stop the Camera Simulation and the FineCollectionService.
-1. Change the `finecalculator.licensekey` secret in the file `java/dapr/components/secrets.json` to something different.
+1. Change the `finecalculator.licensekey` secret in the file `dapr/components/secrets.json` to something different.
 1. Start the Camera Simulation and the FineCollectionService again as described in step 4.
 
 Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license key in the call to the `FineCalculator` component:
