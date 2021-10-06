@@ -106,7 +106,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 
 1. Start the service using `mvn spring-boot:run`.
 
-1. Open the `TrafficControlService/traffic-control.http` file in VS Code.
+1. Open the `TrafficControlService/test.http` file in VS Code.
 
 1. Click on `Execute request` for all three requests in the file to send two requests to the API.
 
