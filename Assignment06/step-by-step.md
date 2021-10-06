@@ -33,7 +33,7 @@ In order to connect to Mosquitto, you need to pass in a custom configuration fil
 1. Create the custom Docker image by entering the following command:
 
    ```console
-   docker build -t dapr-trafficcontrol/mosquitto .
+   docker build -t dapr-trafficcontrol/mosquitto:1.0 .
    ```
 
 1. Check whether the image was created successfully by entering the following command:
@@ -52,7 +52,7 @@ In order to connect to Mosquitto, you need to pass in a custom configuration fil
 1. Start a Mosquitto MQTT broker by entering the following command:
 
    ```console
-   docker run -d -p 1883:1883 -p 9001:9001 --name dtc-mosquitto dapr-trafficcontrol/mosquitto
+   docker run -d -p 1883:1883 -p 9001:9001 --name dtc-mosquitto dapr-trafficcontrol/mosquitto:1.0
    ```
 
 This will start a container based on the `dapr-trafficcontrol/mosquitto` image. The name of the container will be `dtc-mosquitto`. The server will be listening for connections on ports `1883` and `9001` for MQTT traffic.
