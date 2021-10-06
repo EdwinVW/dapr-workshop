@@ -45,7 +45,7 @@ You will use the `run` command of the Dapr CLI and specify all the options above
 1. Make sure you have started Docker Desktop on your machine and the Dapr CLI and runtime are installed
    (see the [prerequisites](../README.md#prerequisites)).
 
-2. Open the source-code folder in VS Code.
+2. Open the source code folder in VS Code.
 
 3. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 

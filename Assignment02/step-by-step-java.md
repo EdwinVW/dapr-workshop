@@ -33,7 +33,7 @@ You will use the `run` command of the Dapr CLI and specify all the options above
 
 1. Make sure you have started Docker Desktop on your machine and the Dapr CLI and runtime are installed (see the [prerequisites](../README.md#prerequisites)).
 
-2. Open the source-code folder in VS Code.
+2. Open the source code folder in VS Code.
 
 3. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
@@ -155,7 +155,7 @@ First stop the simulation:
    </dependency>
    ```
 
-   The version of the dependency is managed using Mavens "dependency management" - you can inspect the `pom.xml` file inside the source-code folder to see the exact version.
+   The version of the dependency is managed using Mavens "dependency management" - you can inspect the `pom.xml` file inside the source code folder to see the exact version.
 
    > The Dapr SDK for Java contains the `DaprClient` class that we will use to directly invoke the Dapr API. There is also an additional library that integrates with Spring Boot, but we don't need that yet. It is only necessary for building application that _offer_ services with Dapr.
 

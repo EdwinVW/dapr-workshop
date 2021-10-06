@@ -128,7 +128,7 @@ Every assignment is contained in a separate folder in this repo. Each folder con
 
 **It is important you work through all the assignments in order and don't skip any assignments. The instructions for each assignment rely on the fact that you have finished the previous assignments successfully.**
 
-You will be provided with a starting-point for the workshop. This starting-point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
+You will be provided with a starting point for the workshop. This starting point is a working version of application in which the services use plain HTTP to communicate with each-other and state is stored in memory. With each assignment of the workshop, you will add a Dapr building block to the solution.
 
 Every assignment offers instructions on how to complete the assignment. With the exception of assignment 1, each assignment offers two versions of the instructions: the **DIY** version and the **step-by-step** version. The DIY version just states the outcome you need to achieve and no further instructions. It's entirely up to you to achieve the goals with the help of the Dapr documentation. The step-by-step version describes exactly what you need to change in the application step-by-step. It's up to you to pick an approach. If you pick the DIY approach and get stuck, you can always go to the step-by-step instructions for some help.
 
@@ -172,7 +172,7 @@ dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
 
 #### Getting started
 
-Now it's time for you to get your hands dirty and start with the first assignment. The source-code that contains the starting-point for the workshop is situated in a different repository. There is a separate repository for each of the programming languages that the workshop is available in:
+Now it's time for you to get your hands dirty and start with the first assignment. The source code that contains the starting point for the workshop is situated in a different repository. There is a separate repository for each of the programming languages that the workshop is available in:
 
 - C#: [https://github.com/EdwinVW/dapr-workshop-csharp](https://github.com/EdwinVW/dapr-workshop-csharp)
 - Java: [https://github.com/mthmulders/dapr-workshop-java](https://github.com/mthmulders/dapr-workshop-java)
@@ -180,15 +180,15 @@ Now it's time for you to get your hands dirty and start with the first assignmen
 
 Follow the instructions below to get started:
 
-1. Clone the source-code repository for the programming language you want to use to a local folder on your machine. For example:
+1. Clone the source code repository for the programming language you want to use to a local folder on your machine. For example:
 
    ```console
    git clone https://github.com/EdwinVW/dapr-workshop-csharp
    ```
 
-   **From now on, this folder is referred to as the 'source-code' folder.**
+   **From now on, this folder is referred to as the 'source code' folder.**
 
-2. Before starting with the assignments, I suggest you check-out the code of the different services. All folders used in the assignments are specified relative to the root of the source-code folder.
+2. Before starting with the assignments, I suggest you check out the code of the different services. All folders used in the assignments are specified relative to the root of the source code folder.
 
 3. Start with [assignment 1](Assignment01/README.md).
 

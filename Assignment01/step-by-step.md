@@ -15,7 +15,7 @@ As a reminder, this is how the services will interact with each other:
 
 ## Step 1. Run the VehicleRegistration service
 
-1. Open the source-code folder in VS Code.
+1. Open the source code folder in VS Code.
 
    > Throughout the assignment you need to execute all steps in the same instance of VS Code.
 
