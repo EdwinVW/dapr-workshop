@@ -33,9 +33,9 @@ You will use the `run` command of the Dapr CLI and specify all the options above
 
 1. Make sure you have started Docker Desktop on your machine and the Dapr CLI and runtime are installed (see the [prerequisites](../README.md#prerequisites)).
 
-2. Open the `java` folder in this repo in VS Code.
+2. Open the source code folder in VS Code.
 
-3. Open the terminal window in VS Code and make sure the current folder is `src/VehicleRegistrationService`.
+3. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 4. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -53,7 +53,7 @@ In this step, you're going to change the code of the FineCollectionService so it
 
 First you're going to change the code so it calls the Dapr sidecar:
 
-1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/vehicle/DefaultVehicleRegistrationClient.java` in VS Code.
+1. Open the file `FineCollectionService/src/main/java/dapr/fines/vehicle/DefaultVehicleRegistrationClient.java` in VS Code.
 
 1. Inspect the `getVehicleInfo` method. It contains a call to the VehicleRegistrationService to retrieve the vehicle info:
 
@@ -64,7 +64,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
    The `restTemplate` is a utility provided by Spring to invoke the VehicleRegistrationService. Its base address for consuming that REST web service is injected through the constructor of that class. That constructor is invoked from a Spring configuration class, which in turn reads the Spring configuration file using `@Value`.
 
-1. Open the file `java/FineCollectionService/src/main/resources/application.yml` in VS Code.
+1. Open the file `FineCollectionService/src/main/resources/application.yml` in VS Code.
 
    Here we see the actual value being configured. Inspect the `vehicle-information.address` setting. You can see that in the HTTP call, the URL of the VehicleRegistrationService (running on port 6002) is used.
 
@@ -90,7 +90,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
    > It's important to really grasp the sidecar pattern used by Dapr. In this case, the FineCollectionService calls the VehicleRegistrationService by **calling its own Dapr sidecar**! The FineCollectionService doesn't need to know anymore where the VehicleRegistrationService lives because its Dapr sidecar will take care of that. It will find it based on the `app-id` specified in the URL and call the target service's sidecar.
 
-1. Open a **new** terminal window in VS Code and make sure the current folder is `java/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and make sure the current folder is `FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code:
 
@@ -110,7 +110,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
 Now you're going to test the application:
 
-1. Open a **new** terminal window in VS Code and change the current folder to `java/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService:
 
@@ -122,7 +122,7 @@ Now you're going to test the application:
 
 The services are up & running. Now you're going to test this using the simulation.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `java/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 
@@ -155,13 +155,13 @@ First stop the simulation:
    </dependency>
    ```
 
-   The version of the dependency is managed using Mavens "dependency management" - you can inspect the `pom.xml` file inside the `java` folder to see the exact version.
+   The version of the dependency is managed using Mavens "dependency management" - you can inspect the `pom.xml` file inside the source code folder to see the exact version.
 
    > The Dapr SDK for Java contains the `DaprClient` class that we will use to directly invoke the Dapr API. There is also an additional library that integrates with Spring Boot, but we don't need that yet. It is only necessary for building application that _offer_ services with Dapr.
 
 Now you'll change the code to use the Dapr-provided `DaprClient` to call the VehicleRegistrationService. In step 2 we used the existing code based on Spring's `RestTemplate`, keeping our code unaware of Dapr. The Dapr SDK for Java ensures that calls are routed through the Dapr sidecar.
 
-1. Create a new file, `java/FineCollectionService/src/main/java/dapr/fines/vehicle/DaprVehicleRegistrationClient.java` and open it in VS Code.
+1. Create a new file, `FineCollectionService/src/main/java/dapr/fines/vehicle/DaprVehicleRegistrationClient.java` and open it in VS Code.
 
 1. Declare a class `DaprVehicleRegistrationClient` that implements the `VehicleRegistrationClient` interface. Make sure to include a package declaration: `package dapr.fines.vehicle;`. To fulfil the contract of the `VehicleRegistrationClient` interface, add the following method:
 
@@ -172,7 +172,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
    }
    ```
 
-1. Open the file `java/FineCollectionService/src/main/java/dapr/fines/FineCollectionConfiguration.java` in VS Code.
+1. Open the file `FineCollectionService/src/main/java/dapr/fines/FineCollectionConfiguration.java` in VS Code.
    Add a new method to declare a Spring Bean of type `DaprClient`:
    
    ```java
@@ -253,7 +253,7 @@ Now the FineCollectionService is changed to use the Dapr SDK for service invocat
 
 The services are up & running. Now you're going to test this using the simulation.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `java/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 

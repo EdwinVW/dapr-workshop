@@ -15,7 +15,7 @@ As a reminder, this is how the services will interact with each other:
 
 ## Step 1. Run the VehicleRegistration service
 
-1. Open the `python` folder in VS Code. This guide assumes VS Code, but feel free to use an editor or IDE you're
+1. Open the source code folder in VS Code. This guide assumes VS Code, but feel free to use an editor or IDE you're
    comfortable with.
 
    > Throughout the assignment you can execute all steps in the same instance of editor or IDE window.
@@ -24,7 +24,7 @@ As a reminder, this is how the services will interact with each other:
 
    > You can do this by using the hotkey ``Ctrl-` `` (Windows) or ``Shift-Ctrl-` `` (macOS).
 
-3. Make sure the current folder is `python/VehicleRegistrationService`.
+3. Make sure the current folder is `VehicleRegistrationService`.
 
 4. Run the command `pip3 install -r requirements.txt`
 5. Start the service using `uvicorn vehicle_registration:app --port 6002`
@@ -39,7 +39,7 @@ Now you can test whether you can call the VehicleRegistrationService. You can do
 other HTTP client. But there is a convenient way of testing RESTful APIs directly from VS Code (this uses the REST
 Client extension VS Code):
 
-1. Open the file `python/VehicleRegistrationService/test.http` in your editor. The request in this file simulates
+1. Open the file `VehicleRegistrationService/test.http` in your editor. The request in this file simulates
    retrieving the vehicle- and owner information for a certain license-number.
 
 2. Click on `Send request` in the file to send a request to the API:
@@ -87,13 +87,13 @@ Client extension VS Code):
    > the `+` button in the terminal window title bar:
    > ![](img/terminal-new.png)
 
-1. Make sure the current folder is `python/FineCollectionService`.
+1. Make sure the current folder is `FineCollectionService`.
 
 1. Run the command `pip3 install -r requirements.txt`
 
 1. Start the service using `uvicorn fine_collection:app --port 6001`.
 
-1. Open the file `python/FineCollectionService/test.http` in VS Code. The request in this file simulates sending a
+1. Open the file `FineCollectionService/test.http` in VS Code. The request in this file simulates sending a
    detected speeding-violation to the FineCollectionService.
 
 2. Click on `Execute request` in the file to send a request to the API.
@@ -116,13 +116,13 @@ Client extension VS Code):
 
 1. Make sure the VehicleRegistrationService and FineCollectionService are running (results of step 1 and 2).
 
-1. Open a **new** terminal window in VS Code and make sure the current folder is `python/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and make sure the current folder is `TrafficControlService`.
 
 1. Run the command `pip3 install -r requirements.txt`
 
 1. Start the service using `uvicorn traffic_control:app --port 6000`.
 
-1. Open the `python/TrafficControlService/test.http` file in VS Code.
+1. Open the `TrafficControlService/test.http` file in VS Code.
 
 1. Click on `Execute request` for all three requests in the file to send two requests to the API.
 
@@ -163,7 +163,7 @@ Client extension VS Code):
 You've tested the APIs directly by using a REST client. Now you're going to run the simulation that actually simulates
 cars driving on the highway. The simulation will simulate 3 entry- and exit-cameras (one for each lane).
 
-1. Open a new terminal window in VS Code and make sure the current folder is `python/Simulation`.
+1. Open a new terminal window in VS Code and make sure the current folder is `Simulation`.
 
 1. Run the command `pip3 install -r requirements.txt`
 

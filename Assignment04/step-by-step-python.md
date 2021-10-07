@@ -17,7 +17,7 @@ This assignment targets number **3** in the end-state setup:
 
 First, you need to add something to the state management configuration file:
 
-1. Open the file `src/dapr/components/statestore.yaml` in VS Code.
+1. Open the file `dapr/components/statestore.yaml` in VS Code.
 
 1. Add a `scopes` section to the configuration file that specifies that only the TrafficControlService should use the
    state management building block:
@@ -44,7 +44,7 @@ First, you need to add something to the state management configuration file:
 Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle
 state:
 
-1. Open the file `python\TrafficControlService\traffic_control\__init__.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/__init__.py` in VS Code.
 
 2. Inspect the code in the `entrycam` and `exitcam` methods of this controller. The methods refer to a `repository`
    which is defined earlier in the file:
@@ -53,7 +53,7 @@ state:
    repository = repositories.VehicleStateRepository()
    ```
 
-3. Open the file `python\TrafficControlService\traffic_control\repositories.py` in VS Code.
+3. Open the file `TrafficControlService/traffic_control/repositories.py` in VS Code.
 
    This is the repository used by the TrafficControlService. Inspect the code of this repository. As you can see, this
    repository uses a very simple in-memory key/value map to store the state. The license number of the vehicle is used
@@ -135,14 +135,14 @@ Now you're ready to test the application.
 1. Make sure no services from previous tests are running (close the terminal windows)
 2. Make sure all the Docker containers introduced in the previous assignments are running (you can use the
    `Infrastructure/start-all.sh` script to start them).
-3. Open the terminal window in VS Code and make sure the current folder is `python/VehicleRegistrationService`.
+3. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 4. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components -- uvicorn vehicle_registration:app --port 6002
    ```
 
-5. Open a **new** terminal window in VS Code and change the current folder to `python/FineCollectionService`.
+5. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 6. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -150,7 +150,7 @@ Now you're ready to test the application.
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components -- uvicorn fine_collection:app --port 6001
    ```
 
-7. Open a **new** terminal window in VS Code and change the current folder to `python/TrafficControlService`.
+7. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 8. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -158,7 +158,7 @@ Now you're ready to test the application.
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components -- uvicorn traffic_control:app --port 6000
    ```
 
-9. Open a **new** terminal window in VS Code and change the current folder to `python/Simulation`.
+9. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 10. Start the simulation:
 
@@ -225,14 +225,14 @@ specifying a different Dapr component configuration, you could use an entirely d
 
 > If you're up for it, try to swap-out Redis with another state provider. See the 
 > [the list of available stores in the Dapr documentation](https://docs.dapr.io/operations/components/setup-state-store/supported-state-stores/)).
-> To configure a different state-store, you need to change the file `python/dapr/components/statestore.yaml`.
+> To configure a different state-store, you need to change the file `dapr/components/statestore.yaml`.
 
 ## Step 3: Use Dapr state management with the Dapr SDK for Python
 
 In this step you're going to change the `VehicleStateRepository` class and replace calling the Dapr state management
 API directly over HTTP with using the `DaprClient` from the Dapr SDK for Python.
 
-1. Open the file `python\TrafficControlService\traffic_control\repositories.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/repositories.py` in VS Code.
 
 2. Add an import statement to the top of the file for the Dapr client:
 

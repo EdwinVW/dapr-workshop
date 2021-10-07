@@ -45,9 +45,9 @@ You will use the `run` command of the Dapr CLI and specify all the options above
 1. Make sure you have started Docker Desktop on your machine and the Dapr CLI and runtime are installed
    (see the [prerequisites](../README.md#prerequisites)).
 
-2. Open the `python` folder in this repo in VS Code.
+2. Open the source code folder in VS Code.
 
-3. Open the terminal window in VS Code and make sure the current folder is `python/VehicleRegistrationService`.
+3. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 4. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -69,7 +69,7 @@ the VehicleRegistrationService.
 
 First you're going to change the code so it calls the Dapr sidecar:
 
-1. Open the file `python/FineCollectionService/fine_collection/clients.py` in VS Code.
+1. Open the file `FineCollectionService/fine_collection/clients.py` in VS Code.
 
 2. Inspect the `get_vehicle_info` method. It contains a call to the VehicleRegistrationService to retrieve the
    vehicle info:
@@ -83,9 +83,9 @@ First you're going to change the code so it calls the Dapr sidecar:
 
    The `requests` is a you can use to invoke the VehicleRegistrationService. Its base address for consuming the API is
    determined by the `settings.py`, which in turn reads the settings from the `.env` file stored in
-   `python/FineCollectionService`.
+   `FineCollectionService`.
 
-3. Open the file `python/FineCollectionService/.env` in VS Code.
+3. Open the file `FineCollectionService/.env` in VS Code.
 
    Here we see the actual value being configured. Inspect the `VEHICLE_REGISTRATION_ADDRESS` setting.
    You can see that in the HTTP call, the URL of the VehicleRegistrationService (running on port 6002) is used.
@@ -120,7 +120,7 @@ First you're going to change the code so it calls the Dapr sidecar:
    > anymore where the VehicleRegistrationService lives because its Dapr sidecar will take care of that. It will find
    > it based on the `app-id` specified in the URL and call the target service's sidecar.
 
-6. Open a **new** terminal window in VS Code and make sure the current folder is `python/FineCollectionService`.
+6. Open a **new** terminal window in VS Code and make sure the current folder is `FineCollectionService`.
 
 7. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -132,7 +132,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
 Now you're going to test the application:
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 2. Enter the following command to run the TrafficControlService:
 
@@ -145,7 +145,7 @@ Now you're going to test the application:
 
 The services are up & running. Now you're going to test this using the simulation.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 2. Start the simulation:
 
@@ -185,7 +185,7 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
 used the `requests` library to keep our application unaware of Dapr. In this step we're going to upgrade our application
 to use the SDK instead.
 
-1. Open the file, `python/FineCollectionService/fine_collection/clients.py` in VS Code.
+1. Open the file, `FineCollectionService/fine_collection/clients.py` in VS Code.
 
 2. Replace the contents of the file with the following code:
 
@@ -233,7 +233,7 @@ Now the FineCollectionService is changed to use the Dapr SDK for service invocat
 
 The services are up & running. Now you're going to test this using the simulation.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 

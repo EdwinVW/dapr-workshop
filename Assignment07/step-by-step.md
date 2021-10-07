@@ -15,7 +15,7 @@ This assignment targets number **6** in the end-state setup:
 
 First, you will add a secrets management component configuration to the solution:
 
-1. Add a new file in the `dotnet/dapr/components` folder named `secrets.json`.
+1. Add a new file in the `dapr/components` folder named `secrets.json`.
 
 1. Open this file in VS Code. The file will hold the secrets used in the application.
 
@@ -33,7 +33,7 @@ First, you will add a secrets management component configuration to the solution
    }
    ```
 
-1. Add a new file in the `dotnet/dapr/components` folder named `secrets-file.yaml`.
+1. Add a new file in the `dapr/components` folder named `secrets-file.yaml`.
 
 1. Open this file in VS Code.
 
@@ -72,7 +72,7 @@ Now you've configured the secrets management building block. Time to use the sec
 
 As stated, you can reference secrets from other Dapr component configuration files.
 
-1. Open the file `dotnet/dapr/components/email.yaml` in VS Code.
+1. Open the file `dapr/components/email.yaml` in VS Code.
 
 1. Inspect the contents of the file. As you can see, it contains clear-text credentials (username and password). Replace the `user` and `password` fields of the `metadata` with secret references and add a reference to the secrets management building block named `trafficcontrol-secrets` you configured in step 1. The resulting file should look like this:
 
@@ -109,11 +109,11 @@ Now, the output binding will use the `smtp.username` and `smtp.password` secrets
 
 ## Step 3: Get the license key for the FineCalculator component
 
-The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `dotnet/FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license key (this is just hard-coded, remember this is a sample application!). The `CollectionController` retrieves the key from the `appsettings.json` file using the standard ASP.NET Core configuration mechanism.
+The `CollectionController` of the FineCollectionService uses an `IFineCalculator` implementation to calculate the fine for a certain speeding violation (check out the code). The calculator used is the `FineCollectionService/DomainServices/HardCodedFineCalculator.cs`. To demonstrate retrieving secrets, this calculator component expects a license key (this is just hard-coded, remember this is a sample application!). The `CollectionController` retrieves the key from the `appsettings.json` file using the standard ASP.NET Core configuration mechanism.
 
 You will now change the controller so it retrieves the license key from the Dapr secrets management building block:
 
-1. Open the file `dotnet/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
+1. Open the file `FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
 1. Add a parameter named `daprClient` of type `DaprClient` to the constructor.
 
@@ -137,7 +137,7 @@ You're going to start all the services now. You specify the custom components fo
 
 1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the `Infrastructure/start-all.ps1` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `dotnet/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -145,7 +145,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -153,7 +153,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -161,7 +161,7 @@ You're going to start all the services now. You specify the custom components fo
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 
@@ -182,7 +182,7 @@ time="2021-02-28T18:16:50.2936204+01:00" level=info msg="component loaded. name:
 To validate that the secrets management building block is actually used:
 
 1. Stop the Camera Simulation and the FineCollectionService.
-1. Change the `finecalculator.licensekey` secret in the file `dotnet/dapr/components/secrets.json` to something different.
+1. Change the `finecalculator.licensekey` secret in the file `dapr/components/secrets.json` to something different.
 1. Start the Camera Simulation and the FineCollectionService again as described in step 4.
 
 Now you should see some errors in the logging because the FineCollectionService service is no longer passing the correct license key in the call to the `FineCalculator` component:

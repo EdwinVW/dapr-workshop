@@ -38,7 +38,7 @@ This assignment targets number **6** in the end-state setup:
 
 ## DIY instructions
 
-First open the `dotnet`, `java` or `python` folder in this repo in VS Code. Then open the [Secrets management documentation](https://docs.dapr.io/developing-applications/building-blocks/secrets/) and start hacking away.
+Open the source code folder in VS Code. Then open the [Secrets management documentation](https://docs.dapr.io/developing-applications/building-blocks/secrets/) and start hacking away.
 
 ## Step by step instructions
 

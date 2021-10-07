@@ -31,7 +31,7 @@ This assignment targets number **3** in the end-state setup:
 
 ## DIY instructions
 
-First open the `dotnet`, `java` or `python` folder in this repo in VS Code. Then open the [Dapr state management documentation](https://docs.dapr.io/developing-applications/building-blocks/state-management/) and start hacking away. Make sure you use the default Redis state-store component provided out of the box by Dapr.
+Open the source code folder in VS Code. Then open the [Dapr state management documentation](https://docs.dapr.io/developing-applications/building-blocks/state-management/) and start hacking away. Make sure you use the default Redis state-store component provided out of the box by Dapr.
 
 ## Step by step instructions
 

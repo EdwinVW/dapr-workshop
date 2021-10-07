@@ -35,7 +35,7 @@ This assignment targets number **1** in the end-state setup:
 
 ## DIY instructions
 
-Open the `dotnet`, `java` or `python` folder in this repo in VS Code. Then open the [Dapr service invocation documentation](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/) and start hacking away. If you need any hints, you may peek in the step-by-step part.
+Open the source code folder in VS Code. Then open the [Dapr service invocation documentation](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/) and start hacking away. If you need any hints, you may peek in the step-by-step part.
 
 ## Step by step instructions
 

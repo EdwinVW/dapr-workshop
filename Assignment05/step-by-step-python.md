@@ -84,7 +84,7 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
 
-1. Open the file `python\FineCollectionService\fine_collection\services.py` in VS Code.
+1. Open the file `FineCollectionService/fine_collection/services.py` in VS Code.
 
 1. Inspect the code of the `process_speed_violation` method. There's a TODO comment at the end of the method. You'll
    add code to complete this TODO and actually send an email.
@@ -122,7 +122,7 @@ That's it, that's all the code you need to write to send an email over SMTP.
 In this step you will add a Dapr binding component configuration file to the custom components folder you created in
 Assignment 3.
 
-1. Add a new file in the `python/dapr/components` folder named `email.yaml`.
+1. Add a new file in the `dapr/components` folder named `email.yaml`.
 
 1. Open this file in VS Code.
 
@@ -172,7 +172,7 @@ using the `--components-path` flag so Dapr will use these config files:
 1. Make sure all the Docker containers introduced in the previous assignments are running (you can use the
    `Infrastructure/start-all.ps1` script to start them).
 
-1. Open the terminal window in VS Code and make sure the current folder is `python/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -180,7 +180,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components -- uvicorn vehicle_registration:app --port 6002
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -188,7 +188,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components -- uvicorn fine_collection:app --port 6001
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -196,7 +196,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components -- uvicorn traffic_control --port 6000
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 

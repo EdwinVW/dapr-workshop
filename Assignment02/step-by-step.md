@@ -33,9 +33,9 @@ You will use the `run` command of the Dapr CLI and specify all the options above
 
 1. Make sure you have started Docker Desktop on your machine and the Dapr CLI and runtime are installed (see the [prerequisites](../README.md#prerequisites)).
 
-2. Open the `dotnet` folder in this repo in VS Code.
+2. Open the source code folder in VS Code.
 
-3. Open the terminal window in VS Code and make sure the current folder is `dotnet/VehicleRegistrationService`.
+3. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 4. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -53,7 +53,7 @@ In this step, you're going to change the code of the FineCollectionService so it
 
 First you're going to change the code so it calls the Dapr sidecar:
 
-1. Open the file `dotnet/FineCollectionService/Controllers/CollectionController.cs` in VS Code.
+1. Open the file `FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
 1. Inspect the `CollectFine` method. It contains a call to the VehicleRegistrationService to retrieve the vehicle info:
 
@@ -64,7 +64,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
    The `_vehicleRegistrationService` is an instance of a proxy that uses the .NET `HttpClient` to call the VehicleRegistrationService. You are going to change that proxy so it uses Dapr service invocation.
 
-1. Open the file `dotnet/FineCollectionService/Proxies/VehicleRegistrationService.cs` in VS Code.
+1. Open the file `FineCollectionService/Proxies/VehicleRegistrationService.cs` in VS Code.
 
 1. Inspect the `GetVehicleInfo` method. You can see that in the HTTP call, the URL of the VehicleRegistrationService (running on port 6002) is used.
 
@@ -94,7 +94,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
    > It's important to really grasp the sidecar pattern used by Dapr. In this case, the FineCollectionService calls the VehicleRegistrationService by **calling its own Dapr sidecar**! The FineCollectionService doesn't need to know anymore where the VehicleRegistrationService lives because its Dapr sidecar will take care of that. It will find it based on the `app-id` specified in the URL and call the target service's sidecar.
 
-1. Open a **new** terminal window in VS Code and make sure the current folder is `dotnet/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and make sure the current folder is `FineCollectionService`.
 
 1. Check all your code-changes are correct by building the code:
 
@@ -114,7 +114,7 @@ First you're going to change the code so it calls the Dapr sidecar:
 
 Now you're going to test the application:
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService:
 
@@ -126,7 +126,7 @@ Now you're going to test the application:
 
 The services are up & running. Now you're going to test this using the simulation.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 
@@ -160,7 +160,7 @@ First stop the simulation:
 
 Now you'll change the code to use the Dapr SDK `HttpClient` integration to call the VehicleRegistrationService. The `HttpClient` integration allows you to keep using the regular `HttpClient` to make service calls, while the SDK ensures that calls are routed through the Dapr sidecar.
 
-1. Open the file `dotnet/FineCollectionService/Startup.cs` in VS Code.
+1. Open the file `FineCollectionService/Startup.cs` in VS Code.
 
 1. Add a using statement in this file to make sure you can use the Dapr client:
 
@@ -189,7 +189,7 @@ Now you'll change the code to use the Dapr SDK `HttpClient` integration to call 
 
    > This is an example of the deep integration of Dapr with ASP.NET Core when you use the `Dapr.AspNetCore` library. You can still use the `HttpClient` (and its rich feature-set) in your code, but under the hood the Dapr service invocation building block is used.
 
-1. Open the file `dotnet/FineCollectionService/Proxies/VehicleRegistrationService.cs` in VS Code.
+1. Open the file `FineCollectionService/Proxies/VehicleRegistrationService.cs` in VS Code.
 
 1. Because the `HttpClient` passed into this class has already been created for a certain `app-id`, you can omit the host information from the request URL. Change the URL that is used in the `GetVehicleInfo` to `/vehicleinfo/{license-number}`. The method should now look like this:
 
@@ -215,7 +215,7 @@ Now the FineCollectionService is changed to use the Dapr SDK for service invocat
 
 The services are up & running. Now you're going to test this using the simulation.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `dotnet/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 

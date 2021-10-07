@@ -79,7 +79,7 @@ docker rm dtc-rabbitmq -f
 Once you have removed it, you need to start it again with the `docker run` command shown at the beginning of this step.
 
 > For your convenience, the `Infrastructure` folder contains Bash scripts for starting the infrastructural components
-> you'll use throughout the workshop. You can use the `src/Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start
+> you'll use throughout the workshop. You can use the `Infrastructure/rabbitmq/start-rabbitmq.ps1` script to start
 > the RabbitMQ container.
 >
 > If you don't mind starting all the infrastructural containers at once (also for assignments to come), you can also
@@ -96,12 +96,12 @@ Because you need to change the message broker from Redis to RabbitMQ, you will c
 component configuration files and use this folder when starting the services using the Dapr CLI. You can specify which
 folder to use on the command-line with the `--components-path` flag.
 
-1. Create a new folder `python/dapr/components`.
+1. Create a new folder `dapr/components`.
 
 2. Copy all files from the folder `%USERPROFILE%\.dapr\components\` on Windows and `$HOME/.dapr/components` on
-   Linux or Mac to the `python/dapr/components` folder.
+   Linux or Mac to the `dapr/components` folder.
 
-3. Open the file `python/dapr/components/pubsub.yaml` in VS Code.
+3. Open the file `dapr/components/pubsub.yaml` in VS Code.
 
 4. Inspect this file. As you can see, it specifies the type of the message broker to use (`pubsub.redis`) and specifies
    information on how to connect to the Redis server in the `metadata` section.
@@ -145,7 +145,7 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
 the topic and one or more consumers subscribe to this topic to receive those messages. First you are going to prepare
 the TrafficControlService so it can send messages using Dapr pub/sub.
 
-1. Open the file `python\TrafficControlService\traffic_control\clients.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/clients.py` in VS Code.
 
 2. Inside the `collect_fine` method, you find the code that sends a `SpeedingViolation` message to the `collectfine`
    endpoint of the FineCollectionService over HTTP:
@@ -163,10 +163,10 @@ the TrafficControlService so it can send messages using Dapr pub/sub.
    )
    ```
 
-   The base_address comes from `python/TrafficControlService/traffic_control/settings.py` which contains the
-   `AppSettings` class. This class loads the data from the file `python/TrafficControlService/.env`.
+   The base_address comes from `TrafficControlService/traffic_control/settings.py` which contains the
+   `AppSettings` class. This class loads the data from the file `TrafficControlService/.env`.
 
-3. Open the file `python/TrafficControlService/.env` in VS Code.
+3. Open the file `TrafficControlService/.env` in VS Code.
 
    Here we see the actual value being configured. Inspect the `FINE_COLLECTION_ADDRESS` setting. You can see that in
    the HTTP call, the URL of the VehicleRegistrationService (running on port 6001) is used.
@@ -189,7 +189,7 @@ messages can be done in two ways: *declaratively* (through configuration) or *pr
 you'll use the declarative way. Later you'll also use the programmatic way and finally also using the Dapr SDK for
 Python.
 
-1. Add a new file in the `python/dapr/components` folder named `subscription.yaml`.
+1. Add a new file in the `dapr/components` folder named `subscription.yaml`.
 
 2. Open this file in VS Code.
 
@@ -218,7 +218,7 @@ Now your FineCollectionService is ready to receive messages through Dapr pub/sub
 receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to
 change the code slightly. For now we write some code, later we're going to use the Dapr SDK.
 
-1. Open the file `python\FineCollectionService\fine_collection\__init__.py` in VS Code.
+1. Open the file `FineCollectionService/fine_collection/__init__.py` in VS Code.
 
 2. Remove the `violation: models.SpeedingViolation` parameter and replace it with `evt_data=Body(...)`.
 
@@ -247,7 +247,7 @@ change the code slightly. For now we write some code, later we're going to use t
 
 5. Save the changes to the file.
 
-6. Open the terminal window in VS Code and make sure the current folder is `python/FineCollectionService`.
+6. Open the terminal window in VS Code and make sure the current folder is `FineCollectionService`.
 
 ## Step 5: Test the application
 
@@ -256,7 +256,7 @@ using the `--components-path` flag so Dapr will use these config files:
 
 1. Make sure no services from previous tests are running (close the command-shell windows).
 
-1. Open the terminal window in VS Code and make sure the current folder is `python/VehicleRegistrationService`.
+1. Open the terminal window in VS Code and make sure the current folder is `VehicleRegistrationService`.
 
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
@@ -266,7 +266,7 @@ using the `--components-path` flag so Dapr will use these config files:
 
    > Notice that you specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use RabbitMQ for pub/sub.
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/FineCollectionService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
 
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
@@ -274,7 +274,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components -- uvicorn fine_collection:app --port 6001
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/TrafficControlService`.
+1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
 
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
@@ -282,7 +282,7 @@ using the `--components-path` flag so Dapr will use these config files:
    dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components -- uvicorn traffic_control:app --port 6000
    ```
 
-1. Open a **new** terminal window in VS Code and change the current folder to `python/Simulation`.
+1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
 
 1. Start the simulation:
 
@@ -308,7 +308,7 @@ the subscription for the `speedingviolations` topic.
 1. Stop the FineCollectionService by navigating to its terminal window and pressing `Ctrl-C`. You can keep the other
    services running for now.
 
-2. Open the file `python\FineCollectionService\fine_collection\__init__.py` in VS Code.
+2. Open the file `FineCollectionService/fine_collection/__init__.py` in VS Code.
 
 3. Add a new method `subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
 
@@ -324,10 +324,10 @@ the subscription for the `speedingviolations` topic.
       return subscription
    ```
 
-4. Remove the file `src/dapr/components/subscription.yaml`. This file is not needed anymore because you implemented
+4. Remove the file `dapr/components/subscription.yaml`. This file is not needed anymore because you implemented
    the `/dapr/subscribe` endpoint that we just added to the application.
 
-5. Go back to the terminal window in VS Code and make sure the current folder is `python/FineCollectionService`.
+5. Go back to the terminal window in VS Code and make sure the current folder is `FineCollectionService`.
 
 6. Start the updated FineCollectionService:
 
@@ -348,7 +348,7 @@ TrafficControlService that sends messages.
    pip3 install dapr
    ```
 
-2. Open the file `python\TrafficControlService\traffic_control\clients.py`.
+2. Open the file `TrafficControlService/traffic_control/clients.py`.
 
 3. Replace the content of the file with the following code:
 
