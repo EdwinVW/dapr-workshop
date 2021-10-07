@@ -16,7 +16,7 @@ This assignment targets number **5** in the end-state setup:
 
 You will add code to the TrafficControlService to use the Dapr input MQTT binding to receive entry- and exit-cam messages:
 
-1. Open the file `TrafficControlService\traffic_control\__init__.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/__init__.py` in VS Code.
 
 1. Inspect the `entrycam` and `exitcam` methods.
 
@@ -168,7 +168,7 @@ In this step you change the Camera Simulation so it sends MQTT messages instead 
     pip3 install paho-mqtt
     ```
 
-1. Open the file `Simulation\simulation\traffic_simulation\clients.py` file in VS Code.
+1. Open the file `Simulation/simulation/traffic_simulation/clients.py` file in VS Code.
 
 1. Inspect the code in this file.
 

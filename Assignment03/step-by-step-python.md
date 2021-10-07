@@ -145,7 +145,7 @@ With the Dapr pub/sub building block, you use a *topic* to send and receive mess
 the topic and one or more consumers subscribe to this topic to receive those messages. First you are going to prepare
 the TrafficControlService so it can send messages using Dapr pub/sub.
 
-1. Open the file `TrafficControlService\traffic_control\clients.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/clients.py` in VS Code.
 
 2. Inside the `collect_fine` method, you find the code that sends a `SpeedingViolation` message to the `collectfine`
    endpoint of the FineCollectionService over HTTP:
@@ -218,7 +218,7 @@ Now your FineCollectionService is ready to receive messages through Dapr pub/sub
 receiving application needs to understand this format and handle the message as a `CloudEvent`. Therefore we need to
 change the code slightly. For now we write some code, later we're going to use the Dapr SDK.
 
-1. Open the file `FineCollectionService\fine_collection\__init__.py` in VS Code.
+1. Open the file `FineCollectionService/fine_collection/__init__.py` in VS Code.
 
 2. Remove the `violation: models.SpeedingViolation` parameter and replace it with `evt_data=Body(...)`.
 
@@ -308,7 +308,7 @@ the subscription for the `speedingviolations` topic.
 1. Stop the FineCollectionService by navigating to its terminal window and pressing `Ctrl-C`. You can keep the other
    services running for now.
 
-2. Open the file `FineCollectionService\fine_collection\__init__.py` in VS Code.
+2. Open the file `FineCollectionService/fine_collection/__init__.py` in VS Code.
 
 3. Add a new method `subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
 
@@ -348,7 +348,7 @@ TrafficControlService that sends messages.
    pip3 install dapr
    ```
 
-2. Open the file `TrafficControlService\traffic_control\clients.py`.
+2. Open the file `TrafficControlService/traffic_control/clients.py`.
 
 3. Replace the content of the file with the following code:
 

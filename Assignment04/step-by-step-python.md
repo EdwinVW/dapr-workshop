@@ -44,7 +44,7 @@ First, you need to add something to the state management configuration file:
 Now you will add code to the TrafficControlService so it uses the Dapr state management building block to store vehicle
 state:
 
-1. Open the file `TrafficControlService\traffic_control\__init__.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/__init__.py` in VS Code.
 
 2. Inspect the code in the `entrycam` and `exitcam` methods of this controller. The methods refer to a `repository`
    which is defined earlier in the file:
@@ -53,7 +53,7 @@ state:
    repository = repositories.VehicleStateRepository()
    ```
 
-3. Open the file `TrafficControlService\traffic_control\repositories.py` in VS Code.
+3. Open the file `TrafficControlService/traffic_control/repositories.py` in VS Code.
 
    This is the repository used by the TrafficControlService. Inspect the code of this repository. As you can see, this
    repository uses a very simple in-memory key/value map to store the state. The license number of the vehicle is used
@@ -216,7 +216,7 @@ that is used as state-store in the default Dapr installation.
    1) "version"
    2) "1"
    3) "data"
-   4) "{\"licenseNumber\":\"ND-841-Y\",\"entryTimestamp\":\"2021-09-15T11:19:18.1781609+02:00\",\"exitTimestamp\":\"0001-01-01T00:00:00\"}"
+   4) "{/"licenseNumber/":/"ND-841-Y/",/"entryTimestamp/":/"2021-09-15T11:19:18.1781609+02:00/",/"exitTimestamp/":/"0001-01-01T00:00:00/"}"
    ```
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management
@@ -232,7 +232,7 @@ specifying a different Dapr component configuration, you could use an entirely d
 In this step you're going to change the `VehicleStateRepository` class and replace calling the Dapr state management
 API directly over HTTP with using the `DaprClient` from the Dapr SDK for Python.
 
-1. Open the file `TrafficControlService\traffic_control\repositories.py` in VS Code.
+1. Open the file `TrafficControlService/traffic_control/repositories.py` in VS Code.
 
 2. Add an import statement to the top of the file for the Dapr client:
 

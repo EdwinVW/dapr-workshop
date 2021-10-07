@@ -84,7 +84,7 @@ Once you have removed it, you need to start it again with the `docker run` comma
 
 You will add code to the FineCollectionService so it uses the Dapr SMTP output binding to send an email:
 
-1. Open the file `FineCollectionService\fine_collection\services.py` in VS Code.
+1. Open the file `FineCollectionService/fine_collection/services.py` in VS Code.
 
 1. Inspect the code of the `process_speed_violation` method. There's a TODO comment at the end of the method. You'll
    add code to complete this TODO and actually send an email.

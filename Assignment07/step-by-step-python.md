@@ -122,13 +122,13 @@ Now, the output binding will use the `smtp.username` and `smtp.password` secrets
 
 The `ViolationProcessor` of the FineCollectionService uses a `FineCalculator` implementation to calculate the fine for
 a certain speeding violation (check out the code). The calculator used is implemented in the
-`FineCollectionService\fine_collection\services.py` file. It checks a license key (because we can). This license
+`FineCollectionService/fine_collection/services.py` file. It checks a license key (because we can). This license
 key has to be loaded from a secret since we don't want anyone stealing the key.
 
 Currently we load the license key from `FineCollectionService/.env` which isn't secure. We're going to change
 the application so it loads the license key as a secret.
 
-1. Open the file `FineCollectionService\fine_collection\__init__.py` in VS Code.
+1. Open the file `FineCollectionService/fine_collection/__init__.py` in VS Code.
 
 2. Add the following import to the top of the file:
 
