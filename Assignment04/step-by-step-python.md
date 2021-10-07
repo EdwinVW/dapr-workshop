@@ -216,7 +216,7 @@ that is used as state-store in the default Dapr installation.
    1) "version"
    2) "1"
    3) "data"
-   4) "{/"licenseNumber/":/"ND-841-Y/",/"entryTimestamp/":/"2021-09-15T11:19:18.1781609+02:00/",/"exitTimestamp/":/"0001-01-01T00:00:00/"}"
+   4) "{\"licenseNumber\":\"ND-841-Y\",\"entryTimestamp\":\"2021-09-15T11:19:18.1781609+02:00\",\"exitTimestamp\":\"0001-01-01T00:00:00\"}"
    ```
 
 As you can see, the data is actually stored in the redis cache. The cool thing about Dapr is that the state management
