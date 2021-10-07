@@ -183,7 +183,7 @@ Follow the instructions below to get started:
 1. Clone the source code repository for the programming language you want to use to a local folder on your machine. For example:
 
    ```console
-   git clone https://github.com/EdwinVW/dapr-workshop-csharp
+   git clone https://github.com/EdwinVW/dapr-workshop-csharp.git
    ```
 
    **From now on, this folder is referred to as the 'source code' folder.**
