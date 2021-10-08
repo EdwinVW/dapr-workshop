@@ -112,15 +112,16 @@ All scripts in the instructions are Powershell scripts. If you're working on a M
 
 The workshop has been tested with the following versions:
 
-| Attribute                 | Details |
-|---------------------------|---------|
-| Dapr runtime version      | v1.3.0  |
-| Dapr SDK for .NET version | v1.3.0  |
-| Dapr SDK for Java version | v1.2.0  |
-| Dapr CLI version          | v1.3.0  |
-| .NET version              | .NET 5  |
-| Java version              | Java 16 |
-| Python version            | 3.9.6   |
+| Attribute                   | Details |
+|-----------------------------|---------|
+| Dapr runtime version        | v1.4.0  |
+| Dapr CLI version            | v1.4.0  |
+| .NET version                | .NET 5  |
+| Java version                | Java 16 |
+| Python version              | 3.9.6   |
+| Dapr SDK for .NET version   | v1.4.0  |
+| Dapr SDK for Java version   | v1.2.0  |
+| Dapr SDK for Python version | v1.3.0  |
 
 ### Instructions
 
