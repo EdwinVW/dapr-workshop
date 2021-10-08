@@ -120,7 +120,7 @@ The workshop has been tested with the following versions:
 | Java version                | Java 16 |
 | Python version              | 3.9.6   |
 | Dapr SDK for .NET version   | v1.4.0  |
-| Dapr SDK for Java version   | v1.2.0  |
+| Dapr SDK for Java version   | v1.3.0  |
 | Dapr SDK for Python version | v1.3.0  |
 
 ### Instructions
