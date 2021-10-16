@@ -25,7 +25,7 @@ In the example, you will use RabbitMQ as the message broker with the Dapr pub/su
 1. Start a RabbitMQ message broker by entering the following command:
 
    ```console
-   docker run -d -p 5672:5672 --name dtc-rabbitmq rabbitmq:3-management-alpine
+   docker run -d -p 5672:5672 -p 15672:15672 --name dtc-rabbitmq rabbitmq:3-management-alpine
    ```
 
 This will pull the docker image `rabbitmq:3-management-alpine` from Docker Hub and start it. The name of the container will be `dtc-rabbitmq`. The server will be listening for connections on port `5672` (which is the default port for RabbitMQ).
