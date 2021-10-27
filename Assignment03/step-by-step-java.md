@@ -429,10 +429,17 @@ Now you will change the FineCollectionService that receives messages. The Dapr S
 
 1. Remove the `subscribe` method.
 
-1. Make the type of the `event` parameter a `CloudEvent`, and add an import for `io.dapr.client.domain.CloudEvent`. method with a parameter of type `SpeedingViolation` named `speedingViolaton`; keep the `@RequestBody` annotation in place:
+1. Change the `registerViolation` method by making the type of the `event` parameter to `CloudEvent<SpeedingViolation>`; keep the `@RequestBody` annotation in place. Add an import for `io.dapr.client.domain.CloudEvent`. The method signature should now look like this:
 
    ```java
-   public ResponseEntity<Void> registerViolation(@RequestBody final CloudEvent event) {
+   public ResponseEntity<Void> registerViolation(@RequestBody final CloudEvent<SpeedingViolation> event) {
+   ```
+
+1. Change the implementation of the method to extract the actual violation info from the Cloud Event:
+
+   ```java
+   var violation = event.getData();
+   violationProcessor.processSpeedingViolation(violation);
    ```
 
 1. Add an import for the `io.dapr.Topic` class. Add a `@Topic` annotation above the `registerViolation` method to link this method to a topic called `speedingviolations`:
