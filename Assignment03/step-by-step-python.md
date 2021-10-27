@@ -310,7 +310,7 @@ the subscription for the `speedingviolations` topic.
 
 2. Open the file `FineCollectionService/fine_collection/__init__.py` in VS Code.
 
-3. Add a new method `subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
+3. Add a new method `subscribe` to the controller that will listen to the route `/dapr/subscribe`:
 
    ```python
    @app.get("/dapr/subscribe")
