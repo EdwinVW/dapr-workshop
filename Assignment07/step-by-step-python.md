@@ -139,8 +139,8 @@ the application so it loads the license key as a secret.
 3. Replace the assignment of the `license_key` variable with the following code:
 
 ```python
-with DaprClient() as dapr_client:
-    license_key = dapr_client.get_secret("trafficcontrol-secrets", "finecalculator.licensekey").secret
+with DaprClient() as client:
+    license_key = client.get_secret("trafficcontrol-secrets", "finecalculator.licensekey").secret["finecalculator.licensekey"]
 ```
 
 Now you're ready to test the application.
