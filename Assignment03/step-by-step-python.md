@@ -368,3 +368,9 @@ TrafficControlService that sends messages.
    ```
 
 4. Test the services using the activities in Step 5 of this exercise.
+
+## Next assignment
+
+Make sure you stop all running processes and close all the terminal windows in VS Code before proceeding to the next assignment.
+
+Go to [assignment 4](../Assignment04/README.md).
