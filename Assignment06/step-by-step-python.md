@@ -245,7 +245,7 @@ using the `--components-path` flag so Dapr will use these config files:
 1. Start the simulation:
 
    ```console
-   python simulation
+   python3 simulation
    ```
 
 You should see the same logs as before.
