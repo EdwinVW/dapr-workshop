@@ -80,12 +80,6 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
 1. Inspect the code of the `CollectFine` method. There's a TODO comment at the end of the class. You'll add code to complete this TODO and actually send an email.
 
-1. Add a using statement in the `CollectionController` file so you can use the Dapr client:
-
-     ```csharp
-     using Dapr.Client;
-     ```
-
 1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `CollectFine` method :
 
     ```csharp
@@ -117,10 +111,10 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
 
      > The first two parameters passed into `InvokeBindingAsync` are the name of the binding to use and the operation (in this case 'create' the email).
 
-1. Now that the `CollectFine` method uses the `[FromServices]` attribute to inject the `DaprClient` class, you need to make sure `DaprClient` is registered with the dependency injection system. Open the file `FineCollectionService/Startup.cs`. Add the following code to the `ConfigureServices` method (just above the code to register the `VehicleRegistrationService` proxy):
+1. Now that the `CollectFine` method uses the `[FromServices]` attribute to inject the `DaprClient` class, you need to make sure `DaprClient` is registered with the dependency injection system. Open the file `FineCollectionService/Program.cs`. Add the following code to the file (just above the code to register the `VehicleRegistrationService` proxy):
 
    ```csharp
-   services.AddDaprClient(builder => builder
+   builder.Services.AddDaprClient(builder => builder
        .UseHttpEndpoint($"http://localhost:3601")
        .UseGrpcEndpoint($"http://localhost:60001"));
    ```
