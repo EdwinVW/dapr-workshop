@@ -167,48 +167,50 @@ As you can see, the simulation gets an `ITrafficControlService` instance injecte
 
 The proxy uses HTTP to send the message to the TrafficControlService. You will replace this now with an implementation that uses MQTT:
 
+1. Open the file `Simulation/GlobalUsings.cs` in VS Code.
+
+1. In this file, add the following global using statements:
+
+   ```csharp
+   global using System.Net.Mqtt;
+   global using System.Text;
+   ```
+
 1. Add a new file in the `Simulation/Proxies` folder named `MqttTrafficControlService.cs`.
 
 1. Paste the following code into this file:
 
    ```csharp
-   using System;
-   using System.Net.Mqtt;
-   using System.Text;
-   using System.Text.Json;
-   using System.Threading.Tasks;
-   using Simulation.Events;
+   namespace Simulation.Proxies;
    
-   namespace Simulation.Proxies
+   public class MqttTrafficControlService : ITrafficControlService
    {
-       public class MqttTrafficControlService : ITrafficControlService
+       private readonly IMqttClient _client;
+   
+       public MqttTrafficControlService(int camNumber)
        {
-           private readonly IMqttClient _client;
+           // connect to mqtt broker
+           var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
+           _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
+           var sessionState = _client.ConnectAsync(
+               new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
+       }
    
-           public MqttTrafficControlService(int camNumber)
-           {
-               // connect to mqtt broker
-               var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
-               _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
-               var sessionState = _client.ConnectAsync(
-                   new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
-           }
+       public async Task SendVehicleEntryAsync(VehicleRegistered vehicleRegistered)
+       {
+           var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+           var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
+           await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
+       }
    
-           public async Task SendVehicleEntryAsync(VehicleRegistered vehicleRegistered)
-           {
-               var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-               var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
-               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
-           }
-   
-           public async Task SendVehicleExitAsync(VehicleRegistered vehicleRegistered)
-           {
-               var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-               var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
-               await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
-           }
+       public async Task SendVehicleExitAsync(VehicleRegistered vehicleRegistered)
+       {
+           var eventJson = JsonSerializer.Serialize(vehicleRegistered);
+           var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
+           await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
        }
    }
+   
    ```
 
 1. Inspect the new code.

@@ -186,9 +186,9 @@ Now your FineCollectionService is ready to receive messages through Dapr pub/sub
    var data = cloudevent.RootElement.GetProperty("data");
    var speedingViolation = new SpeedingViolation
    {
-       VehicleId = data.GetProperty("vehicleId").GetString(),
-       RoadId = data.GetProperty("roadId").GetString(),
-       Timestamp = data.GetProperty("timestamp").GetDateTime(),
+       VehicleId = data.GetProperty("vehicleId").GetString()!,
+       RoadId = data.GetProperty("roadId").GetString()!,
+       Timestamp = data.GetProperty("timestamp").GetDateTime()!,
        ViolationInKmh = data.GetProperty("violationInKmh").GetInt32()
    };
    ```
@@ -309,16 +309,18 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
 1. Add a reference to the Dapr ASP.NET Core integration package:
 
    ```console
-   dotnet add package Dapr.AspNetCore -v 1.4.0
+   dotnet add package Dapr.AspNetCore -v 1.5.0
+   ```
+
+1. Open the file `TrafficControlService/GlobalUsings.cs` in VS Code.
+
+1. In this file, add a global using statement for the Dapr client:
+
+   ```csharp
+   global using Dapr.Client;
    ```
 
 1. Open the file `TrafficControlService/Controllers/TrafficController.cs` in VS Code.
-
-1. In this file, add a using statement for the Dapr client:
-
-   ```csharp
-   using Dapr.Client;
-   ```
 
 1. Add an argument named `daprClient` of type `DaprClient` that is decorated with the `[FromServices]` attribute to the `VehicleExit` method :
 
@@ -343,12 +345,12 @@ In this step, you will change the code slightly so it uses the Dapr SDK for .NET
    await daprClient.PublishEventAsync("pubsub", "speedingviolations", speedingViolation);
    ```
 
-1. Open the file `TrafficControlService/Startup.cs`.
+1. Open the file `TrafficControlService/Program.cs`.
 
-1. The service now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. Add the following line to the `ConfigureServices` method to register the `DaprClient` with dependency injection:
+1. The service now uses the `DaprClient`. Therefore, it needs to be registered with dependency injection. Insert the following code at line 3 into the file to register the `DaprClient` with dependency injection:
 
    ```csharp
-   services.AddDaprClient(builder => builder
+   builder.Services.AddDaprClient(builder => builder
        .UseHttpEndpoint($"http://localhost:3600")
        .UseGrpcEndpoint($"http://localhost:60000"));
    ```
@@ -381,17 +383,19 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
    var data = cloudevent.RootElement.GetProperty("data");
    var speedingViolation = new SpeedingViolation
    {
-       VehicleId = data.GetProperty("vehicleId").GetString(),
-       RoadId = data.GetProperty("roadId").GetString(),
-       Timestamp = data.GetProperty("timestamp").GetDateTime(),
+       VehicleId = data.GetProperty("vehicleId").GetString()!,
+       RoadId = data.GetProperty("roadId").GetString()!,
+       Timestamp = data.GetProperty("timestamp").GetDateTime()!,
        ViolationInKmh = data.GetProperty("violationInKmh").GetInt32()
    };
    ```
 
-1. Add a using statement in this file so you can use Dapr:
+1. Open the file `FineCollectionService/GlobalUsings.cs` in VS Code.
+
+1. In this file, add a global using statement for the Dapr library:
 
    ```csharp
-   using Dapr;
+   global using Dapr;
    ```
 
 1. Add an attribute above the `CollectFine` method to link this method to a topic called `speedingviolations`:
@@ -404,30 +408,26 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
 
 Now you need to make sure that Dapr knows this controller and also knows which pub/sub topics the controller subscribes to. To determine this, Dapr will call your service on a default endpoint to retrieve the subscriptions. To make sure your service handles this request and returns the correct information, you need to add some statements to the `Startup` class:
 
-1. Open the file `FineCollectionService/Startup.cs` in VS Code.
+1. Open the file `FineCollectionService/Program.cs` in VS Code.
 
-1. Add `AddDapr` to the `AddControllers` line in the `ConfigureServices` method:
+1. Add `AddDapr` to the `AddControllers` line in this file:
 
    ```csharp
-   services.AddControllers().AddDapr();
+   builder.Services.AddControllers().AddDapr();
    ```
 
    > The `AddDapr` method adds Dapr integration for ASP.NET MVC.
 
-1. As you saw earlier, Dapr uses the cloud event message-format standard when sending messages over pub/sub. To make sure cloud events are automatically unwrapped, add the following line just after the call to `app.UseRouting()` in the `Configure` method:
+1. As you saw earlier, Dapr uses the cloud event message-format standard when sending messages over pub/sub. To make sure cloud events are automatically unwrapped, add the following line just after the call to `app.MapControllers()` in the file:
 
    ```csharp
    app.UseCloudEvents();
    ```
 
-1. To register every controller that uses pub/sub as a subscriber, add a call to `endpoints.MapSubscribeHandler()` to the lambda passed into `app.UseEndpoints` in the `Configure` method. It should look like this:
+1. To register every controller that uses pub/sub as a subscriber, add a call to `app.MapSubscribeHandler()` just after the call to `app.UseCloudEvent()` in the file:
 
    ```csharp
-   app.UseEndpoints(endpoints =>
-   {
-       endpoints.MapSubscribeHandler();
-       endpoints.MapControllers();
-   });
+   app.MapSubscribeHandler();
    ```
 
    > By adding this, the `/dapr/subscribe` endpoint that you implemented in step 6 is automatically implemented by Dapr. It will collect all the controller methods that are decorated with the Dapr `Topic` attribute and return the corresponding subscriptions.

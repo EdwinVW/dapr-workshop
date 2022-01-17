@@ -89,7 +89,7 @@ As stated, you can do the assignments using .NET or Java. Each technology stack 
 
 For the .NET assignments:
 
-- .NET 5 SDK ([download](https://dotnet.microsoft.com/download/dotnet/5.0))
+- .NET 6 SDK ([download](https://dotnet.microsoft.com/download/dotnet/6.0))
 - [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
 
 For the Java assignments:
@@ -114,12 +114,12 @@ The workshop has been tested with the following versions:
 
 | Attribute                   | Details |
 |-----------------------------|---------|
-| Dapr runtime version        | v1.4.0  |
-| Dapr CLI version            | v1.4.0  |
-| .NET version                | .NET 5  |
+| Dapr runtime version        | v1.5.1  |
+| Dapr CLI version            | v1.5.1  |
+| .NET version                | .NET 6  |
 | Java version                | Java 16 |
 | Python version              | 3.9.6   |
-| Dapr SDK for .NET version   | v1.4.0  |
+| Dapr SDK for .NET version   | v1.5.0  |
 | Dapr SDK for Java version   | v1.3.0  |
 | Dapr SDK for Python version | v1.3.0  |
 
@@ -155,7 +155,7 @@ The ports can be specified on the command-line when starting a service with the 
 - `--dapr-http-port`
 - `--dapr-grpc-port`
 
-If you're on Windows with Hyper-V enabled, you might run into an issue that you're not able to use one (or more) of these ports. This could have something to do with aggressive port reservations by Hyper-V. You can check whether or not this is the case by executing this command: 
+If you're on Windows with Hyper-V enabled, you might run into an issue that you're not able to use one (or more) of these ports. This could have something to do with aggressive port reservations by Hyper-V. You can check whether or not this is the case by executing this command:
 
 ```powershell
 netsh int ipv4 show excludedportrange protocol=tcp

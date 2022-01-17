@@ -153,34 +153,34 @@ First stop the simulation:
 1. Add a reference to the Dapr ASP.NET Core integration library:
 
    ```console
-   dotnet add package Dapr.AspNetCore -v 1.4.0
+   dotnet add package Dapr.AspNetCore -v 1.5.0
    ```
 
    > The `Dapr.AspNetCore` package contains the `DaprClient` class used to directly invoke the Dapr API as well as additional integrations with ASP.NET Core. Because the services are all ASP.NET Core web APIs, we'll use this package throughout the workshop.
 
 Now you'll change the code to use the Dapr SDK `HttpClient` integration to call the VehicleRegistrationService. The `HttpClient` integration allows you to keep using the regular `HttpClient` to make service calls, while the SDK ensures that calls are routed through the Dapr sidecar.
 
-1. Open the file `FineCollectionService/Startup.cs` in VS Code.
+1. Open the file `FineCollectionService/GlobalUsings.cs` in VS Code.
 
-1. Add a using statement in this file to make sure you can use the Dapr client:
+1. Add a global using statement in this file to make sure you can use the Dapr client:
 
    ```csharp
-   using Dapr.Client;
+   global using Dapr.Client;
    ```
 
-1. The `ConfigureServices` method, contains these two lines of code which register the .NET `HttpClient` and the `VehicleRegistrationService`  proxy (which uses the `HttpClient`) with dependency injection:
+1. Open the file `FineCollectionService/Program.cs` in VS Code.
+
+1. This file contains these two lines of code which register the .NET `HttpClient` and the `VehicleRegistrationService`  proxy (which uses the `HttpClient`) with dependency injection:
 
    ```csharp
-   // add service proxies
-   services.AddHttpClient();
-   services.AddSingleton<VehicleRegistrationService>();
+   builder.Services.AddHttpClient();
+   builder.Services.AddSingleton<VehicleRegistrationService>();
    ```
 
 1. Replace these two lines with with the following lines:
 
    ```csharp
-   // add service proxies
-   services.AddSingleton<VehicleRegistrationService>(_ => 
+   builder.Services.AddSingleton<VehicleRegistrationService>(_ => 
        new VehicleRegistrationService(DaprClient.CreateInvokeHttpClient(
            "vehicleregistrationservice", "http://localhost:3601")));
    ```
