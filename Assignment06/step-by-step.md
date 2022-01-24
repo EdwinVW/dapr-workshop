@@ -151,10 +151,10 @@ In this step you change the Camera Simulation so it sends MQTT messages instead 
 
 1. Open the terminal window in VS Code and make sure the current folder is `Simulation`.
 
-1. Add a reference to the `System.Net.Mqtt` library:
+1. Add a reference to the `MQTTNet` library:
 
    ```console
-   dotnet add package System.Net.Mqtt --prerelease
+   dotnet add package MQTTNet
    ```
 
 1. Open the file `Simulation/CameraSimulation.cs` file in VS Code.
@@ -172,7 +172,9 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
 1. In this file, add the following global using statements:
 
    ```csharp
-   global using System.Net.Mqtt;
+   global using MQTTnet;
+   global using MQTTnet.Client;
+   global using MQTTnet.Client.Options;
    global using System.Text;
    ```
 
@@ -185,32 +187,48 @@ The proxy uses HTTP to send the message to the TrafficControlService. You will r
    
    public class MqttTrafficControlService : ITrafficControlService
    {
-       private readonly IMqttClient _client;
+       private IMqttClient _client;
    
-       public MqttTrafficControlService(int camNumber)
+       private MqttTrafficControlService(IMqttClient mqttClient)
        {
-           // connect to mqtt broker
+           _client = mqttClient;
+       }
+   
+       public static async Task<MqttTrafficControlService> CreateAsync(int camNumber)
+       {
            var mqttHost = Environment.GetEnvironmentVariable("MQTT_HOST") ?? "localhost";
-           _client = MqttClient.CreateAsync(mqttHost, 1883).Result;
-           var sessionState = _client.ConnectAsync(
-               new MqttClientCredentials(clientId: $"camerasim{camNumber}")).Result;
+           var factory = new MqttFactory();
+           var client = factory.CreateMqttClient();
+           var mqttOptions = new MqttClientOptionsBuilder()
+               .WithTcpServer(mqttHost, 1883)
+               .WithClientId($"camerasim{camNumber}")
+               .Build();
+           await client.ConnectAsync(mqttOptions, CancellationToken.None);
+           return new MqttTrafficControlService(client);
        }
    
        public async Task SendVehicleEntryAsync(VehicleRegistered vehicleRegistered)
        {
            var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-           var message = new MqttApplicationMessage("trafficcontrol/entrycam", Encoding.UTF8.GetBytes(eventJson));
-           await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
+           var message = new MqttApplicationMessageBuilder()
+               .WithTopic("trafficcontrol/entrycam")
+               .WithPayload(Encoding.UTF8.GetBytes(eventJson))
+               .WithAtMostOnceQoS()
+               .Build();
+           await _client.PublishAsync(message, CancellationToken.None);
        }
    
        public async Task SendVehicleExitAsync(VehicleRegistered vehicleRegistered)
        {
            var eventJson = JsonSerializer.Serialize(vehicleRegistered);
-           var message = new MqttApplicationMessage("trafficcontrol/exitcam", Encoding.UTF8.GetBytes(eventJson));
-           await _client.PublishAsync(message, MqttQualityOfService.AtMostOnce);
+           var message = new MqttApplicationMessageBuilder()
+               .WithTopic("trafficcontrol/exitcam")
+               .WithPayload(Encoding.UTF8.GetBytes(eventJson))
+               .WithAtMostOnceQoS()
+               .Build();
+           await _client.PublishAsync(message, CancellationToken.None);
        }
    }
-   
    ```
 
 1. Inspect the new code.
@@ -221,12 +239,22 @@ Now you need to make sure this implementation is used instead of the HTTP one:
 
 1. Open the file `Simulation/Program.cs` in VS Code.
 
-1. Remove the first line of the `Main` method where an instance of the `HttpClient` instance is created.
-
-1. Replace the creation of a `HttpTrafficControlService` instance with the creation of a `MqttTrafficControlService` instance:
+1. Remove the line where an instance of the `HttpClient` instance is created:
 
    ```csharp
-   var trafficControlService = new MqttTrafficControlService(camNumber);
+   var httpClient = new HttpClient();
+   ```
+
+1. Find the line which creates an instance of a `HttpTrafficControlService`:
+
+   ```csharp
+   var trafficControlService = new HttpTrafficControlService(httpClient);
+   ```
+
+1. Replace this line with the creation of a `MqttTrafficControlService` instance:
+
+   ```csharp
+   var trafficControlService = await MqttTrafficControlService.CreateAsync(camNumber);
    ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `Simulation`.
