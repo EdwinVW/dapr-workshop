@@ -153,7 +153,7 @@ First stop the simulation:
 1. Add a reference to the Dapr ASP.NET Core integration library:
 
    ```console
-   dotnet add package Dapr.AspNetCore -v 1.5.0
+   dotnet add package Dapr.AspNetCore
    ```
 
    > The `Dapr.AspNetCore` package contains the `DaprClient` class used to directly invoke the Dapr API as well as additional integrations with ASP.NET Core. Because the services are all ASP.NET Core web APIs, we'll use this package throughout the workshop.
