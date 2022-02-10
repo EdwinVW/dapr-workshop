@@ -259,7 +259,7 @@ The other way of subscribing to pub/sub events is the programmatic way. Dapr wil
 
 1. Open the file `FineCollectionService/Controllers/CollectionController.cs` in VS Code.
 
-1. Add a new operation named `Subscribe` to the controller that will listen to the route `/dapr/dubscribe`:
+1. Add a new operation named `Subscribe` to the controller that will listen to the route `/dapr/subscribe`:
 
    ```csharp
    [Route("/dapr/subscribe")]
@@ -390,6 +390,14 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
    };
    ```
 
+1. Add a `Topic` attribute above the `CollectFine` method to link this method to a topic called `speedingviolations`:
+
+   ```csharp
+   [Topic("pubsub", "speedingviolations")]
+   ```
+
+   > The *"pubsub"* argument passed to this attribute refers to the name of the Dapr pub/sub component to use.
+
 1. Open the file `FineCollectionService/GlobalUsings.cs` in VS Code.
 
 1. In this file, add a global using statement for the Dapr library:
@@ -397,14 +405,6 @@ Now you will change the FineCollectionService that receives messages. The Dapr A
    ```csharp
    global using Dapr;
    ```
-
-1. Add an attribute above the `CollectFine` method to link this method to a topic called `speedingviolations`:
-
-   ```csharp
-   [Topic("pubsub", "speedingviolations")]
-   ```
-
-   > The *"pubsub"* argument passed to this attribute refers to the name of the Dapr pub/sub component to use.
 
 Now you need to make sure that Dapr knows this controller and also knows which pub/sub topics the controller subscribes to. To determine this, Dapr will call your service on a default endpoint to retrieve the subscriptions. To make sure your service handles this request and returns the correct information, you need to add some statements to the `Startup` class:
 
