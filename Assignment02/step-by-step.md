@@ -191,7 +191,7 @@ Now you'll change the code to use the Dapr SDK `HttpClient` integration to call 
 
 1. Open the file `FineCollectionService/Proxies/VehicleRegistrationService.cs` in VS Code.
 
-1. Because the `HttpClient` passed into this class has already been created for a certain `app-id`, you can omit the host information from the request URL. Change the URL that is used in the `GetVehicleInfo` to `/vehicleinfo/{license-number}`. The method should now look like this:
+1. Because the `HttpClient` passed into this class has already been created for a certain `app-id`, you can omit the host information from the request URL. Change the URL that is used in the `GetVehicleInfo` to `/vehicleinfo/{licenseNumber}`. The method should now look like this:
 
    ```csharp
    public async Task<VehicleInfo> GetVehicleInfo(string licenseNumber)
