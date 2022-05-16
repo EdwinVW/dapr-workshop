@@ -22,17 +22,17 @@ You will run this server as a Docker container:
 1. Start a MailDev SMTP server by entering the following command:
 
    ```console
-   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
+   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:1.1.0
    ```
 
-This will pull the docker image `maildev/maildev:latest` from Docker Hub and start it. The name of the container will be `dtc-maildev`. The server will be listening for connections on port `4025` for SMTP traffic and port `4000` for HTTP traffic. This last port is where the inbox web app will run for inspecting the emails.
+This will pull the docker image `maildev/maildev:1.1.0` from Docker Hub and start it. The name of the container will be `dtc-maildev`. The server will be listening for connections on port `4025` for SMTP traffic and port `4000` for HTTP traffic. This last port is where the inbox web app will run for inspecting the emails.
 
 If everything goes well, you should see some output like this:
 
 ```console
-❯ docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:latest
-Unable to find image 'maildev/maildev:latest' locally
-latest: Pulling from maildev/maildev
+❯ docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:1.1.0
+Unable to find image 'maildev/maildev:1.1.0' locally
+1.1.0: Pulling from maildev/maildev
 e6b0cf9c0882: Pull complete
 93f9cf0467ca: Pull complete
 a564402f98da: Pull complete
@@ -42,8 +42,8 @@ d83a90929b44: Pull complete
 021ced319bab: Pull complete
 7a42c2dca0ef: Pull complete
 Digest: sha256:9ae76db9e72ad3c41a34ffcc327bbd3525849a161d257888f41a8dc4262ec73f
-Status: Downloaded newer image for maildev/maildev:latest
-ed402d40e2c301fa4624c074ad94049701e6c7d0a87fdcbb01ffe3ecbc551355
+Status: Downloaded newer image for maildev/maildev:1.1.0
+b4214ffff2e7624eac3fa3f71bb6b59a1902c9277c9f1dcf5a0742f0807a085f
 ```
 
 > If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub. See [Docker Hub](https://hub.docker.com/) for more info.
