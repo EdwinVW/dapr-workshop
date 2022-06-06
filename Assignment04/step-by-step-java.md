@@ -324,11 +324,12 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
 1. Open the file `TrafficControlService/src/main/java/dapr/traffic/vehicle/DaprVehicleStateRepository.java` in VS Code.
 
-1. Add two import statements for the Dapr client:
+1. Add three import statements for the Dapr client and the Sleuth integration:
 
    ```java
    import io.dapr.client.DaprClient;
    import io.dapr.client.domain.State;
+   import spring.SleuthDaprTracingInjector;
    ```
    
 1. Replace the `RestTemplate` instance variable with a different name and different type. Also replace the constructor:
@@ -345,6 +346,7 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
 
    ```java
    return daprClient.getState(DAPR_STORE_NAME, licenseNumber, VehicleState.class)
+           .contextWrite(new SleuthDaprTracingInjector())
            .blockOptional()
            .map(State::getValue);
    ```
@@ -355,6 +357,7 @@ In this step you're going to change the `DaprVehicleStateRepository` and replace
    @Override
    public VehicleState saveVehicleState(VehicleState vehicleState) {
        daprClient.saveState(DAPR_STORE_NAME, vehicleState.licenseNumber(), vehicleState)
+               .contextWrite(new SleuthDaprTracingInjector())
                .block();
 
        return vehicleState;
