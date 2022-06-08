@@ -199,11 +199,12 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
    import io.dapr.client.DaprClientBuilder;
    ```
 
-1. Go back to the `DaprVehicleRegistrationClient` implementation class and add a using statement in this file to make sure you can use the Dapr client:
+1. Go back to the `DaprVehicleRegistrationClient` implementation class and add a few import statements in this file to make sure you can use the Dapr client and the Sleuth integration:
 
    ```java
    import io.dapr.client.DaprClient;
    import io.dapr.client.domain.HttpExtension;
+   import spring.SleuthDaprTracingInjector;
 
    import java.time.Duration;
    ```
@@ -230,7 +231,9 @@ Now you'll change the code to use the Dapr-provided `DaprClient` to call the Veh
             VehicleInfo.class
    );
 
-   return result.block(Duration.ofMillis(1000));
+   return result
+            .contextWrite(new SleuthDaprTracingInjector())
+            .block(Duration.ofMillis(1000));
    ```
 
    As you can see in this snippet, this code does not require our application to know the _address_ of the Vehicle Registration Service, only it's _name_. With each call to the `DaprClient`, you specify the `app-id` of the service you want to communicate with.

@@ -382,10 +382,11 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   import io.dapr.serializer.DefaultObjectSerializer;
   ```
 
-1. Go back to the `DaprFineCollectionClient` implementation class and add an import statement in this file to make sure you can use the Dapr client:
+1. Go back to the `DaprFineCollectionClient` implementation class and add two import statements in this file to make sure you can use the Dapr client and the Sleuth integration:
 
   ```java
   import io.dapr.client.DaprClient;
+  import spring.SleuthDaprTracingInjector;
   ```
 
   Now add an instance variable of type DaprClient, and add a constructor to inject it:
@@ -401,7 +402,9 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
 1. Finally, update the `submitForFine()` method in this class to use the `DaprClient`:
 
   ```java
-  daprClient.publishEvent("pubsub",  "speedingviolations", speedingViolation).block();
+  daprClient.publishEvent("pubsub",  "speedingviolations", speedingViolation)
+         .contextWrite(new SleuthDaprTracingInjector())
+         .block();
   ```
 
 1. Open the terminal window in VS Code and make sure the current folder is `TrafficControlService`.
