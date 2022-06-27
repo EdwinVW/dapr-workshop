@@ -85,7 +85,7 @@ Make sure you have the following prerequisites installed on your machine:
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
 
-As stated, you can do the assignments using .NET or Java. Each technology stack has its own prerequisites:
+As stated, you can do the assignments using .NET, Java or Python. Each technology stack has its own prerequisites:
 
 For the .NET assignments:
 
