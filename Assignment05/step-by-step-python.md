@@ -24,30 +24,28 @@ You will run this server as a Docker container:
 1. Start a MailDev SMTP server by entering the following command:
 
    ```console
-   docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:1.1.0
+   docker run -d -p 4000:1080 -p 4025:1025 --name dtc-maildev maildev/maildev:2.0.5
    ```
 
-This will pull the docker image `maildev/maildev:1.1.0` from Docker Hub and start it. The name of the container will
+This will pull the docker image `maildev/maildev:2.0.5` from Docker Hub and start it. The name of the container will
 be `dtc-maildev`. The server will be listening for connections on port `4025` for SMTP traffic and port `4000` for HTTP
 traffic. This last port is where the inbox web app will run for inspecting the emails.
 
 If everything goes well, you should see some output like this:
 
 ```console
-❯ docker run -d -p 4000:80 -p 4025:25 --name dtc-maildev maildev/maildev:1.1.0
-Unable to find image 'maildev/maildev:1.1.0' locally
-1.1.0: Pulling from maildev/maildev
-e6b0cf9c0882: Pull complete
-93f9cf0467ca: Pull complete
-a564402f98da: Pull complete
-b68680f1d28f: Pull complete
-d83a90929b44: Pull complete
-5bb08f80fc87: Pull complete
-021ced319bab: Pull complete
-7a42c2dca0ef: Pull complete
-Digest: sha256:9ae76db9e72ad3c41a34ffcc327bbd3525849a161d257888f41a8dc4262ec73f
-Status: Downloaded newer image for maildev/maildev:1.1.0
-b4214ffff2e7624eac3fa3f71bb6b59a1902c9277c9f1dcf5a0742f0807a085f
+❯ docker run -d -p 4000:1080 -p 4025:1025 --name dtc-maildev maildev/maildev:2.0.5
+Unable to find image 'maildev/maildev:2.0.5' locally
+2.0.5: Pulling from maildev/maildev
+df9b9388f04a: Already exists
+70c90f7de7cb: Pull complete
+f83937c3ce37: Pull complete
+98b78bba1d70: Pull complete
+ee0959d18bfc: Pull complete
+42bcb104f1ff: Pull complete
+Digest: sha256:082ec5ee92266c6e17493998ff1bf1c3eb70604b159fbeeaa435ee777f5cc953
+Status: Downloaded newer image for maildev/maildev:2.0.5
+15460526eeec36fb10de920a92086797b69dab7638c7a7a8254d237346fd82e2
 ```
 
 > If you see any errors, make sure you have access to the Internet and are able to download images from Docker Hub.
@@ -107,7 +105,7 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
             "emailFrom": "test@domain.org"
       }
    }
-
+   
    response = requests.post("http://localhost:3601/v1.0/bindings/sendmail", json=message_data)
    ```
 
