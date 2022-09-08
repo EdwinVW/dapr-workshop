@@ -77,7 +77,9 @@ The sequence diagram below shows how the solution will work with Dapr:
 
 ### Prerequisites
 
-Make sure you have the following prerequisites installed on your machine:
+In order to get most value out of the workshop, make sure you have the prerequisites installed on your machine before the workshop starts. Install the General prerequisites first. Then, select the technology stack you are going to use for executing the workshop assignments and install the prerequisites for that technology stack.
+
+#### General
 
 - Git ([download](https://git-scm.com/))
 - Visual Studio Code ([download](https://code.visualstudio.com/download)) with at least the following extensions installed:
@@ -85,12 +87,18 @@ Make sure you have the following prerequisites installed on your machine:
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
 
-As stated, you can do the assignments using .NET, Java or Python. Each technology stack has its own prerequisites:
+All scripts in the instructions are PowerShell scripts. If you're working on a Mac, it is recommended to install PowerShell for Mac:
+
+- PowerShell for Mac ([instructions](https://docs.microsoft.com/nl-nl/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
+
+#### .NET
 
 For the .NET assignments:
 
 - .NET 6 SDK ([download](https://dotnet.microsoft.com/download/dotnet/6.0))
 - [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
+
+#### Java
 
 For the Java assignments:
 
@@ -99,14 +107,12 @@ For the Java assignments:
 - Apache Maven 3.6.3 or above is required; Apache Maven 3.8.1 is advised ([download](http://maven.apache.org/download.cgi))
   - Make sure that Maven uses the correct Java runtime by running `mvn -version`.
 
+#### Python
+
 For the Python assignments:
 
 - Python 3.9 ([download](https://www.python.org/downloads/))
 - Python Extension for Visual Studio Code ([download](https://marketplace.visualstudio.com/items?itemName=ms-python.python))
-
-All scripts in the instructions are Powershell scripts. If you're working on a Mac, it is recommended to install Powershell for Mac:
-
-- Powershell for Mac ([instructions](https://docs.microsoft.com/nl-nl/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
 
 ### Versions
 
