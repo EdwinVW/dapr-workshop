@@ -102,7 +102,7 @@ For the .NET assignments:
 
 For the Java assignments:
 
-- Java 16 or above ([download](https://adoptopenjdk.net/?variant=openjdk16))
+- Java 17 or above ([download](https://adoptopenjdk.net/?variant=openjdk17))
 - [Visual Studio Code Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
 - Apache Maven 3.6.3 or above is required; Apache Maven 3.8.1 is advised ([download](http://maven.apache.org/download.cgi))
   - Make sure that Maven uses the correct Java runtime by running `mvn -version`.
