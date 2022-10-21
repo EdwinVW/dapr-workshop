@@ -154,7 +154,7 @@ In this step you change the Camera Simulation so it sends MQTT messages instead 
 1. Add a reference to the `MQTTNet` library:
 
    ```console
-   dotnet add package MQTTNet
+   dotnet add package MQTTNet -v 3.1.2
    ```
 
 1. Open the file `Simulation/CameraSimulation.cs` file in VS Code.
