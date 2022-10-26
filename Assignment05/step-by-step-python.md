@@ -191,7 +191,7 @@ using the `--components-path` flag so Dapr will use these config files:
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components -- uvicorn traffic_control --port 6000
+   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components -- uvicorn traffic_control:app --port 6000
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.
