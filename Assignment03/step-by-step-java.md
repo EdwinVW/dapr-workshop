@@ -336,7 +336,23 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   }
   ```
 
-  Add an import for the `SpeedingViolation` class: `import dapr.traffic.violation.SpeedingViolation;`.
+  Also, add a few imports for the class:
+
+   ```java
+   import dapr.traffic.violation.SpeedingViolation;
+   import io.dapr.client.DaprClient;
+   import spring.SleuthDaprTracingInjector;
+   ```
+
+1. Finally, add an instance variable of type DaprClient, and add a constructor to inject it:
+
+   ```java
+   private final DaprClient daprClient;
+ 
+   public DaprFineCollectionClient(final DaprClient daprClient) {
+      this.daprClient = daprClient;
+   }
+   ```
 
 1. Open the file `TrafficControlService/src/main/java/dapr/traffic/TrafficControlConfiguration.java` in VS Code. The default JSON serialization is not suitable for todays goal, so you need to customize the Jackson `ObjectMapper` that it uses. You do so by adding a static inner class to configure the JSON serialization:
 
@@ -380,23 +396,6 @@ In this step, you will change the code slightly so it uses the Dapr SDK for Java
   import io.dapr.client.DaprClient;
   import io.dapr.client.DaprClientBuilder;
   import io.dapr.serializer.DefaultObjectSerializer;
-  ```
-
-1. Go back to the `DaprFineCollectionClient` implementation class and add two import statements in this file to make sure you can use the Dapr client and the Sleuth integration:
-
-  ```java
-  import io.dapr.client.DaprClient;
-  import spring.SleuthDaprTracingInjector;
-  ```
-
-  Now add an instance variable of type DaprClient, and add a constructor to inject it:
-
-  ```java
-  private final DaprClient daprClient;
-
-  public DaprFineCollectionClient(final DaprClient daprClient) {
-     this.daprClient = daprClient;
-  }
   ```
 
 1. Finally, update the `submitForFine()` method in this class to use the `DaprClient`:
