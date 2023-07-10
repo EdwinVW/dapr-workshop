@@ -8,7 +8,7 @@ In a microservices application, it is important to be able to communicate with o
 
 <img src="img/service-invocation.png" style="zoom: 33%;" />
 
-In Dapr, every service is started with a unique Id (the *app-id*) which can be used the find it. Let's say Service A wants to call Service B.
+In Dapr, every service is started with a unique Id (the *app-id*) which can be used to find it. Let's say Service A wants to call Service B.
 
 1. Service A invokes the Dapr service invocation API (using HTTP or gRPC) on its Dapr sidecar and specifies the unique app-id of Service B.
 1. Dapr discovers Service B's location using its name-resolution component for the hosting environment the solution is running in.
