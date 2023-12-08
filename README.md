@@ -95,7 +95,7 @@ All scripts in the instructions are PowerShell scripts. If you're working on a M
 
 For the .NET assignments:
 
-- .NET 6 SDK ([download](https://dotnet.microsoft.com/download/dotnet/6.0))
+- .NET 8 SDK ([download](https://dotnet.microsoft.com/download/dotnet/8.0))
 - [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
 
 #### Java
@@ -120,12 +120,12 @@ The workshop has been tested with the following versions:
 
 | Attribute                   | Details              |
 | --------------------------- | -------------------- |
-| Dapr runtime version        | v1.8.4               |
-| Dapr CLI version            | v1.8.1               |
-| .NET version                | .NET 6 (SDK 6.0.300) |
+| Dapr runtime version        | v1.12               |
+| Dapr CLI version            | v1.12               |
+| .NET version                | .NET 8              |
 | Java version                | Java 16              |
 | Python version              | 3.9.6                |
-| Dapr SDK for .NET version   | v1.8.0               |
+| Dapr SDK for .NET version   | v1.12.0               |
 | Dapr SDK for Java version   | v1.3.0               |
 | Dapr SDK for Python version | v1.3.0               |
 
@@ -175,6 +175,25 @@ netsh int ipv4 add excludedportrange protocol=tcp startport=6000 numberofports=3
 netsh int ipv4 add excludedportrange protocol=tcp startport=3600 numberofports=3
 netsh int ipv4 add excludedportrange protocol=tcp startport=60000 numberofports=3
 dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
+```
+
+#### Running self-hosted on MacOS with Antivirus software
+
+Some antivirus software blocks mDNS (we've actually encountered this with Sophos). mDNS is used for name-resolution by Dapr when running in self-hosted mode. Blocking mDNS will cause issues with service invocation. When you encounter any errors when invoking services using service invocation, use Consul as an alternative name resolution service.
+
+When starting the services, use the `dapr/config/consul-config.yaml` config file. This config file configures Dapr to use Consul for name resolution. You can use the `--config` command-line argument to specify the config file to use:
+
+```bash
+❯ dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --config ../dapr/config/consul-config.yaml dotnet run
+```
+
+You can find a line in the Dapr logging that indicates the naming service used:
+
+```bash
+ℹ️  Starting Dapr with id vehicleregistrationservice. HTTP Port: 3602. gRPC Port: 60002
+...
+INFO[0000] Initialized name resolution to consul app_id=vehicleregistrationservice instance=192.168.2.16 scope=dapr.runtime type=log ...
+...
 ```
 
 #### Getting started
