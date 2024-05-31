@@ -83,8 +83,7 @@ In order to get most value out of the workshop, make sure you have the prerequis
 
 - Git ([download](https://git-scm.com/))
 - Visual Studio Code ([download](https://code.visualstudio.com/download)) with at least the following extensions installed:
-  - [C# DevKit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
-  - [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
+  - REST Client
   
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
 - [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
