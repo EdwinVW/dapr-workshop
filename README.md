@@ -120,14 +120,14 @@ The workshop has been tested with the following versions:
 
 | Attribute                   | Details              |
 | --------------------------- | -------------------- |
-| Dapr runtime version        | v1.12               |
-| Dapr CLI version            | v1.12               |
+| Dapr runtime version        | 1.13.4            |
+| Dapr CLI version            | 1.13.0            |
 | .NET version                | .NET 8              |
 | Java version                | Java 16              |
 | Python version              | 3.9.6                |
-| Dapr SDK for .NET version   | v1.12.0               |
-| Dapr SDK for Java version   | v1.3.0               |
-| Dapr SDK for Python version | v1.3.0               |
+| Dapr SDK for .NET version   | 1.13.1            |
+| Dapr SDK for Java version   | 1.3.0               |
+| Dapr SDK for Python version | 1.3.0               |
 
 ### Instructions
 
