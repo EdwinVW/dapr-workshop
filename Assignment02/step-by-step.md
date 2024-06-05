@@ -31,7 +31,7 @@ In assignment 1, you started all the services using `dotnet run`. When you want 
 
 You will use the `run` command of the Dapr CLI and specify all the options above on the command-line:
 
-1. Make sure you have started Docker Desktop on your machine and the Dapr CLI and runtime are installed (see the [prerequisites](../README.md#prerequisites)).
+1. Make sure you have started Docker Desktop (or PodMan) on your machine and the Dapr CLI and runtime are installed (see the [prerequisites](../README.md#prerequisites)).
 
 2. Open the source code folder in VS Code.
 

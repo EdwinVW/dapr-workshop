@@ -86,6 +86,8 @@ In order to get most value out of the workshop, make sure you have the prerequis
   - REST Client
   
 - Docker for desktop ([download](https://www.docker.com/products/docker-desktop))
+
+  > You can also use PodMan as a Docker Desktop alternative. In that case, follow the PodMan specific instructions in the Dapr documentation (links below) and use the appropriate PodMan CLI commands during the workshop in stead of the Docker CLI commands.
 - [Install the Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/) and [initialize Dapr locally](https://docs.dapr.io/getting-started/install-dapr-selfhost/)
 
 All scripts in the instructions are PowerShell scripts. If you're working on a Mac, it is recommended to install PowerShell for Mac:
