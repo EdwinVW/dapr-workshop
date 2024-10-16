@@ -131,7 +131,7 @@ Now you're ready to test the application.
 
 ## Step 4: Test the application
 
-You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--components-path` flag so Dapr will use these config files:
+You're going to start all the services now. You specify the custom components folder you've created on the command-line using the `--resources-path` flag so Dapr will use these config files:
 
 1. Make sure no services from previous tests are running (close the terminal windows).
 
@@ -142,7 +142,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the VehicleRegistrationService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --components-path ../dapr/components dotnet run
+   dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --resources-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `FineCollectionService`.
@@ -150,7 +150,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the FineCollectionService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --components-path ../dapr/components dotnet run
+   dapr run --app-id finecollectionservice --app-port 6001 --dapr-http-port 3601 --dapr-grpc-port 60001 --resources-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `TrafficControlService`.
@@ -158,7 +158,7 @@ You're going to start all the services now. You specify the custom components fo
 1. Enter the following command to run the TrafficControlService with a Dapr sidecar:
 
    ```console
-   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --components-path ../dapr/components dotnet run
+   dapr run --app-id trafficcontrolservice --app-port 6000 --dapr-http-port 3600 --dapr-grpc-port 60000 --resources-path ../dapr/components dotnet run
    ```
 
 1. Open a **new** terminal window in VS Code and change the current folder to `Simulation`.

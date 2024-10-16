@@ -184,10 +184,10 @@ dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
 
 Some antivirus software blocks mDNS (we've actually encountered this with Sophos). mDNS is used for name-resolution by Dapr when running in self-hosted mode. Blocking mDNS will cause issues with service invocation. When you encounter any errors when invoking services using service invocation, use Consul as an alternative name resolution service.
 
-When starting the services, use the `dapr/config/consul-config.yaml` config file. This config file configures Dapr to use Consul for name resolution. You can use the `--config` command-line argument to specify the config file to use:
+When starting the services, use the `dapr/config/config.yaml` config file. This config file configures Dapr to use Consul for name resolution. You can use the `--config` command-line argument to specify the config file to use:
 
 ```bash
-❯ dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --config ../dapr/config/consul-config.yaml dotnet run
+❯ dapr run --app-id vehicleregistrationservice --app-port 6002 --dapr-http-port 3602 --dapr-grpc-port 60002 --config ../dapr/config/config.yaml dotnet run
 ```
 
 You can find a line in the Dapr logging that indicates the naming service used:
