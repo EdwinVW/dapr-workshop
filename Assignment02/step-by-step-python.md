@@ -81,7 +81,7 @@ First you're going to change the code so it calls the Dapr sidecar:
       return Vehicle.parse_raw(response.content)
    ```
 
-   `requests` is a http library, which is used to invoke the VehicleRegistrationService. Its base address for consuming 
+   `requests` is a http library which is used to invoke the VehicleRegistrationService. Its base address for consuming 
    the API is determined by the `settings.py`, which in turn reads the settings from the `.env` file stored in
    `FineCollectionService`.
 
