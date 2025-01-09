@@ -81,8 +81,8 @@ First you're going to change the code so it calls the Dapr sidecar:
       return Vehicle.parse_raw(response.content)
    ```
 
-   The `requests` is a you can use to invoke the VehicleRegistrationService. Its base address for consuming the API is
-   determined by the `settings.py`, which in turn reads the settings from the `.env` file stored in
+   `requests` is a http library which is used to invoke the VehicleRegistrationService. Its base address for consuming 
+   the API is determined by the `settings.py`, which in turn reads the settings from the `.env` file stored in
    `FineCollectionService`.
 
 3. Open the file `FineCollectionService/.env` in VS Code.

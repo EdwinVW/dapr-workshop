@@ -93,7 +93,7 @@ You will add code to the FineCollectionService so it uses the Dapr SMTP output b
      import requests
      ```
 
-1. Add the following code toe the `process_speed_violation` method to replace the TODO comment:
+1. Add the following code to the `process_speed_violation` method to replace the TODO comment:
 
    ```python
    message_data = {
